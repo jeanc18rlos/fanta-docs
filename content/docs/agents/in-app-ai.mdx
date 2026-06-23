@@ -1,0 +1,126 @@
+---
+title: The In-App AI Brain
+description: Models, BYO-key env vars, the DocTool→Operation flow, CanvasContext, the orchestrator loop, ask-before-edit, and the docked agent panel.
+---
+
+Fantaisa ships with its own AI brain — no external CLI required. An
+**orchestrator runs on a worker thread** while the UI stays responsive, driving
+the canvas through the exact same tool surface and review pipeline external
+agents use. The two paths are at **parity**: anything Claude Code or Codex can
+do over the live MCP, the in-app brain can do too.
+
+## Models
+
+The brain talks to two model families:
+
+| Family | Models |
+| --- | --- |
+| **Claude** | `claude-opus-4-8`, `claude-sonnet-4-6`, `claude-haiku-4-5`, `claude-fable-5` |
+| **GLM** | `glm-5.2` (via Z.ai's Anthropic-compatible endpoint `https://api.z.ai/api/anthropic`) |
+
+Pick a heavier tier for hard layout reasoning, a lighter one for quick edits.
+
+## Bring your own key
+
+Authentication is bring-your-own-key. Set the API key and, optionally, override
+the model and base URL:
+
+```bash title="Environment"
+# Required — your API key
+export ANTHROPIC_API_KEY="sk-..."
+
+# Optional — choose a specific model
+export FANTA_AI_MODEL="claude-sonnet-4-6"
+
+# Optional — point at an Anthropic-compatible endpoint (e.g. GLM via Z.ai)
+export FANTA_LLM_BASE_URL="https://api.z.ai/api/anthropic"
+```
+
+<Callout type="info">
+Because GLM is reached through an Anthropic-compatible endpoint, switching
+families is just a matter of `FANTA_AI_MODEL` plus `FANTA_LLM_BASE_URL` — the
+brain's tool surface and orchestration are unchanged.
+</Callout>
+
+## How the brain touches the canvas
+
+The brain never mutates raw document state. Two pieces make this safe:
+
+- **DocTool → Operation.** The model calls high-level **DocTool** intents
+  (`create_*`, `set_fill`, `set_auto_layout`, `insert_instance`, …). Each lowers
+  to a reversible `Operation`, so every AI edit is undoable like a human one.
+- **CanvasContext.** A compact, curated view of the canvas is injected into the
+  prompt so the model "sees" the design without raw source state. It carries up
+  to ~200 nodes — each with id, type, name, world bounds, fill, and parent —
+  plus the viewport, components, and design tokens. Nodes flagged **private** are
+  excluded.
+
+## The orchestrator loop
+
+The orchestrator runs a bounded tool-use loop on its worker thread:
+
+```text title="Orchestrator loop"
+1. Build messages:  system prompt + CanvasContext + user prompt
+2. Model responds:  text + zero or more tool calls
+3. Apply each tool call via a ToolSink, capturing applied_ops
+4. Repeat until:    no tool calls / end-turn / max_steps reached
+```
+
+`max_steps` defaults to **10**. When the loop ends, it returns a structured
+result:
+
+```json title="Orchestrator result"
+{
+  "final_message": "Built the pricing section with three tiers.",
+  "steps": 6,
+  "tool_call_count": 14,
+  "applied_ops": [ /* the reversible operations applied */ ]
+}
+```
+
+Because edits are captured as `applied_ops`, a fanned-out team can replay every
+agent's ops into one undo step — see [Agent workflows](/docs/agents/workflows).
+
+## Ask before edit
+
+An **"ask before edit"** toggle pauses the loop for your approval **per tool
+call**. With it on, the brain proposes each mutation and waits; with it off, it
+runs autonomously to the end of the turn. Use it when you want a human in the
+loop on a sensitive document, and turn it off for trusted, repetitive work.
+
+## The docked agent panel
+
+The agent panel is the brain's home in the desktop app. It can:
+
+- **Run the in-app brain directly**, or
+- **Orchestrate CLI agents** (Claude Code, Codex) that drive the editor over
+  the live MCP at `:3846` — with a **streaming timeline**, a **stop button**, and
+  **auto-commit**.
+
+It has two modes:
+
+- **Chat** — a one-shot request.
+- **Agents** — a team of **1–6** agents working together.
+
+Every conversation is persisted to a per-document **`chat.json`** transcript, so
+the design's AI history travels with the project.
+
+<Callout type="warn">
+The in-memory document is not auto-persisted. Save the document (and let
+auto-commit run, if enabled) before relaunching the app, or unsaved edits and
+in-flight context are lost.
+</Callout>
+
+## Parity, restated
+
+The in-app brain and external agents share tool definitions, the
+`CanvasContext` shape, the orchestrator/loop semantics, and the
+`review_design` pipeline. Learn one and you have learned the other.
+
+## Next steps
+
+<Cards>
+  <Card title="Agent workflows" href="/docs/agents/workflows" description="Single-agent and multi-agent loops, including merged single-undo teams." />
+  <Card title="Connect an external agent" href="/docs/getting-started/connect-an-agent" description="Drive the same canvas from Claude Code, Codex, or GLM over the live MCP." />
+  <Card title="Review & revision" href="/docs/agents/review-revision" description="The audit-and-consolidate flow both paths share." />
+</Cards>

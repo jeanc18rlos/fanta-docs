@@ -1,0 +1,53 @@
+---
+title: Surfaces
+description: The six editor surfaces — Variables, Git, Home, Components, Code, and Prototype — and what each one is for.
+---
+
+Beyond the canvas and inspector, the editor has six dedicated **surfaces**: focused panels for specific kinds of work. Each one is a different lens on the same [document](/docs/concepts/document-model). They are all shipped in the current editor.
+
+## Variables
+
+Manage your design tokens. The Variables surface is where you create **collections**, define their **modes** (e.g. Light / Dark), and set each variable's value per mode. From here you maintain the semantic token set — `color/surface`, `color/text`, `radius/card` — that node properties bind to. Switching a collection's active mode rethemes the whole design.
+
+→ Concept: [Variables & modes](/docs/concepts/variables) · Tools: [Style & variables](/docs/tools/style-variables)
+
+## Git
+
+Version control for your design. Because Fantaisa can represent designs as [source](/docs/concepts/fnx-design-as-source), the Git surface brings the developer workflow to design: review changes as code-like diffs, see history, and commit. Design history lives in version control rather than a proprietary blob, so design and code can share one repository.
+
+→ Concept: [Design as source (.fnx)](/docs/concepts/fnx-design-as-source) · Format: [.fnx](/docs/formats/fnx)
+
+## Home
+
+Your starting point. The Home surface is the project launcher and dashboard — open recent projects, create new ones, and get oriented before diving into the canvas.
+
+→ Guide: [Getting started](/docs/getting-started)
+
+## Components
+
+Browse and manage your reusable parts. The Components surface lists the **masters** in the document, their **variants**, and lets you organize and reuse them. It's the catalog you draw from when assembling screens, and where a design system's building blocks live.
+
+→ Concept: [Components & instances](/docs/concepts/components) · Tools: [Components & instances](/docs/tools/components-instances)
+
+## Code
+
+See the design *as* code. The Code surface shows the [.fnx](/docs/concepts/fnx-design-as-source) source for your design — React/JSX-style files that read and diff like code. It pairs with the Git surface for review and with `export_jsx` for handing legible structure to humans or LLMs.
+
+→ Concept: [Design as source (.fnx)](/docs/concepts/fnx-design-as-source)
+
+## Prototype
+
+Wire and run interactivity. The Prototype surface is where you set **flow starts**, attach **reactions** (trigger → action) to nodes, configure **transitions**, and launch **present mode** to click through the result.
+
+→ Concept: [Prototyping](/docs/concepts/prototyping) · Tools: [Prototype](/docs/tools/prototype)
+
+## All six at a glance
+
+<Cards>
+  <Card title="Variables" href="/docs/concepts/variables" description="Collections, modes, and token values." />
+  <Card title="Git" href="/docs/concepts/fnx-design-as-source" description="Design version control via code-like diffs." />
+  <Card title="Home" href="/docs/getting-started" description="Project launcher and dashboard." />
+  <Card title="Components" href="/docs/concepts/components" description="Masters, variants, and reuse." />
+  <Card title="Code" href="/docs/concepts/fnx-design-as-source" description="The .fnx source view." />
+  <Card title="Prototype" href="/docs/concepts/prototyping" description="Flows, reactions, transitions, present mode." />
+</Cards>

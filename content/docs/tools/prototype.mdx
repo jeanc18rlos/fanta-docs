@@ -1,0 +1,29 @@
+---
+title: Prototyping & interactions
+description: Set the flow start, attach reactions with triggers and transitions, and edit them.
+---
+
+Wire interactive prototypes by setting a flow start and attaching reactions to nodes. A reaction pairs a **trigger** with an **action** and an optional **transition**.
+
+## Tools
+
+| Tool | Purpose | Key parameters |
+| --- | --- | --- |
+| `set_flow_start` | Set (or clear) the prototype entry node | `node` \| `null` |
+| `add_reaction` | Attach a reaction to a node | `node`, `trigger`, `delay_ms?`, `keys?`, `action`, `to?`, `target?`, `transition:{style, duration_ms, easing, direction}` |
+| `remove_reaction` | Remove a reaction by index | `node`, `index` |
+| `set_reaction` | Edit a reaction by index | `node`, `index`, … |
+
+**`trigger`:** `"click"` \| `"hover"` \| `"drag"` \| `"after_delay"` \| `"key"`. **`action`:** `"navigate"` \| `"back"` \| `"close"` \| `"scroll_to"`. Use `delay_ms` with `after_delay`, `keys` with `key`, and `to`/`target` to point `navigate`/`scroll_to`.
+
+## Examples
+
+Set the flow start, then navigate on click with a transition:
+
+```json
+{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"set_flow_start","arguments":{"node":"page-home"}}}
+```
+
+```json
+{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"add_reaction","arguments":{"node":"btn-cta","trigger":"click","action":"navigate","to":"page-details","transition":{"style":"smart_animate","duration_ms":300,"easing":"ease_out","direction":"left"}}}}
+```

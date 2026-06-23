@@ -1,0 +1,65 @@
+---
+title: Read, query & debug
+description: Read the document tree, query and hit-test nodes, draw overlays, pull logs, and assert state.
+---
+
+Read state, locate nodes, debug what the renderer is doing, and assert invariants. LLMs see compact projections of the scene — prefer [`snapshot_layout`](#snapshot_layout) and [`query`](#query) over dumping the whole document.
+
+## Read
+
+| Tool | Purpose | Key parameters |
+| --- | --- | --- |
+| `get_document` | Document tree | `include_hidden?`, `max_nodes?`=`200` |
+| `get_node` | One node | `id` |
+| `get_node_props` | One node's properties | `id` |
+| `batch_get` | Fetch many nodes / pattern matches | `nodeIds?:[]`, `patterns?:[{name,type,reusable}]`, `parentId?`, `include_hidden?`, `max_nodes?` |
+| `snapshot_layout` <a id="snapshot_layout" /> | Resolved, auto-layout-solved, instance-expanded flat list with world bounds | `page?` |
+| `get_tree` | Hierarchy | `root?`, `depth?`, `include_hidden?`=`true` |
+| `list_components` | List components | — |
+
+## Query & hit-test
+
+| Tool | Purpose | Key parameters |
+| --- | --- | --- |
+| `query` <a id="query" /> | Select nodes by kind/name/rect | `selector:{kind?, name_contains?, rect?}` |
+| `hit_test` | Topmost node at a point | `x`, `y`, `deep?` |
+| `inspect_at` | Inspect (and optionally select/highlight) at a point | `x`, `y`, `highlight?`=`true`, `select?`=`false` |
+
+## Overlays & logs
+
+| Tool | Purpose | Key parameters |
+| --- | --- | --- |
+| `draw_overlay` | Draw a debug annotation | `shape`, `x?`, `y?`, `w?`, `h?`, `x2?`, `y2?`, `radius?`, `node?`, `color?`, `label?`, `coords?`, `id?` |
+| `clear_overlay` | Remove overlays | `id?` |
+| `get_errors` | Recent errors | `since?`, `limit?`=`200` |
+| `get_logs` | Filtered logs | `level`: `"warn"` \| `"error"`, `since?`, `limit?` |
+| `clear_logs` | Clear the log buffer | — |
+| `get_interaction_state` | Current interaction state | — |
+
+**`draw_overlay` shapes:** `"rect"` \| `"outline"` \| `"dot"` \| `"arrow"` \| `"line"` \| `"label"`. **`coords`:** `"world"` \| `"screen"`.
+
+## Assert & golden
+
+| Tool | Purpose | Key parameters |
+| --- | --- | --- |
+| `assert` | Assert one predicate | `predicate` |
+| `assert_all` | Assert many predicates | `predicates:[]` |
+| `golden_save` | Save a golden snapshot | `name`, `path?` |
+| `golden_diff` | Diff against a golden | `name`, `path?` |
+| `golden_list` | List goldens | — |
+
+**Predicate kinds:** `node_exists`, `selection_is`, `count`, `bounds_near`, `prop_eq`, `no_overlap`.
+
+## Examples
+
+Get the resolved, layout-solved snapshot for a page:
+
+```json
+{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"snapshot_layout","arguments":{"page":"page-home"}}}
+```
+
+Assert a node exists and a fill matches:
+
+```json
+{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"assert_all","arguments":{"predicates":[{"kind":"node_exists","id":"card-1"},{"kind":"prop_eq","id":"card-1","prop":"fill","value":"#101418"}]}}}
+```

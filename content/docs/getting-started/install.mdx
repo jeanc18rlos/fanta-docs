@@ -1,0 +1,111 @@
+---
+title: Install & Build
+description: Set up the Rust toolchain and run the Fantaisa editor, the headless MCP server, or the live proxy.
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+Fantaisa is a single Cargo workspace. You build it from source with the standard Rust toolchain.
+
+## Prerequisites
+
+- **Rust toolchain** — install via [rustup](https://rustup.rs). A recent stable `rustc` and `cargo` are required.
+- **Git** — to clone the repository.
+- **macOS** — the desktop app ships a macOS Skia Ganesh/Metal GPU path for hardware-accelerated rendering. The headless MCP server and the rest of the workspace are platform-agnostic.
+
+<Callout type="info">
+On macOS the editor renders through Metal. No extra configuration is needed beyond a working Rust toolchain and Xcode command-line tools (`xcode-select --install`).
+</Callout>
+
+## Clone & build
+
+<Steps>
+<Step>
+
+Clone the repository and enter it.
+
+```bash title="Terminal"
+git clone <your-fantaisa-remote> fanta
+cd fanta
+```
+
+</Step>
+<Step>
+
+Build the workspace once to warm the cache (optional, but the first build is the long one).
+
+```bash title="Terminal"
+cargo build
+```
+
+</Step>
+</Steps>
+
+## Run it
+
+There are three entry points. Most people start with the desktop editor.
+
+<Tabs items={['Desktop editor', 'Headless MCP', 'Live proxy']}>
+<Tab value="Desktop editor">
+
+The visible canvas app. It **auto-starts the live MCP server on `:3846`** so agents can connect immediately.
+
+```bash title="Terminal"
+cargo run -p fanta-app
+```
+
+</Tab>
+<Tab value="Headless MCP">
+
+A standalone MCP server over stdio (JSON-RPC). It owns an in-memory document and can load `.fant` / `.fig` files. Use it for CI, scripted design, or when you don't need a window.
+
+```bash title="Terminal"
+cargo run -p fanta-ai --bin fanta-mcp
+```
+
+</Tab>
+<Tab value="Live proxy">
+
+A stdio→HTTP proxy so stdio-only clients (like Claude Code) can reach the **visible desktop editor** instead of an in-memory doc.
+
+```bash title="Terminal"
+cargo run -p fanta-ai --bin fanta-mcp -- --live
+```
+
+</Tab>
+</Tabs>
+
+<Callout type="info">
+The live MCP listens on `http://127.0.0.1:3846/mcp` by default. Override the bind address with the `FANTA_MCP_ADDR` environment variable.
+</Callout>
+
+## Configure the AI brain (optional)
+
+Fantaisa has an in-app AI brain in addition to the external agents that connect over MCP. To use it, bring your own key:
+
+```bash title="Terminal"
+export ANTHROPIC_API_KEY="sk-ant-..."
+```
+
+The default models are Claude (`claude-opus-4-8`, `claude-sonnet-4-6`, `claude-haiku-4-5`, `claude-fable-5`). You can also run GLM via Z.ai's Anthropic-compatible endpoint:
+
+```bash title="Terminal"
+export FANTA_AI_MODEL="glm-5.2"
+export FANTA_LLM_BASE_URL="https://api.z.ai/api/anthropic"
+export ANTHROPIC_API_KEY="<your-z.ai-key>"
+```
+
+| Variable | Purpose |
+| --- | --- |
+| `ANTHROPIC_API_KEY` | API key for the in-app AI brain (Anthropic-compatible). |
+| `FANTA_AI_MODEL` | Override the model id (e.g. `glm-5.2`). |
+| `FANTA_LLM_BASE_URL` | Override the LLM base URL (e.g. the Z.ai endpoint). |
+| `FANTA_MCP_ADDR` | Override the live MCP bind address (default `127.0.0.1:3846`). |
+
+## Next steps
+
+<Cards>
+  <Card title="Your first project" href="/docs/getting-started/first-project" description="Create a page, draw a frame, and save your work." />
+  <Card title="Connect an agent" href="/docs/getting-started/connect-an-agent" description="Wire an AI agent to the running editor in 60 seconds." />
+</Cards>

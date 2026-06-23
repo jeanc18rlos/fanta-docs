@@ -1,0 +1,78 @@
+---
+title: Agents & AI
+description: Fantaisa is agent-native — external agents and the in-app brain share one tool surface and one design-review pipeline.
+---
+
+Fantaisa is built to be **designed by agents**, not just by hand. The desktop
+app is a live MCP server *and* it ships with an in-app AI brain. Both reach the
+canvas through the **same high-level tool surface** and the **same deterministic
+design-review pipeline**. There is no second-class path: anything an external
+agent can do, the in-app brain can do, and vice versa.
+
+## Two ways to drive the canvas
+
+<Cards>
+  <Card title="External agents" href="/docs/getting-started/connect-an-agent" description="Claude Code, Codex, or GLM connect over the live MCP at 127.0.0.1:3846 and design on your running editor." />
+  <Card title="The in-app brain" href="/docs/agents/in-app-ai" description="A docked assistant runs an orchestrator on a worker thread while the UI stays responsive — no external CLI required." />
+</Cards>
+
+Both speak the same language:
+
+- **DocTool intents, not raw operations.** Agents call high-level intents
+  (`create_frame`, `set_fill`, `set_auto_layout`, `insert_instance`, …) that
+  lower to reversible `Operation`s. The model never pokes raw document state.
+- **A compact `CanvasContext`.** The model "sees" the canvas through a small,
+  curated view (node id, type, name, world bounds, fill, parent, plus viewport,
+  components, and tokens). Nodes flagged private are excluded.
+- **One review pipeline.** `review_design` runs the same deterministic audit no
+  matter who triggered it.
+
+## The parity principle
+
+The single most important idea in this section: **external agents and the
+in-app brain are at parity.** They share tool definitions, the canvas context
+shape, the review pipeline, and the canonical build loop. Whatever you learn
+designing with Claude Code applies one-to-one to the in-app assistant — and to
+a fanned-out team of agents working the same document.
+
+<Callout type="info">
+Pick the in-app brain for a fast, self-contained loop; pick external agents
+(or a visible team) when you want CLI-grade autonomy, your own subscription
+auth, or many agents working in parallel.
+</Callout>
+
+## Single agent vs. a team
+
+A **single agent** runs the canonical loop: inspect the canvas, build with the
+tool surface, verify with a screenshot and review, then save. Good for focused
+work and tight iteration.
+
+A **multi-agent team** fans out N concurrent agents (1–6), each working on its
+own clone of the document, then **merges every agent's edits into one undo
+step**. Launch a *visible* team and you can watch on-canvas cursors, focus
+frames, and step markers move in real time. Good for breadth — building several
+sections, screens, or variants at once.
+
+## The canonical build loop
+
+Every agent — external or in-app, solo or in a team — follows the same loop:
+
+```text title="Build loop"
+agent_playbook        # read the rules of the road
+get_guidelines        # styles, tokens, component conventions
+inspect               # get_editor_state / get_document / snapshot_layout
+build                 # create_* / batch_design / set_auto_layout / insert_instance
+verify                # export_png / get_screenshot / compare_screenshot / review_design
+save_document
+```
+
+## Explore this section
+
+<Cards>
+  <Card title="Agent workflows" href="/docs/agents/workflows" description="The single-agent loop in practice, plus the parallel multi-agent model and the discipline for sharing one doc." />
+  <Card title="Reference-grounded design" href="/docs/agents/reference-grounded" description="Build from inspiration boards and iterate against saved references." />
+  <Card title="Review & revision" href="/docs/agents/review-revision" description="review_design, annotated screenshots, and a PR-style comment → consolidate → commit loop." />
+  <Card title="Media generation" href="/docs/agents/media-generation" description="Async image, video, audio, and 3D generation that drops straight into the doc." />
+  <Card title="The in-app AI brain" href="/docs/agents/in-app-ai" description="Models, BYO-key, the orchestrator loop, ask-before-edit, and the docked agent panel." />
+  <Card title="MCP server" href="/docs/mcp" description="How agents connect, the tool catalog, and best-output practices." />
+</Cards>

@@ -1,0 +1,95 @@
+---
+title: The Fantaisa Plugin
+description: A turnkey Claude Code plugin that wires up the live Fantaisa MCP server and ships the design skills agents need.
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+The **Fantaisa plugin** makes Claude Code (and any Claude-plugin-compatible client) work against Fantaisa out of the box. It bundles:
+
+- **The MCP server config** — points at the live editor on `http://127.0.0.1:3846/mcp`, so the `fantaisa` tools are available the moment the editor is running.
+- **Skills** — the [Fantaisa build loop, verification, and component workflows](/docs/plugin/skills) encoded as Agent Skills, so the model follows the hard rules (explicit nesting, fill-to-width, verify-with-a-node) without you re-explaining them.
+- **A `/design` command** — a one-liner to kick off a build on the live canvas.
+
+<Callout type="info">
+  The plugin lives in this docs repository under `/plugin`, and the repo doubles as a Claude Code **plugin marketplace** (its `.claude-plugin/marketplace.json`). That means you can install it straight from GitHub.
+</Callout>
+
+## Prerequisites
+
+1. The Fantaisa desktop editor is running: `cargo run -p fanta-app` (it serves MCP on `:3846`).
+2. Claude Code is installed (`claude`).
+
+## Install
+
+<Steps>
+<Step>
+### Add the marketplace
+
+```bash title="Terminal"
+claude plugin marketplace add jeanc18rlos/fanta-docs
+```
+</Step>
+<Step>
+### Install the plugin
+
+```bash title="Terminal"
+claude plugin install fantaisa@fantaisa-docs
+```
+</Step>
+<Step>
+### Start designing
+
+With the editor running, ask Claude to design — or use the bundled command:
+
+```text
+/design a sign-in card with email, password, and a primary button
+```
+
+The agent will call `agent_playbook`, inspect the canvas, build with auto-layout, verify with `export_png`/`review_design`, and save.
+</Step>
+</Steps>
+
+## Don't want the full plugin?
+
+You can wire up just the MCP server. Both forms point at the same running editor.
+
+<Tabs items={["Claude Code (HTTP)", "Claude Code (stdio proxy)", ".mcp.json"]}>
+<Tab value="Claude Code (HTTP)">
+```bash title="Terminal"
+claude mcp add fantaisa --transport http http://127.0.0.1:3846/mcp
+```
+</Tab>
+<Tab value="Claude Code (stdio proxy)">
+For clients that prefer stdio, use the `--live` proxy (run from the Fantaisa repo):
+
+```bash title="Terminal"
+claude mcp add fantaisa -- cargo run -p fanta-ai --bin fanta-mcp -- --live
+```
+</Tab>
+<Tab value=".mcp.json">
+Drop this in your project's `.mcp.json`:
+
+```json title=".mcp.json"
+{
+  "mcpServers": {
+    "fantaisa": {
+      "type": "http",
+      "url": "http://127.0.0.1:3846/mcp"
+    }
+  }
+}
+```
+</Tab>
+</Tabs>
+
+See [MCP → Connect](/docs/mcp/connect) for Codex and headless setups.
+
+## What's next
+
+<Cards>
+  <Card title="Skills" href="/docs/plugin/skills" description="The Agent Skills the plugin ships and what each one does." />
+  <Card title="Recipes" href="/docs/plugin/recipes" description="Copy-paste prompts and the /design command in action." />
+  <Card title="Best output" href="/docs/mcp/best-output" description="The rules the skills enforce — worth reading once." />
+</Cards>

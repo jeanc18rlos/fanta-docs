@@ -1,0 +1,69 @@
+---
+title: Export — PNG, SVG, PDF
+description: Render Fantaisa documents to PNG, SVG, and PDF with fanta-export and the MCP export tools, plus the always-pass-a-node verification rule.
+---
+
+Fantaisa renders documents for the outside world through the `fanta-export`
+crate, which drives PNG, SVG, and PDF output and the resolver paths behind them.
+Over MCP, the same capability is exposed as a small set of export tools you call
+on a node.
+
+## Export tools
+
+| Tool | Output | Typical use |
+| --- | --- | --- |
+| `export_png` | Rasterized PNG | Final assets, visual verification |
+| `export_svg` | Vector SVG | Hand-off to web / vector pipelines |
+| `export_jsx` | `.fnx` source | Design-to-code (see [.fnx](/docs/formats/fnx)) |
+| `get_screenshot` | Fast PNG | Quick in-loop checks (chrome-free, no OS perms) |
+
+```json title="Export a frame to PNG"
+{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"export_png","arguments":{"node":"Card"}}}
+```
+
+```json title="Export a frame to SVG"
+{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"export_svg","arguments":{"node":"Card"}}}
+```
+
+## The two rules that matter
+
+Both export and screenshot composite the scene, so two constraints keep them fast
+and correct.
+
+<Callout type="error">
+  **Always pass a frame `node`, and keep frames ≤ 1920×1080.** With no `node`,
+  `export_png` / `get_screenshot` default to the whole document — every page across
+  world space — and **time out** (`visible editor timed out`). Never screenshot a
+  page or the canvas.
+</Callout>
+
+<Callout type="warn">
+  Export composites **every page overlapping the export rect**. Keep pages in
+  separate world regions and pack frames compactly within a page, or an export of
+  one frame can bleed in content from another page. Prefer exporting individual
+  frames by id.
+</Callout>
+
+## Export as verification
+
+In a build session, export is also how you *see* what you built. After assembling
+a section, render the frame and look — then critique with `review_design` before
+saving:
+
+```json title="Screenshot, then critique"
+{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"get_screenshot","arguments":{"node":"Card"}}}
+```
+
+```json
+{"jsonrpc":"2.0","id":4,"method":"tools/call","params":{"name":"review_design","arguments":{"node":"Card"}}}
+```
+
+This is the **verify** step of the build loop. See
+[Export & visual verification](/docs/tools/verify) for the full tool set
+(`compare_screenshot`, `review_design`) and [the build loop](/docs/mcp/build-loop)
+for where it sits.
+
+<Cards>
+  <Card title="Visual verification" href="/docs/tools/verify" description="export_png/svg/jsx, get_screenshot, compare_screenshot, review_design." />
+  <Card title=".fnx design-as-source" href="/docs/formats/fnx" description="export_jsx returns design source instead of pixels." />
+</Cards>

@@ -1,0 +1,112 @@
+---
+title: Version-control your designs
+description: Branch, commit, and promote designs with Fantaisa's VCS tools — vcs_begin_task through vcs_promote — plus design locks for safe parallel work.
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+Fantaisa treats designs as versionable artifacts with a git-like flow built into
+the editor. This guide walks the task lifecycle — open a task, make edits, commit,
+finish, and promote — and how design locks keep parallel work from colliding.
+
+<Callout type="info">
+  The VCS tools give you branches, diffs, tasks, commit, merge, and promote over
+  the same live document. They pair naturally with
+  [`.fnx`](/docs/formats/fnx) source for line-level history.
+</Callout>
+
+<Steps>
+
+<Step>
+
+### Begin a task
+
+`vcs_begin_task` opens an isolated unit of design work — the design equivalent of
+a branch. Edits you make are tracked against this task rather than landing
+straight on the trunk.
+
+```json title="open a task"
+{"name":"vcs_begin_task","arguments":{"name":"redesign-card","description":"new metric card layout"}}
+```
+
+</Step>
+
+<Step>
+
+### Make your edits
+
+Build inside the task with the normal [build loop](/docs/mcp/build-loop) — create,
+`reorder`, `set_auto_layout`, override, verify. Everything you change is captured
+as part of the task's diff.
+
+```json title="example edit within the task"
+{"name":"set_auto_layout","arguments":{"node":"Card","direction":"vertical","gap":6,"padding":16}}
+```
+
+</Step>
+
+<Step>
+
+### Commit checkpoints
+
+`vcs_commit` records a checkpoint with a message — the same discipline as a code
+commit. Commit at meaningful milestones so the task's history is reviewable.
+
+```json title="commit a checkpoint"
+{"name":"vcs_commit","arguments":{"message":"card: vertical stack, 16 padding"}}
+```
+
+Inspect what changed with a diff before committing if you want to review first.
+
+</Step>
+
+<Step>
+
+### Finish the task
+
+When the work is done, `vcs_finish_task` closes the task and prepares it for
+integration. This is the design analogue of marking a branch ready to merge.
+
+```json title="finish the task"
+{"name":"vcs_finish_task","arguments":{"task":"redesign-card"}}
+```
+
+</Step>
+
+<Step>
+
+### Promote to trunk
+
+`vcs_promote` integrates the finished task into the main line of the document —
+the merge/promote step. After promotion the change is part of the canonical
+design.
+
+```json title="promote the finished task"
+{"name":"vcs_promote","arguments":{"task":"redesign-card"}}
+```
+
+</Step>
+
+</Steps>
+
+## Design locks for parallel work
+
+When several people or agents edit one document, design locks reserve a subtree so
+two tasks don't fight over the same nodes. Combine locks with the
+[multi-agent](/docs/guides/multi-agent-build) discipline — disjoint regions and
+unique names — for collision-free parallel work, then promote each task in turn.
+
+<Callout type="warn">
+  Locks coordinate *who edits what*; disjoint world regions and unique names
+  coordinate *where work lives*. Use both for swarms — neither alone is enough.
+</Callout>
+
+## The lifecycle in one line
+
+`vcs_begin_task` → edits → `vcs_commit` (checkpoints) → `vcs_finish_task` →
+`vcs_promote`.
+
+<Cards>
+  <Card title="Version control tools" href="/docs/tools/vcs" description="The full VCS tool catalog: branches, diff, tasks, commit, merge, promote." />
+  <Card title="Design-to-code with .fnx" href="/docs/guides/design-to-code-fnx" description="Pair design VCS with .fnx source for line-level git diffs." />
+</Cards>

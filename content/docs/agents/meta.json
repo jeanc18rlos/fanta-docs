@@ -1,0 +1,5 @@
+{
+  "title": "Agents & AI",
+  "icon": "Bot",
+  "pages": ["index", "workflows", "reference-grounded", "review-revision", "media-generation", "in-app-ai"]
+}

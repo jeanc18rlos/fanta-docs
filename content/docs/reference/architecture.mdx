@@ -1,0 +1,73 @@
+---
+title: Architecture
+description: The Fantaisa crate map, dependency direction, and where the MCP server and AI surface live within the Cargo workspace.
+---
+
+Fantaisa is a native Rust creative canvas built as a **single Cargo workspace**.
+The architecture is layered: a renderer-agnostic document core at the bottom, a
+renderer and tools above it, the desktop app wiring everything together, and an AI
+surface that talks to the document only through a typed intent layer.
+
+## Crate map
+
+| Crate | Responsibility |
+| --- | --- |
+| `fanta-doc` | Renderer-agnostic scene graph: IDs, nodes, operations, history, variables, components, auto-layout, snapshots. The model core. |
+| `fanta-render` | Skia raster rendering, image cache, instance expansion, golden render tests. |
+| `fanta-app` | Desktop binary + app state (winit + softbuffer; macOS Skia Ganesh/Metal GPU; native chat WebView). Hosts the live MCP server and the docked AI panel. |
+| `fanta-tools` | Human tool state machines: select, hand, rect, ellipse, line, polygon, star, text, pen. |
+| `fanta-ai` | LLM client traits, Anthropic client, mock clients, `CanvasContext` builder, `DocTool` intent surface, orchestrators, design/style review, headless MCP server, MCP batch tooling. |
+| `fanta-fig-interop` | `.fig` import: Kiwi reader/writer, Figma mapping, variables, components, instance overrides, auto-layout, vector geometry. |
+| `fanta-format` | `.fant` container: manifest, migration, round-trip tests. |
+| `fanta-export` | PNG / SVG / PDF export and resolver paths. |
+| `fanta-fidelity` | CLI for rendering and diffing fidelity corpora. |
+| `fanta-nodes` | Node graph model/executor and deterministic AI-node stand-ins. |
+| `fanta-text` | Text buffer, caret, style, layout engine, font resolver. |
+| `fanta-canvas` | Viewport, hit testing, snapping, handles, alignment. |
+| `fanta-video`, `fanta-3d`, `fanta-collab` | Early / stub for later phases. |
+
+## Dependency direction
+
+The layering is strict and must not reverse:
+
+```text
+fanta-doc  (core — depends on nothing above it)
+   ▲
+   ├── fanta-render   (consumes fanta-doc + fanta-text)
+   ├── fanta-tools    (emits document operations; UI-shell agnostic)
+   └── fanta-ai       (talks to the doc via DocTool / Doc::apply)
+            ▲
+        fanta-app     (wires state, windowing, rendering, MCP, IO together)
+```
+
+- **`fanta-doc` is the core** and depends on nothing above it.
+- **`fanta-render`** consumes `fanta-doc` and `fanta-text`; the direction never
+  reverses.
+- **`fanta-app`** is the integration layer — it wires state, windowing, overlays,
+  commands, file IO, the live MCP, and rendering together.
+- **`fanta-ai`** never pokes app internals; it talks to the document through the
+  `DocTool` intent surface and `Doc::apply`, and sees a compact `CanvasContext`
+  rather than arbitrary source state.
+
+## Where the MCP and AI live
+
+There are two MCP surfaces and one in-app brain:
+
+- **Live MCP server** — hosted by `fanta-app`, driving the *visible* desktop
+  canvas. Reachable over Streamable HTTP at `http://127.0.0.1:3846/mcp`.
+- **Headless MCP server** — the `fanta-mcp` binary in `fanta-ai`, which owns an
+  in-memory document with no UI. A `--live` mode proxies stdio clients to the
+  visible editor.
+- **In-app AI panel** — a docked agent in `fanta-app` that drives the same
+  document through `fanta-ai`'s orchestrators and `DocTool`.
+
+<Callout type="info">
+  Mutations from any of these go through `DocTool` and lower to `Operation`, so
+  undo/redo, history, and invariants behave identically whether a human, the live
+  MCP, or the in-app AI made the change.
+</Callout>
+
+<Cards>
+  <Card title="CLI & binaries" href="/docs/reference/cli" description="How to run each crate and the env vars that configure them." />
+  <Card title="Formats & interop" href="/docs/formats" description="Which crate owns each format: project dir, .fant, .fnx, .fig, export." />
+</Cards>

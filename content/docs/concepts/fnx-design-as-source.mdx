@@ -1,0 +1,56 @@
+---
+title: Design as Source (.fnx)
+description: .fnx represents designs as React/JSX-style source files — git-friendly, code-like diffs — and export_jsx returns the source for any subtree.
+---
+
+`.fnx` is Fantaisa's **design-as-source** format. Instead of storing a design as per-node JSON, `.fnx` represents it as **React/JSX-style source files** — one per component or page — that read like code and diff like code. It is produced and consumed by the `fanta-fnx` codec, and it sits on top of the same [document model](/docs/concepts/document-model): the tree is the source of truth; `.fnx` is a code-shaped projection of it.
+
+## What .fnx looks like
+
+A frame becomes a tag; its children nest like JSX children; properties become attributes. A card might serialize roughly like this:
+
+```jsx title="Card.fnx (illustrative)"
+<Frame name="Card" autoLayout="column" gap={12} padding={16} fill="color/surface">
+  <Text style="title">Welcome back</Text>
+  <Text style="body" fill="color/text-muted">Sign in to continue</Text>
+  <Button label="Continue" fill="color/accent" />
+</Frame>
+```
+
+The exact syntax follows the codec, but the shape is the point: structure is nesting, configuration is attributes, and tokens read by name.
+
+## Why design as source
+
+Storing designs as code-shaped files unlocks the developer workflow for design:
+
+- **Git-native.** `.fnx` files commit, branch, and merge like any source file. Design history lives in your version control, not a proprietary blob.
+- **Code-like diffs.** A pull request shows *what changed* in human-readable lines — "label changed, gap 8→12" — instead of an opaque binary diff. Review becomes possible.
+- **Reads like code.** A component's structure is legible at a glance, which is friendly to both humans and LLMs and pairs naturally with [components](/docs/concepts/components) and [variables](/docs/concepts/variables) (tokens appear by name).
+
+<Callout type="info">
+`.fnx` is design *as* source — the same scene graph, projected to text. It complements binary/container formats rather than replacing the model: edits still flow through [Operations](/docs/concepts/document-model#operations).
+</Callout>
+
+## export_jsx
+
+To get the source for part of a design, call **`export_jsx { node }`**. It returns the `.fnx` for that subtree — a component, a page section, or a whole frame — so you can review it, commit it, or hand it to an LLM as legible context.
+
+```text title="Getting source for a subtree"
+export_jsx { node: <frame id> }  →  .fnx source for that subtree
+```
+
+Because it is just text, the output drops straight into a diff, a code review, or a prompt — no special viewer required.
+
+## When to reach for it
+
+- **Reviewing design changes** the way you review code (PRs, line comments).
+- **Versioning designs** alongside the codebase in the same repository.
+- **Feeding an agent** a compact, readable description of existing structure.
+
+## Related
+
+<Cards>
+  <Card title=".fnx format" href="/docs/formats/fnx" description="The format reference and round-trip details." />
+  <Card title="Figma import" href="/docs/formats/figma-import" description="Bring existing .fig designs into the model." />
+  <Card title="The Code surface" href="/docs/editor/surfaces" description="View and work with design source inside the editor." />
+</Cards>

@@ -1,0 +1,44 @@
+---
+title: Agent orchestration & presence
+description: Bootstrap the workflow, spawn agent teams, drive presence cursors, and generate brand pages.
+---
+
+Start every live-MCP session here. Call [`agent_playbook`](#agent_playbook) for the official workflow, then [`get_guidelines`](#get_guidelines). These tools also orchestrate multi-agent teams and render presence (cursors, focus frames, step markers) on the shared canvas.
+
+## Bootstrap
+
+| Tool | Purpose | Key parameters |
+| --- | --- | --- |
+| `agent_playbook` <a id="agent_playbook" /> | Official live-MCP workflow: principles + recommended flow + tool groups | — |
+| `get_guidelines` <a id="get_guidelines" /> | Build guidance and style packs | `category`: `"guide"` \| `"style"`, `name?` |
+
+## Teams & presence
+
+| Tool | Purpose | Key parameters |
+| --- | --- | --- |
+| `start_agent_team` | Launch a multi-agent build | `prompt`, `provider?`: `"claude"` \| `"codex"` \| `"glm"`, `agent_count?`: `1..6`, `visible?`=`true` |
+| `spawn_agent` | Register a presence agent | `name`, `role`, `x`, `y`, `color` |
+| `focus_frame` | Highlight a region for an agent | `target?`, `x?`, `y?`, `w?`, `h?`, `label?`, `color?` |
+| `agent_step` | Post a step marker / status | `agent?`, `x?`, `y?`, `message?`, `status?`, `color?` |
+| `agent_cursor` | Move a presence cursor | `id?`=`"agent"`, `x`, `y`, `label?`, `color?` |
+| `clear_cursors` | Remove cursors | `id?` |
+
+## Brand pages
+
+| Tool | Purpose | Key parameters |
+| --- | --- | --- |
+| `create_brand_color_page` | Generate a full brand color page | `brand_name`, `page_name?`, `logo_path?`, `logo_treatment?`, `palette_direction?`, `primary_color?`, `agent_color?`, `success_color?`, `warning_color?`, `danger_color?`, `include_dark_mode`, `include_spectrum_reference?`, `notes?` |
+
+## Examples
+
+Bootstrap the workflow at the start of a session:
+
+```json
+{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"agent_playbook","arguments":{}}}
+```
+
+Launch a small team to build from a prompt:
+
+```json
+{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"start_agent_team","arguments":{"prompt":"Design a settings page with sidebar nav","provider":"claude","agent_count":3,"visible":true}}}
+```

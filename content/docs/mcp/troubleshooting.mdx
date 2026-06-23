@@ -1,0 +1,156 @@
+---
+title: Troubleshooting
+description: Fixes for the common failures when building over the Fantaisa live MCP — timeouts, page bleed, silent overrides, lost work.
+---
+
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
+
+Almost every live-MCP failure traces back to one of nine hard rules. Here are the
+symptoms you will actually see, and the exact fix for each.
+
+<Accordions>
+
+<Accordion title="“visible editor timed out” on a screenshot or export">
+
+You called `export_png` or `get_screenshot` **without a `node`**. With no node
+they default to `node:"document"`, which renders **every page across the entire
+world space** — on a real document that never finishes, and the socket returns
+`visible editor timed out`.
+
+- Always pass a frame: `export_png {node: "frame_card"}`.
+- Keep every frame **≤ 1920×1080**. Oversized frames also bloat the render and
+  risk the timeout.
+- **Never** screenshot a page, the canvas, or the document.
+
+A single ~300×1010 frame returns in one shot (~70 KB); the document default times
+out every time. See [rule 6](/docs/mcp/best-output).
+
+</Accordion>
+
+<Accordion title="export_png shows content from other pages (page bleed)">
+
+`export_png` composites **every page that overlaps the export rect** in world
+space — and frame export does **not** dodge this. If two pages sit in the same
+region, both render into your export.
+
+- Give **each page a disjoint world region** (e.g. brand pages at `x < 2500`,
+  mockups at `x ≥ 12000`).
+- *Within* a page, still pack frames tightly (~64–120px gutters) — compaction
+  inside a page is safe; only page-to-page overlap causes bleed.
+
+See [rule 8](/docs/mcp/best-output).
+
+</Accordion>
+
+<Accordion title="An override does nothing — set_instance_override silently no-ops">
+
+`set_instance_override` (and `insert_instance` overrides) resolve only the
+component **root** or a **direct child** by node id. A deeper descendant needs the
+full `target` **PATH array** — give a plain id where a path is required and the
+call succeeds but changes nothing.
+
+```json
+{ "tool": "set_instance_override",
+  "args": { "node": "inst_card", "target": ["row_header", "txt_title"], "text": "New" } }
+```
+
+If you recreated a master child, re-point the override at the new id. See
+[rule 2](/docs/mcp/best-output).
+
+</Accordion>
+
+<Accordion title="A child won’t fill its parent’s width">
+
+Fill-to-width on the cross axis needs **both** conditions, in order:
+
+1. The child's own `set_auto_layout primary_sizing` is `hug` — a `fixed` primary
+   sizing **overrides** stretch.
+2. `set_layout_child align_self: "stretch"` is set **after** the parent became an
+   auto-layout frame.
+
+If you set `align_self` before the parent is auto-layout, or leave the child at
+`fixed`, it stays its created width. For growth along the layout direction, use
+`fill_container` / `grow` instead. See [rule 3](/docs/mcp/best-output).
+
+</Accordion>
+
+<Accordion title="Changes vanished after I relaunched the app">
+
+In-memory document state is **not auto-persisted**. Relaunch reloads from disk,
+so anything you did since the last save is gone.
+
+- Call **`save_document` first**, before any relaunch.
+- Save once each section is right, not just at the very end.
+
+See the save step in [the build loop](/docs/mcp/build-loop).
+
+</Accordion>
+
+<Accordion title="Port 3846 is already in use, or I need a second editor">
+
+The HTTP endpoint binds `127.0.0.1:3846` by default. If the port is taken (an
+editor is already running, or another process holds it), point the new editor at
+a different address with `FANTA_MCP_ADDR`:
+
+```bash
+FANTA_MCP_ADDR=127.0.0.1:4000 cargo run -p fanta-app
+```
+
+Point your HTTP client — or the `--live` proxy, which reads the same variable —
+at the matching address. Note that for Codex you should connect to the **one**
+running editor over HTTP, not spawn a second instance; use a custom address only
+when you deliberately want two separate documents.
+
+</Accordion>
+
+<Accordion title="The window hangs and memory climbs to ~10GB (macOS)">
+
+This is the GPU framebuffer trap. The macOS Metal layer
+(`crates/fanta-app/src/app/gpu.rs`) keeps `framebufferOnly = true` on purpose.
+**Do not flip it to `false`** to sample the drawable for advanced blends or
+backdrop blur: on a large document every drawable becomes a full sampleable
+texture and RSS climbs unbounded (~10GB), hanging the window.
+
+The correct fix for dst-sampling effects is to render to an **offscreen
+sampleable surface and blit** into the framebuffer-only drawable at present time —
+not to change the flag. If you hit the hang, revert the flag and relaunch.
+
+</Accordion>
+
+<Accordion title="The agent builds drifting, uneven, absolutely-placed layouts">
+
+The agent skipped the front of the loop. It is placing children by coordinate
+instead of nesting them into auto-layout stacks.
+
+- Make sure the session opened with `agent_playbook`, then `get_guidelines`.
+- Build with auto-layout: `reorder {into, to:"front"}` each child, then
+  `set_auto_layout` with a `gap`. Never flat absolute placement.
+- Ship an `AGENTS.md` so the conventions reach the agent automatically — see
+  [Custom rules & project context](/docs/mcp/custom-rules).
+
+See rules [1](/docs/mcp/best-output) and [7](/docs/mcp/best-output).
+
+</Accordion>
+
+<Accordion title="A read returns nothing even though the node exists">
+
+Many inspection reads are scoped to the **active page**. If you created a node on
+one page and query it after switching the active page, the lookup can come back
+empty.
+
+- Capture node ids **at creation time** and reuse them, rather than re-querying
+  across pages.
+- Set the active page explicitly before a page-scoped read if you must re-query.
+
+See the inspect step in [the build loop](/docs/mcp/build-loop).
+
+</Accordion>
+
+</Accordions>
+
+## Still stuck?
+
+<Cards>
+  <Card title="Connect an agent" href="/docs/mcp/connect" description="Re-check your transport and client config." />
+  <Card title="Get the best output" href="/docs/mcp/best-output" description="The full rules each fix derives from." />
+</Cards>

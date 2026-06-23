@@ -1,0 +1,31 @@
+---
+title: Core Concepts
+description: The document model, world space, auto-layout, variables, components, vectors, prototyping, and design-as-source that everything else builds on.
+---
+
+Fantaisa is a polymorphic infinite canvas: vector, bitmap, text, video, 3D, node graphs, and AI artifacts all share the same document semantics — transform, selection, grouping, undo, and export. Understanding a handful of core ideas makes both hand-editing and agent-driven design predictable.
+
+These concepts are renderer-agnostic and tool-agnostic. They describe what a Fantaisa document *is*, independent of whether you draw with a mouse, drive the [editor](/docs/editor) by hand, or build over [MCP](/docs/mcp/best-output).
+
+## Start here
+
+<Cards>
+  <Card title="Document model" href="/docs/concepts/document-model" description="The scene graph: nodes, ULID ids, Operations, undo/redo history, and snapshots — a core that never depends on rendering or AI." />
+  <Card title="Pages & world space" href="/docs/concepts/pages-world-space" description="Multiple pages on an infinite plane, disjoint world regions, and the compact-canvas rule (and why export compositing makes it matter)." />
+  <Card title="Auto-layout" href="/docs/concepts/auto-layout" description="Figma-style flex: direction, gap, padding, alignment, wrap, and hug/fixed/fill sizing — plus the fill-to-width recipe." />
+  <Card title="Variables & modes" href="/docs/concepts/variables" description="Design tokens in collections with modes (light/dark), bound to node properties so themes switch by mode." />
+  <Card title="Components & instances" href="/docs/concepts/components" description="Masters, instances, overrides (including PATH overrides for nested targets), and variant sets." />
+  <Card title="Vectors, icons & SVG" href="/docs/concepts/vectors-icons-svg" description="create_icon vs create_svg, fill vs outline (stroke-to-fill), fill_rule, and viewBox." />
+  <Card title="Prototyping" href="/docs/concepts/prototyping" description="Flow starts, reactions (triggers and actions), transitions, and the present/play preview." />
+  <Card title="Design as source (.fnx)" href="/docs/concepts/fnx-design-as-source" description="React/JSX-style source files for designs — git-friendly, code-like diffs — and export_jsx." />
+</Cards>
+
+## How the pieces fit
+
+A **document** holds **pages**, each placed in its own region of one shared **world space**. A page is a tree of **nodes** — frames, vectors, text, images — each with a globally-unique id. You change the document only through **Operations**, which the **history stack** records for undo and redo.
+
+Layout, theming, and reuse sit on top of that tree. **Auto-layout** turns a frame into a flex container so children flow with consistent rhythm. **Variables** bind node properties to named tokens that resolve per mode. **Components** let one master drive many instances, with per-instance **overrides**. Vectors and icons render as resolution-independent paths. **Prototyping** adds interactivity, and **.fnx** lets the whole thing read and diff like source code.
+
+<Callout type="info">
+Everything here is exposed to AI agents too. When you build over MCP, the same model rules apply — see [Best output over MCP](/docs/mcp/best-output) and the [Tool Reference](/docs/tools).
+</Callout>

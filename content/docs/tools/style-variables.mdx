@@ -1,0 +1,59 @@
+---
+title: Style, typography & design tokens
+description: Fills, strokes, radius, shadows, blur, gradients, blend modes, text styling, variables, and property audits.
+---
+
+Visual properties, type, and design tokens. Colors are `"#RRGGBB"` or `"#RRGGBBAA"`. Bind any supported property to a variable so themes and modes resolve at render time.
+
+## Style
+
+| Tool | Purpose | Key parameters |
+| --- | --- | --- |
+| `set_fill` | Solid fill | `id`, `color` |
+| `set_stroke` | Stroke | `id`, `color`, `width`, `align`: `"center"` \| `"inside"` \| `"outside"`, `dashes?:[]`, `per_side?:[4]` |
+| `set_corner_radius` | Corner radius | `id`, `radius` \| `radii:[TL,TR,BR,BL]` |
+| `set_shadow` | Drop/inner shadow | `id`, `kind`: `"drop"` \| `"inner"`, `color`, `dx`, `dy`, `blur`, `spread` |
+| `set_blur` | Layer/background blur | `id`, `kind`: `"layer"` \| `"background"`, `radius` |
+| `set_gradient` | Gradient fill | `id`, `kind`, `stops:[{position,color}]`, `start`/`end` (linear) \| `center`/`radius`/`angle` |
+| `set_blend_mode` | Blend mode | `id`, `mode` |
+| `set_opacity` | Node opacity | `id`, `opacity`: `0..1` |
+
+**`set_gradient` kinds:** `"linear"` \| `"radial"` \| `"angular"` \| `"diamond"`. **`set_blend_mode` modes:** `normal`, `multiply`, `screen`, `overlay`, `darken`, `lighten`, `color_dodge`, `color_burn`, `hard_light`, `soft_light`, `difference`, `exclusion`, `hue`, `saturation`, `color`, `luminosity`.
+
+## Typography
+
+| Tool | Purpose | Key parameters |
+| --- | --- | --- |
+| `set_text` | Replace text content | `id`, `content` |
+| `set_text_style` | Type styling | `id`, `size?`, `weight?`, `color?`, `letter_spacing?`, `line_height?`, `font_family?` |
+
+## Design tokens & variables
+
+| Tool | Purpose | Key parameters |
+| --- | --- | --- |
+| `create_theme_tokens` | Seed a theme token set | `name` |
+| `set_variables` | Define/replace variables | `collection?`=`"Fanta MCP Variables"`, `replace?`, `variables:{name→{type, value \| {theme,mode}}}` |
+| `get_variables` | Read all variables | — |
+| `bind_variable` | Bind a node property to a variable | `node`, `prop`, `index?`, `variable`: `string` \| `null` |
+| `list_design_tokens` | List design tokens | — |
+
+**`bind_variable` props:** `"fill"`, `"stroke"`, `"stroke_width"`, `"radius"`, `"opacity"`, `"visible"`, `"text"`, `"clip_width"`, `"clip_height"`. Pass `variable:null` to unbind.
+
+## Audit
+
+| Tool | Purpose | Key parameters |
+| --- | --- | --- |
+| `search_all_unique_properties` | Inventory distinct property values across a subtree | `parents?:[]` \| `parent` \| `page`, `properties?:[]`, `max_examples?` |
+| `replace_all_matching_properties` | Bulk find/replace property values | `parents` \| `parent` \| `page`, `properties:{prop→[{from,to}]}` |
+
+## Examples
+
+Define theme-aware tokens, then bind a frame's fill to one:
+
+```json
+{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"set_variables","arguments":{"replace":false,"variables":{"surface/bg":{"type":"color","value":{"theme":"dark","mode":"default"}}}}}}
+```
+
+```json
+{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"bind_variable","arguments":{"node":"card-1","prop":"fill","variable":"surface/bg"}}}
+```

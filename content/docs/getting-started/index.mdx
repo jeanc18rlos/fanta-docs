@@ -1,0 +1,30 @@
+---
+title: Getting Started
+description: Install Fantaisa, create your first project, and connect an AI agent that designs on the live canvas.
+---
+
+Fantaisa is a native Rust creative canvas — a Figma-like, polymorphic infinite canvas where vector, bitmap, text, video, 3D, node graphs, and AI artifacts share the same document semantics: transform, selection, grouping, undo, and export.
+
+What makes it different: **the desktop app is itself a live MCP server.** AI coding agents — Claude Code, OpenAI Codex, GLM — connect to the running editor and design on the real canvas in real time, while you watch.
+
+## Two ways to work
+
+<Cards>
+  <Card title="Design by hand" href="/docs/getting-started/first-project" description="Open the editor, create a page, draw frames, and save. The classic direct-manipulation canvas." />
+  <Card title="Design with an agent" href="/docs/getting-started/connect-an-agent" description="Point an AI agent at the live editor over MCP and have it build on the real canvas." />
+</Cards>
+
+Both paths share one document. An agent can lay out a screen and you can refine it by hand in the same session — or the reverse.
+
+## What you'll learn
+
+<Cards>
+  <Card title="Install & build" href="/docs/getting-started/install" description="Set up the Rust toolchain and run the editor, the headless MCP server, or the live proxy." />
+  <Card title="Your first project" href="/docs/getting-started/first-project" description="Project directories vs. .fant, creating a page, drawing a frame, and saving." />
+  <Card title="Connect an agent" href="/docs/getting-started/connect-an-agent" description="The 60-second MCP quickstart — wire any agent to the editor on :3846." />
+  <Card title="Quickstart: Claude Code" href="/docs/getting-started/quickstart-claude-code" description="End-to-end: have an agent design a sign-in card on the live canvas." />
+</Cards>
+
+<Callout type="info">
+New to the model-context layer? After this section, dive into [MCP](/docs/mcp) for the full agent build loop and the [Claude plugin](/docs/plugin) for a turnkey setup.
+</Callout>

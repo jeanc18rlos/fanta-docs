@@ -1,0 +1,70 @@
+---
+title: Prototyping
+description: Flow starts, reactions (triggers and actions), transitions, and the present/play preview that turns static frames into a clickable prototype.
+---
+
+Prototyping makes a design interactive without leaving the canvas. You mark a frame as a **flow start**, attach **reactions** to nodes (a trigger that fires an action), give those actions **transitions**, and then run **present mode** to click through it as a real user would.
+
+## Flow start
+
+A **flow start** is the entry frame of a prototype flow — where present mode begins. A document can have more than one flow, each with its own start frame (e.g. an onboarding flow and a settings flow). Designating the start tells the preview which frame to show first.
+
+## Reactions: triggers and actions
+
+A **reaction** lives on a node and pairs a **trigger** (what the user does) with an **action** (what happens):
+
+**Triggers**
+
+| Trigger | Fires when… |
+| --- | --- |
+| `click` | the node is clicked / tapped |
+| `hover` | the pointer enters the node |
+| `drag` | the node is dragged |
+| `after_delay` | a set time elapses on the current frame |
+| `key` | a specific key is pressed |
+
+**Actions**
+
+| Action | Effect |
+| --- | --- |
+| `navigate` | go to another frame |
+| `back` | return to the previous frame |
+| `close` | close an opened overlay |
+| `scroll_to` | scroll to a target within the frame |
+
+```text title="A reaction"
+on  <button node>
+  trigger: click
+  action:  navigate → <Dashboard frame>
+  transition: smart-animate, 200ms
+```
+
+You can attach multiple reactions to one node (e.g. `hover` to highlight, `click` to navigate), and reactions can be authored directly via the prototype tools.
+
+## Transitions
+
+A **transition** describes *how* an action animates — the motion between the current frame and the target. Navigations can dissolve, slide, push, or smart-animate matching layers, with a duration and easing. Transitions are what make a prototype feel like a product rather than a slideshow; spend a moment tuning them after the flow itself works.
+
+<Callout type="info">
+Author reactions and transitions on the nodes themselves, then verify the feel in present mode. Like everything else, reactions are part of the [document model](/docs/concepts/document-model) — they undo/redo and serialize with the rest of the design.
+</Callout>
+
+## Present / play mode
+
+**Present mode** (play) runs the prototype: it starts at the flow-start frame and responds to your triggers, animating transitions between frames. It is a live preview of the *interaction*, not just the visuals — the fastest way to feel whether a flow makes sense.
+
+A typical loop:
+
+1. Mark the flow start.
+2. Add reactions to the interactive nodes.
+3. Tune transitions.
+4. Enter present mode and click through.
+5. Adjust and repeat.
+
+## Related
+
+<Cards>
+  <Card title="Prototype tools" href="/docs/tools/prototype" description="Set flow starts, add reactions, and configure transitions." />
+  <Card title="The Prototype surface" href="/docs/editor/surfaces" description="The editor panel for wiring and running prototypes." />
+  <Card title="Components & instances" href="/docs/concepts/components" description="Prototype reusable parts once, reuse the interaction everywhere." />
+</Cards>

@@ -1,0 +1,40 @@
+---
+title: Export & visual verification
+description: Export PNG/SVG/JSX, capture chrome-free screenshots, compare against references, and review designs.
+---
+
+<Callout type="warn">
+**ALWAYS pass a frame `node` and keep frames ≤ 1920×1080.** Never screenshot a whole page or the canvas: export composites **every** page overlapping the export rect (frame export does not dodge this), so a page export pulls in all of world space and times out (`visible editor timed out`).
+</Callout>
+
+Verify visually with `export_png` / `get_screenshot` (chrome-free, no OS perms), compare against a reference, and run `review_design` before saving.
+
+## Export
+
+| Tool | Purpose | Key parameters |
+| --- | --- | --- |
+| `export_png` | Render a node to PNG | `path`, `node?`, `scale?`=`2.0`, `padding?`, `background?` |
+| `export_svg` | Export node(s) to SVG | `node` \| `nodes:[]` |
+| `export_jsx` | Return `.fnx` design-as-source for a subtree | `node` |
+
+## Verify
+
+| Tool | Purpose | Key parameters |
+| --- | --- | --- |
+| `get_screenshot` | Chrome-free screenshot | `nodeId` \| `node` (default `"document"`), `path?`, `scale?`, `padding?`, `background?` |
+| `compare_screenshot` | Diff a capture against a reference | `reference_path`, `nodeId` \| `node?`, `screenshot_path?`, `diff_path?`, `scale?`, `padding?`, `background?`, `resize_reference?`, `pixel_threshold?`, `passing_similarity?` |
+| `review_design` | Heuristic design review (gutters, rhythm) | `page?`, `min_gutter?`=`96`, `screenshot_path?`, `annotate_screenshot?`, `annotated_screenshot_path?`, `screenshot_scale?`, `screenshot_padding?` |
+
+## Examples
+
+Export a single frame to PNG at 2× with padding:
+
+```json
+{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"export_png","arguments":{"path":"/tmp/card.png","node":"card-1","scale":2.0,"padding":24,"background":"#0B0E11"}}}
+```
+
+Compare a captured frame against a saved reference image:
+
+```json
+{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"compare_screenshot","arguments":{"reference_path":"/refs/card.png","node":"card-1","diff_path":"/tmp/card-diff.png","passing_similarity":0.97}}}
+```

@@ -1,0 +1,57 @@
+---
+title: Inspector
+description: The properties panel for the current selection — fills, strokes, effects, typography, auto-layout, and variable binding.
+---
+
+The **inspector** (the properties panel) is where you edit the current selection. It reflects whatever node or nodes are selected on the [canvas](/docs/editor) and exposes the right controls for that node type. Like the [tools](/docs/editor/tools), every change you make here is an [Operation](/docs/concepts/document-model#operations) — recorded, undoable, and identical to what an agent would emit over [MCP](/docs/mcp/best-output).
+
+## What the inspector edits
+
+The panel is organized into sections that appear based on the selection:
+
+- **Position & size** — the node's transform (x/y, dimensions, rotation). Remember there is [no resize tool](/docs/concepts/auto-layout#the-no-resize-rule); set size deliberately.
+- **Fills** — solid colors (and other paint kinds). Fills are a prime target for [variable binding](#binding-variables).
+- **Strokes** — stroke color, weight, and alignment.
+- **Effects** — shadows, blurs, and similar render effects.
+- **Typography** — for text nodes: font, size, weight, line height, letter spacing, and alignment.
+- **Auto-layout** — for frames: direction, gap, padding, alignment, wrap, and child sizing (hug/fixed/fill). See [Auto-layout](/docs/concepts/auto-layout).
+- **Corner radius / opacity / visibility** — common per-node properties, also bindable.
+
+## Auto-layout in the inspector
+
+When a frame is (or becomes) an auto-layout frame, the inspector surfaces its flex controls: choose **direction**, set **gap** and **padding**, pick **primary** and **counter alignment**, and toggle **wrap**. Per-child, you set the sizing mode and `align_self`. This is the panel where you apply the [fill-to-width recipe](/docs/concepts/auto-layout#the-fill-to-width-recipe): make the parent auto-layout first, set the child's primary sizing to `hug`, then stretch it.
+
+## Binding variables
+
+Many properties can be **bound to a variable** instead of holding a raw value. A bound property reads its value from a [design token](/docs/concepts/variables), and resolves per the active **mode** — so binding fills and text colors is how a design themes (light/dark) without duplicate nodes.
+
+Bindable properties include:
+
+- fill and stroke (color)
+- corner radius
+- opacity
+- visibility (boolean)
+- text content (string)
+- numeric properties like spacing
+
+```text title="A bound fill"
+node.fill  ⇒  variable "color/surface"
+   Light mode → #FFFFFF
+   Dark  mode → #0B0B0F
+```
+
+<Callout type="info">
+Prefer binding to typing raw values for anything that should stay consistent across the design — surface and text colors, accent, radii, standard spacings. Manage the tokens themselves in the [Variables surface](/docs/editor/surfaces).
+</Callout>
+
+## Multi-selection
+
+With several nodes selected, the inspector shows the properties they share and applies a change to all of them at once — a quick way to recolor a row of items or normalize spacing.
+
+## Related
+
+<Cards>
+  <Card title="Variables & modes" href="/docs/concepts/variables" description="The tokens you bind properties to." />
+  <Card title="Style & variable tools" href="/docs/tools/style-variables" description="The programmatic equivalents for fills, strokes, and binding." />
+  <Card title="Auto-layout" href="/docs/concepts/auto-layout" description="The model behind the layout section." />
+</Cards>

@@ -1,0 +1,57 @@
+---
+title: Tools
+description: The human tools in the toolbar — select, hand, rect, ellipse, line, polygon, star, text, pen — and how each maps to document Operations.
+---
+
+The editor's toolbar holds the **human tools** (the `fanta-tools` crate): small state machines that translate pointer and keyboard input into [Operations](/docs/concepts/document-model#operations) on the document. Every tool funnels through the same mutation path an AI agent uses, so hand edits and agent edits are fully interchangeable and equally undoable.
+
+## The toolset
+
+| Tool | What it does | Emits |
+| --- | --- | --- |
+| **Select** | Click to select; drag to marquee; move, and manipulate the current selection. | reorder / transform / set-property Operations |
+| **Hand** | Pan the canvas (no document change). | none — viewport only |
+| **Rectangle** | Drag out a rectangle. | create rectangle node |
+| **Ellipse** | Drag out an ellipse / circle. | create ellipse node |
+| **Line** | Drag a straight line segment. | create vector (line) node |
+| **Polygon** | Drag out an N-sided polygon. | create polygon node |
+| **Star** | Drag out a star shape. | create star node |
+| **Text** | Click or drag to place a text box, then type. | create text node + text edits |
+| **Pen** | Click/drag anchor points to draw a custom vector path. | create vector path node |
+
+## How tools become Operations
+
+A tool reads input and decides *intent*; it does not poke the scene graph directly. Instead it produces an Operation that `Doc::apply` records:
+
+```text title="Tool → Operation → document"
+pointer down/move/up   →   tool state machine   →   Operation   →   Doc::apply
+                                                                     (history records it)
+```
+
+This is why:
+
+- **Everything undoes.** Drawing a rectangle, moving a node, and typing text are all recorded steps.
+- **Tools stay UI-agnostic.** A tool emits document operations and doesn't care about the surrounding chrome — the same operations an agent emits over [MCP](/docs/mcp/best-output).
+- **The model enforces invariants.** Tools can't create an inconsistent tree; the Operation layer guarantees structure.
+
+## Working with shapes
+
+- Shapes (rect, ellipse, polygon, star) and lines are **vector nodes** — resolution-independent paths, see [Vectors, icons & SVG](/docs/concepts/vectors-icons-svg).
+- The **pen** tool produces arbitrary paths; for whole icons or logos, authoring SVG via the create tools is often faster than drawing point by point.
+- Newly drawn nodes land on the **active page**, not inside a frame by geometry. To nest them, reparent into a frame, then turn the frame into an [auto-layout](/docs/concepts/auto-layout) container.
+
+<Callout type="info">
+There is **no resize tool**. The Select tool moves and transforms, but a created box keeps its size — size text boxes for the longest label they'll hold. See the [no-resize rule](/docs/concepts/auto-layout#the-no-resize-rule).
+</Callout>
+
+## Text and typing
+
+The Text tool places a text box and switches into inline editing — caret, selection, and styling are handled by the text engine. Edits to content and style are Operations like any other, so they undo and serialize with the rest of the design.
+
+## Related
+
+<Cards>
+  <Card title="Create tools (MCP)" href="/docs/tools/create" description="The programmatic equivalents agents call to create nodes." />
+  <Card title="Inspector" href="/docs/editor/inspector" description="Refine a selected node's properties after you draw it." />
+  <Card title="Document model" href="/docs/concepts/document-model" description="Why every tool action is an Operation." />
+</Cards>

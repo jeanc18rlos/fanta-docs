@@ -1,0 +1,58 @@
+---
+title: Vectors, Icons & SVG
+description: create_icon vs create_svg, fill vs outline (stroke-to-fill), fill_rule for holes, and honoring viewBox — resolution-independent vector art.
+---
+
+Vector art in Fantaisa is resolution-independent: shapes are stored as paths and rasterized crisply at any size. There are two ways to get vector content onto the canvas — a curated built-in icon set, and arbitrary SVG you author yourself — plus a couple of rules that decide whether art renders correctly.
+
+## create_icon vs create_svg
+
+- **`create_icon`** draws from a **curated built-in set** of common icons. Reach for it when a standard glyph exists — it's the fastest path to a consistent, known-good symbol.
+- **`create_svg`** renders **any SVG you provide**. The input can be a single path `d` string or a full `<svg>` document; it honors the source `viewBox`. Use it for custom logos, brand marks, or icons not in the built-in set.
+
+```text title="Two sources of vector art"
+create_icon  →  curated built-in glyphs (standard set)
+create_svg   →  your own SVG: a path "d", or a whole <svg>
+```
+
+## Fill vs outline
+
+`create_svg` renders in one of two modes, and choosing the right one is the difference between crisp art and broken art:
+
+- **`mode: "fill"`** — for **solid / multi-contour art**: filled shapes, logos, glyphs with multiple regions.
+- **`mode: "outline"`** — for **line icons**. It **bakes the stroke into a filled path** (stroke-to-fill). The result is crisp at any size and is preferred over the live `mode: "stroke"`.
+
+```text title="Choosing a mode"
+solid shape / logo        → mode: "fill"
+line icon (stroked look)  → mode: "outline"   (stroke baked into a filled path)
+```
+
+<Callout type="info">
+Why prefer **outline** over a live stroke? Baking the stroke into a filled path makes the geometry self-contained — it scales and re-sizes cleanly inside [auto-layout](/docs/concepts/auto-layout) without the stroke width drifting or distorting.
+</Callout>
+
+To render a glyph that has **both** a solid and a line treatment (e.g. a filled badge with a line symbol on top), call `create_svg` twice — once with `mode: "fill"`, once with `mode: "outline"`.
+
+## fill_rule: holes and donuts
+
+Art with **holes** — a donut, a counter inside an "O", an icon with cut-outs — needs the right **fill rule** so the inner contour subtracts instead of fills. Use **`fill_rule: "evenodd"`** for multi-contour shapes that should have holes. Without it, the hole fills in solid.
+
+```text title="Holes need evenodd"
+donut, letter "O" counter, cut-outs  →  fill_rule: "evenodd"
+```
+
+## viewBox
+
+SVG coordinates are interpreted against the source **`viewBox`**. `create_svg` honors it, so a standard 24×24 icon places correctly by default. For art authored at a different size, pass the matching `view_box` (e.g. for non-24 art) so the geometry maps into the node's box without clipping or scaling surprises.
+
+## Why vectors survive layout
+
+The layout resizer preserves **real vector and icon geometry** — it only re-rectangles actual rectangles. That means icons created with `create_icon` and paths from `create_svg` render and size correctly inside auto-layout frames; they won't be flattened into bounding boxes. This is what makes icon-bearing rows and cards reliable to assemble.
+
+## Related
+
+<Cards>
+  <Card title="Create tools" href="/docs/tools/create" description="create_icon, create_svg, and the rest of the node-creation surface." />
+  <Card title="Auto-layout" href="/docs/concepts/auto-layout" description="Why vector geometry stays intact inside layout frames." />
+  <Card title="Components & instances" href="/docs/concepts/components" description="Turn icons into swappable, overridable parts." />
+</Cards>

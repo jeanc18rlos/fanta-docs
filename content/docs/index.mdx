@@ -1,0 +1,40 @@
+---
+title: Introduction
+description: Fantaisa is a native creative canvas whose app is a live MCP server — agents design on the real document in real time.
+---
+
+**Fantaisa** is a native, polymorphic creative canvas — vector, bitmap, text, video, 3D, node graphs, and AI artifacts all share the same document semantics (transform, selection, grouping, undo, export).
+
+What makes it different: **the app is itself a live MCP server.** AI coding agents — Claude Code, OpenAI Codex, GLM — connect to the running editor and design on the *real* canvas, with the same tool surface the in-app AI brain uses. Every change is an undoable operation. You watch it happen.
+
+<Callout type="info">
+  New here? The fastest path is the [60-second agent quickstart](/docs/getting-started/connect-an-agent) — launch the editor, point your agent at `http://127.0.0.1:3846/mcp`, and start designing.
+</Callout>
+
+## Two ways to design
+
+<Cards>
+  <Card title="By hand, in the editor" href="/docs/editor" description="A native desktop canvas with tools, an inspector, auto-layout, components, variables, and prototyping — plus a docked AI panel." />
+  <Card title="With an agent, over MCP" href="/docs/mcp" description="Connect Claude Code or Codex to the live editor and drive ~127 design tools through the agent build loop." />
+</Cards>
+
+## Start here
+
+<Cards>
+  <Card title="Getting Started" href="/docs/getting-started" description="Install, run, and connect an agent in minutes." />
+  <Card title="MCP Server" href="/docs/mcp" description="The centerpiece: transports, the build loop, and how to get the best output." />
+  <Card title="Agents & AI" href="/docs/agents" description="Single and multi-agent workflows, reference-grounded design, review & revision." />
+  <Card title="Claude Plugin & Skills" href="/docs/plugin" description="A turnkey plugin so Claude Code and Codex work against Fantaisa out of the box." />
+  <Card title="Tool Reference" href="/docs/tools" description="Every MCP tool, grouped by purpose, with parameters and JSON-RPC examples." />
+  <Card title="Core Concepts" href="/docs/concepts" description="The document model, pages & world space, auto-layout, components, variables, and .fnx." />
+</Cards>
+
+## Built LLM-first
+
+These docs are designed to be read by machines as easily as by people:
+
+- Every page has a Markdown twin — use the **Copy Markdown** / **Open in** buttons at the top of any page.
+- A curated [`/llms.txt`](/llms.txt) index and a full [`/llms-full.txt`](/llms-full.txt) dump let an agent ingest the whole site in one fetch.
+- The [Tool Reference](/docs/tools) mirrors the live tool schemas the editor exposes on `:3846`.
+
+See [Reference → LLM-first docs](/docs/reference/llms) for details.

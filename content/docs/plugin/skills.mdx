@@ -1,0 +1,44 @@
+---
+title: Skills
+description: The Agent Skills bundled with the Fantaisa plugin and what each one does.
+---
+
+The plugin ships three [Agent Skills](https://code.claude.com/docs/en/skills). Skills load on demand when the model decides they're relevant, so they cost nothing until used — and once used, the agent follows Fantaisa's hard rules without you re-explaining them.
+
+## `fantaisa-design`
+
+The primary skill — the full **build loop** for designing on the live canvas.
+
+- Connect and orient: `agent_playbook`, `get_guidelines`, `get_editor_state`.
+- Build bottom-up with **explicit nesting** (`reorder {into, to:"front"}`) and **auto-layout** (`set_auto_layout`, `set_layout_child`) — never flat absolute placement.
+- Apply the hard rules: fill-to-width = hug + `align_self:"stretch"`, no resize tool, PATH overrides for nested instance targets, compact canvas / disjoint world regions.
+- Verify before saving: `export_png {node}` / `review_design`, then `save_document`.
+
+Triggers on requests like "design a …", "build a screen/component on the canvas", "lay this out in Fantaisa".
+
+## `fantaisa-verify`
+
+Visual verification and design review.
+
+- Always pass a frame `node` to `export_png` / `get_screenshot` and keep frames ≤ 1920×1080 (screenshotting a whole page composites every overlapping page and times out).
+- `compare_screenshot` against a reference image; `review_design` for the deterministic audit (hierarchy, gutters, overlap, token coverage, contrast, overflow) and its per-section scorecard.
+
+Triggers on "verify", "screenshot", "review the design", "does this match the reference".
+
+## `fantaisa-components`
+
+Components, variants, and design tokens.
+
+- `define_component` / `define_component_set`, `insert_instance`, and `set_instance_override` (with full **PATH** targets for nested children).
+- `set_variables` / `bind_variable` for tokenized, theme-aware designs.
+- Reference-grounded creation: gather refs with `create_reference_frame`, then build the editable master.
+
+Triggers on "make this a component", "add variants", "set up design tokens / variables".
+
+<Callout type="info">
+  Skills are plain Markdown with frontmatter. You can read or fork them in the repo under `/plugin/skills/<name>/SKILL.md` and adapt them to your house style.
+</Callout>
+
+## How skills relate to the playbook
+
+The skills are the *client-side* encoding of the same rules the editor serves through `agent_playbook` and `get_guidelines`. If you're not using the plugin, the agent can still call those tools at runtime — the skills just make the behavior reliable and reduce round-trips. See [Custom rules & project context](/docs/mcp/custom-rules).

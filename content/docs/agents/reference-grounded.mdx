@@ -1,0 +1,108 @@
+---
+title: Reference-Grounded Design
+description: Build from prompt-weighted inspiration boards and iterate against saved references with compare_screenshot and review_design.
+---
+
+Great design rarely starts from nothing. Fantaisa lets agents **ground a build
+in references** — a board of inspiration images, each carrying its source, a
+comment, a prompt bias, and a numeric influence — and then **iterate against
+those references** instead of drifting.
+
+## The reference frame
+
+`create_reference_frame` builds a prompt-weighted inspiration board on the
+canvas. References can come from many sources:
+
+- User uploads
+- Generated images (see [Media generation](/docs/agents/media-generation))
+- Browser screenshots
+- Web-search results
+- Dribbble / Pinterest shots
+- Figma-style annotations
+
+Each reference carries metadata the agent (and you) can act on:
+
+- **`source`** — where it came from, so provenance stays clear.
+- **`comment`** — what to take from it ("note the generous card padding").
+- **`prompt`** — the prompt bias this reference contributes.
+- **`influence` / `weight`** — how strongly it should pull the design, so you
+  can favor or downweight any inspiration before each iteration.
+
+### Example
+
+```json title="create_reference_frame"
+{
+  "name": "Pricing — inspiration",
+  "references": [
+    {
+      "source": "dribbble",
+      "image": "shot-014.png",
+      "comment": "Card spacing + soft shadow we want",
+      "prompt": "clean SaaS pricing cards, generous padding, soft elevation",
+      "influence": 0.9
+    },
+    {
+      "source": "upload",
+      "image": "brand-palette.png",
+      "comment": "Use these accent colors only",
+      "prompt": "muted teal accent, near-black text on off-white",
+      "weight": 0.7
+    },
+    {
+      "source": "web-search",
+      "image": "competitor-tiers.png",
+      "comment": "Three-tier layout, avoid the cramped feel",
+      "prompt": "three pricing tiers, comfortable gutters",
+      "influence": 0.4
+    }
+  ]
+}
+```
+
+<Callout type="info">
+Set `influence` / `weight` deliberately. A reference at `0.9` should clearly
+steer the look; one at `0.4` is a hint. Tuning these between iterations is how
+you converge on a direction without rebuilding the board.
+</Callout>
+
+## The reference-grounded loop
+
+The best practice is a tight gather → build → compare cycle:
+
+1. **Gather or generate references.** Collect uploads and screenshots, or
+   generate fresh ones, and write down what each contributes.
+2. **Create the reference frame.** Capture them with `create_reference_frame`,
+   setting source, comment, prompt bias, and influence/weight per reference.
+3. **Build.** Assemble the design with the normal tool surface, biased by the
+   board.
+4. **Iterate against the references.** After each major section, export a
+   screenshot and compare it back to the saved references so the look does not
+   drift.
+
+```text title="Iterate without drifting"
+create_reference_frame { ... }      # capture the board
+build the section
+export_png        { node: <section> }
+compare_screenshot { node: <section>, against: <reference> }
+review_design                       # deterministic audit
+# adjust influence/weight, refine, repeat
+```
+
+`compare_screenshot` checks the built section against a saved reference image,
+and `review_design` adds a deterministic quality audit — together they keep
+each iteration honest about whether it is getting closer to the intended look.
+
+## Components are reference-grounded too
+
+When asked to create a component, search existing components first, gather or
+generate previews if the visual direction is open, create the reference frame,
+then build the editable master and variants. If references conflict, ask which
+style, layout, palette, or weighting to favor rather than guessing.
+
+## Next steps
+
+<Cards>
+  <Card title="Media generation" href="/docs/agents/media-generation" description="Generate the reference images you board up." />
+  <Card title="Review & revision" href="/docs/agents/review-revision" description="Audit and consolidate each iteration before saving." />
+  <Card title="Verification tools" href="/docs/tools/verify" description="export_png, get_screenshot, compare_screenshot, review_design." />
+</Cards>

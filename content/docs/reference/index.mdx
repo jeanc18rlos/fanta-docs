@@ -1,0 +1,21 @@
+---
+title: Reference
+description: The Fantaisa system reference — crate architecture, command-line binaries and env vars, the LLM-first docs surface, and the changelog.
+---
+
+Hard reference material: how the workspace is structured, how to run it, how this
+documentation feeds an LLM, and what's changed.
+
+<Cards>
+  <Card title="Architecture" href="/docs/reference/architecture" description="The crate map, dependency direction, and where the MCP and AI live." />
+  <Card title="CLI & binaries" href="/docs/reference/cli" description="cargo run commands, the fanta-mcp modes, and environment variables." />
+  <Card title="LLM-first docs" href="/docs/reference/llms" description="/llms.txt, /llms-full.txt, and the Markdown twin of every page." />
+  <Card title="Changelog" href="/docs/reference/changelog" description="What's shipped in the docs and how they track the alpha." />
+</Cards>
+
+## Source of truth
+
+When sources disagree, the project's own ordering applies: current source code and
+tests first, then crate manifests and crate-root docs, then focused engineering
+docs, then specs, then architecture rationale. This site reflects that order — it
+describes the implemented system, not aspirational behavior.

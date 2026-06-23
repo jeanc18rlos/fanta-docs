@@ -1,0 +1,1 @@
+{ "title": "Tool Reference", "icon": "Wrench", "pages": ["index", "create", "layout", "style-variables", "components-instances", "inspect", "verify", "media", "prototype", "vcs", "session", "agent-control"] }

@@ -1,0 +1,15 @@
+{
+  "pages": [
+    "index",
+    "getting-started",
+    "concepts",
+    "editor",
+    "mcp",
+    "agents",
+    "plugin",
+    "tools",
+    "guides",
+    "formats",
+    "reference"
+  ]
+}

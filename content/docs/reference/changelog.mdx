@@ -1,0 +1,44 @@
+---
+title: Changelog
+description: What's shipped in the Fantaisa documentation and how it tracks the alpha.
+---
+
+This documentation tracks the Fantaisa **alpha**, which focuses on the image
+wedge — generation, the live editor, and the agent-native MCP surface. The docs
+will expand as the product does.
+
+## 0.1 — initial docs
+
+The first published cut of the Fantaisa documentation site. It covers what is
+implemented today and is written LLM-first so agents can ingest it.
+
+**Included:**
+
+- **Formats & Interop** — the project-directory working format, the
+  [`.fant`](/docs/formats/fant) container, [`.fnx`](/docs/formats/fnx)
+  design-as-source, [Figma `.fig` import](/docs/formats/figma-import), and
+  [PNG/SVG/PDF export](/docs/formats/export).
+- **Guides** — task walkthroughs for
+  [auto-layout cards](/docs/guides/auto-layout-card),
+  [components & variants](/docs/guides/component-variants),
+  [multi-agent builds](/docs/guides/multi-agent-build),
+  [design-to-code with .fnx](/docs/guides/design-to-code-fnx), and
+  [version-controlling designs](/docs/guides/version-control-designs).
+- **Reference** — the [crate architecture](/docs/reference/architecture),
+  [CLI & binaries](/docs/reference/cli), and the
+  [LLM-first docs surface](/docs/reference/llms).
+- The [MCP build loop](/docs/mcp/build-loop), the
+  [tool reference](/docs/tools), [agent workflows](/docs/agents/workflows), and
+  [core concepts](/docs/concepts).
+
+<Callout type="info">
+  These docs describe the **implemented** system, in line with Fantaisa's
+  source-of-truth ordering (code and tests first). Where the alpha grows — video,
+  3D, collaboration — the docs will follow.
+</Callout>
+
+## What's next
+
+Planned additions track the roadmap: deeper per-tool reference coverage, more
+build guides, and documentation for the later-phase crates
+(`fanta-video`, `fanta-3d`, `fanta-collab`) as they mature past stub state.

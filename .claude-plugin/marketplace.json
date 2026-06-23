@@ -1,0 +1,22 @@
+{
+  "name": "fantaisa-docs",
+  "owner": {
+    "name": "Fantaisa",
+    "url": "https://github.com/jeanc18rlos"
+  },
+  "metadata": {
+    "description": "Fantaisa documentation, plugin, and MCP integrations for AI design agents.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "fantaisa",
+      "source": "./plugin",
+      "description": "Drive the Fantaisa design canvas from Claude Code: connects to the live editor's MCP server (:3846) and ships the design/verify/component skills plus a /design command.",
+      "version": "0.1.0",
+      "author": { "name": "Fantaisa" },
+      "homepage": "https://github.com/jeanc18rlos/fanta-docs",
+      "keywords": ["design", "mcp", "canvas", "figma", "fantaisa", "agent"]
+    }
+  ]
+}

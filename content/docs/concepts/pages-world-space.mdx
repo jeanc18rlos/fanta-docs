@@ -1,0 +1,58 @@
+---
+title: Pages & World Space
+description: How a project's pages live in one shared world space, why each page needs a disjoint region, and the compact-canvas rule that keeps exports clean.
+---
+
+A Fantaisa project has **multiple pages**, and every page's content lives in one shared, infinite **world space** — a single 2D coordinate plane. This is different from how you might picture separate, isolated artboards: pages are conceptual groupings, but their geometry shares one coordinate system.
+
+That sharing has one consequence you must design around.
+
+## One world, many pages
+
+Think of world space as an endless sheet of graph paper. Each node has world coordinates `(x, y)`. Pages organize nodes into named groups, but they do not give each group its own private coordinate origin — they all sit on the same sheet.
+
+So if Page A has a frame at `x: 0` and Page B also places a frame at `x: 0`, those frames **overlap in world space**, even though they belong to different pages.
+
+## Why regions must be disjoint
+
+PNG export composites **every page that overlaps the export rectangle** — frame export does not dodge this. If two pages occupy the same world region, exporting a frame on one page can pull in content from the other, producing a muddy, double-exposed image.
+
+The fix is a simple rule:
+
+<Callout type="warn">
+Give each page its own **disjoint world region**. Keep one page's content well clear of every other page's content in world coordinates.
+</Callout>
+
+A practical convention: park different page families in clearly separated x-bands — for example brand/app pages at `x < 2500` and inspector mockups at `x ≥ 12000`. Any large, unambiguous gap works; the point is that no two pages' bounding boxes overlap.
+
+## The compact-canvas rule
+
+Disjoint regions could tempt you to scatter content across thousands of pixels "just to be safe." Don't. The standing practice is:
+
+- **Between pages:** separate regions, generously.
+- **Within a page:** pack tightly. Small gutters (roughly 64–120 px), a consistent grid, no sprawl.
+
+```text title="Good layout: separated pages, compact frames"
+world x →
+[ Page A: tightly packed frames ]            [ Page B: tightly packed frames ]
+x≈0 ────────────────── x≈2400      gap       x≈12000 ───────────────── x≈14000
+```
+
+Why compact? Scattered frames drift into uneven gaps, make screenshots and exports awkward to frame, and make the document harder to reason about. Tight packing with consistent gutters keeps look-and-feel uniform — and it pairs naturally with [auto-layout](/docs/concepts/auto-layout), which produces that rhythm for you.
+
+## Exporting and screenshotting safely
+
+When you export or screenshot, always target a specific **frame node** and keep it reasonably sized. Two habits prevent the common failures:
+
+1. **Never export a whole page or the bare canvas.** With no node target, export defaults to the entire document — every page across world space — which is slow and bleeds pages together.
+2. **Keep export frames modest** (a single frame ≤ 1920×1080 is a safe ceiling). Pass the frame's id explicitly.
+
+These habits matter most when building over MCP, where a too-broad export can time out. See [Best output over MCP](/docs/mcp/best-output) and the [verify tools](/docs/tools/verify) for the export/screenshot/compare loop.
+
+## Related
+
+<Cards>
+  <Card title="Document model" href="/docs/concepts/document-model" description="Nodes, ids, and the tree that pages organize." />
+  <Card title="Auto-layout" href="/docs/concepts/auto-layout" description="Get uniform spacing without hand-placing every frame." />
+  <Card title="Verify tools" href="/docs/tools/verify" description="export_png, screenshots, and visual comparison." />
+</Cards>

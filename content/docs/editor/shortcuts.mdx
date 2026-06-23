@@ -1,0 +1,89 @@
+---
+title: Keyboard Shortcuts
+description: The current default keyboard shortcuts for the Fantaisa editor — conventional Figma-like defaults that may evolve.
+---
+
+This page lists the editor's **current default** keyboard shortcuts. They follow conventional, Figma-like defaults so they feel familiar, and they are organized by what they do. On macOS, `Cmd` is the primary modifier; on other platforms substitute `Ctrl`.
+
+<Callout type="warn">
+These are the **current defaults** and are conventional — they may change as the editor evolves, and customization may differ on your platform. When a shortcut doesn't match, check the in-app menus, which are the source of truth.
+</Callout>
+
+## Tools
+
+| Action | Shortcut |
+| --- | --- |
+| Select (move) tool | `V` |
+| Hand (pan) tool | `H` (or hold `Space`) |
+| Rectangle | `R` |
+| Ellipse | `O` |
+| Line | `L` |
+| Pen | `P` |
+| Text | `T` |
+| Polygon / Star | (select from the shape tool group) |
+
+→ See [Tools](/docs/editor/tools) for what each one does.
+
+## Edit & history
+
+| Action | Shortcut |
+| --- | --- |
+| Undo | `Cmd` + `Z` |
+| Redo | `Cmd` + `Shift` + `Z` |
+| Copy | `Cmd` + `C` |
+| Cut | `Cmd` + `X` |
+| Paste | `Cmd` + `V` |
+| Duplicate | `Cmd` + `D` |
+| Delete | `Delete` / `Backspace` |
+| Select all | `Cmd` + `A` |
+
+Every one of these maps to an [Operation](/docs/concepts/document-model#operations), so history behaves consistently.
+
+## View & navigation
+
+| Action | Shortcut |
+| --- | --- |
+| Zoom in | `Cmd` + `+` |
+| Zoom out | `Cmd` + `-` |
+| Zoom to 100% | `Cmd` + `0` |
+| Zoom to fit selection | `Shift` + `2` |
+| Zoom to fit page | `Shift` + `1` |
+| Pan | hold `Space` + drag |
+
+## Arrange & group
+
+| Action | Shortcut |
+| --- | --- |
+| Group selection | `Cmd` + `G` |
+| Ungroup | `Cmd` + `Shift` + `G` |
+| Bring forward | `Cmd` + `]` |
+| Send backward | `Cmd` + `[` |
+
+Reordering is paint order — later siblings draw on top. See the [document model](/docs/concepts/document-model#nodes-and-the-scene-graph).
+
+## Layout & components
+
+| Action | Shortcut |
+| --- | --- |
+| Add / toggle auto-layout | `Shift` + `A` |
+| Create component (master) | `Cmd` + `Option` + `K` |
+
+→ See [Auto-layout](/docs/concepts/auto-layout) and [Components & instances](/docs/concepts/components).
+
+## Save & file
+
+| Action | Shortcut |
+| --- | --- |
+| Save | `Cmd` + `S` |
+
+<Callout type="info">
+In-memory document state isn't auto-persisted. **Save before relaunching** the app, especially after a long agent-driven build session.
+</Callout>
+
+## Related
+
+<Cards>
+  <Card title="Tools" href="/docs/editor/tools" description="What each toolbar tool does." />
+  <Card title="Inspector" href="/docs/editor/inspector" description="Edit selected node properties." />
+  <Card title="Surfaces" href="/docs/editor/surfaces" description="Variables, Git, Home, Components, Code, Prototype." />
+</Cards>

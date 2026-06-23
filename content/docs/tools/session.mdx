@@ -1,0 +1,53 @@
+---
+title: Sessions, input & checkpoints
+description: Record/replay sessions, synthesize pointer and key input, checkpoint state, and run editor commands.
+---
+
+Drive the editor like a human (synthetic input), record and replay sessions, and checkpoint state so you can probe-and-revert safely.
+
+## Sessions
+
+| Tool | Purpose | Key parameters |
+| --- | --- | --- |
+| `session_start` | Begin recording | — |
+| `session_stop` | Stop recording | — |
+| `session_status` | Recording status | — |
+| `session_export` | Export the journal | `path?` |
+| `session_replay` | Replay a journal | `path` \| `inline`, `mode?`=`"ops"`, `out_dir?` |
+
+## Input
+
+| Tool | Purpose | Key parameters |
+| --- | --- | --- |
+| `input_pointer` | Synthesize a pointer event | `phase`: `"down"` \| `"move"` \| `"up"`, `x`, `y`, `coords?`, `button?`, `modifiers?`, `clicks?` |
+| `input_key` | Synthesize a key | `key`, `modifiers?` |
+| `gesture` | High-level gesture | `kind`: `"click"` \| `"drag"` \| `"marquee"`, `from`, `to?`, `steps?`, `modifiers?`, `clicks?` |
+| `set_active_tool` | Switch the active tool | `tool` |
+
+**`input_pointer` enums:** `coords`: `"world"` \| `"screen"`; `button`: `"primary"` \| `"secondary"` \| `"middle"`. **`input_key` keys:** `"arrow_left"`, `"arrow_right"`, `"arrow_up"`, `"arrow_down"`, `"escape"`, `"enter"`, `"delete"`.
+
+## Checkpoints & commands
+
+| Tool | Purpose | Key parameters |
+| --- | --- | --- |
+| `checkpoint` | Snapshot state | `label?` |
+| `restore` | Restore a checkpoint | `id` |
+| `drop_checkpoint` | Discard a checkpoint | `id?` |
+| `try_edit` | Apply, assert, revert/keep | `apply` (batch_design args), `expect` (predicate \| [predicate]), `on_fail`: `"revert"` \| `"keep"` |
+| `command` | Run an editor command | `name` |
+
+**`command` names:** `undo`, `redo`, `copy`, `cut`, `paste`, `duplicate`, `delete`, `group`, `ungroup`, `select_all`.
+
+## Examples
+
+Probe an edit and auto-revert if an assertion fails:
+
+```json
+{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"try_edit","arguments":{"apply":{"operations":[{"tool":"set_fill","arguments":{"id":"card-1","color":"#9B8CFF"}}]},"expect":[{"kind":"prop_eq","id":"card-1","prop":"fill","value":"#9B8CFF"}],"on_fail":"revert"}}}
+```
+
+Marquee-select a region:
+
+```json
+{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"gesture","arguments":{"kind":"marquee","from":{"x":0,"y":0},"to":{"x":400,"y":300}}}}
+```

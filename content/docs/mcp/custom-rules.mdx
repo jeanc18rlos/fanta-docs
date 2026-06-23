@@ -1,0 +1,115 @@
+---
+title: Custom rules & project context
+description: Ship an AGENTS.md and context files so your build conventions reach every agent that connects to Fantaisa.
+---
+
+The hard rules in [Get the best output](/docs/mcp/best-output) ship inside
+`agent_playbook`, so every connected agent gets them. But your *project* has its
+own conventions — a color system, a component library, naming, a target
+look-and-feel. Custom rules and project context are how you push those to every
+agent automatically, so you stop repeating yourself in every prompt.
+
+## Two surfaces, one goal
+
+| Surface | What it carries | How agents read it |
+| --- | --- | --- |
+| **`AGENTS.md`** (a rules file) | Build conventions, do/don't rules, project-specific gotchas, naming. | Coding agents (Claude Code, Codex) read it on connect. The condensed rules also flow through `agent_playbook`. |
+| **`context/*.json`** | Structured project context — the design system, brand tokens, component inventory, page map. | Agents fetch it with `get_project_context`; `get_guidelines` serves curated guide/style packs. |
+
+Together they mean a fresh agent — one with no memory of your last session —
+builds in your style on its first call, not its tenth.
+
+## Ship an `AGENTS.md`
+
+Put an `AGENTS.md` (or your client's rules file) at the project root. Keep it
+practical and current: it is the first document an agent reads. State the rules
+that are non-obvious or easy to get wrong, and point to deeper docs rather than
+inlining everything.
+
+A good rules file:
+
+- States your **build conventions** (auto-layout-first, component-first, the
+  naming scheme for nodes and pages).
+- Records **project gotchas** (which pages live in which world region, where the
+  component masters live).
+- Names the **guide and style** to default to so agents call `get_guidelines`
+  with the right arguments.
+- Stays short. Promote mandatory rules to the top; link the rest.
+
+## Ship `context/*.json`
+
+Structured context lives in `context/*.json` and is served to agents through
+`get_project_context`. Use it for facts an agent should *look up*, not memorize:
+
+- The brand color system and design tokens.
+- The component inventory (which masters exist, what each is for).
+- The page map and the world-region anchors per page.
+
+Agents call `get_project_context` during the inspect phase of the
+[build loop](/docs/mcp/build-loop), the same way they call `get_guidelines` — so
+your project's truth is one tool call away, every session.
+
+## A copy-paste starter
+
+Drop this into `AGENTS.md` as a baseline and tailor it to your project. It is the
+hard rules condensed into a checklist an agent can follow without re-deriving
+them.
+
+```markdown title="AGENTS.md (starter rules block)"
+# Build rules for this project
+
+Read first: call `agent_playbook`, then `get_guidelines`
+(guide + style), then `get_project_context`. Inspect before you build.
+
+## Hard rules
+1. Nesting is explicit. After `create_*` / `insert_instance`, reparent with
+   `reorder {into: <frame>, to: "front"}`, then `set_auto_layout`. Build
+   bottom-up: leaves → rows → cards → sections → page.
+2. Nested overrides need a PATH. `set_instance_override` resolves the root or a
+   DIRECT child by id; a deeper target needs the full `target` PATH array, or it
+   silently no-ops.
+3. Fill-to-width = hug + stretch. Child `primary_sizing: "hug"` (never `fixed`),
+   then `set_layout_child align_self: "stretch"` AFTER the parent is auto-layout.
+   Main-axis growth uses `fill_container` / `grow`.
+4. No resize tool. Boxes keep their created size — size text for the LONGEST
+   label it will hold; longer overridden text clips.
+5. Icons & SVG: `create_icon` = built-in set; `create_svg` = any SVG (honors
+   viewBox). `mode: "fill"` for solids (holes → `fill_rule: "evenodd"`);
+   `mode: "outline"` for line icons (crisp; preferred over `mode: "stroke"`).
+6. Verify with a node. `export_png {node}` / `get_screenshot {node}` only — never
+   screenshot a page or document (it times out). Keep frames ≤ 1920×1080. Run
+   `review_design` before `save_document`.
+7. Auto-layout, not absolute placement. Panels/cards/rows are real auto-layout
+   stacks with a `gap`.
+8. Compact canvas. One disjoint world region per page; pack frames tightly
+   (~64–120px gutters). Keep component masters on-page.
+9. References first. Capture inspiration with `create_reference_frame` before
+   design-heavy work.
+
+## Project specifics
+- Default guide: <e.g. Web App>     Default style: <e.g. Figma Clean Dark Light>
+- Node naming: <your scheme>
+- Page world regions: <page → x anchor>
+- Component library lives on: <page / strip>
+
+Always `save_document` before relaunching the app — in-memory state is not
+auto-persisted.
+```
+
+## Where this connects
+
+- **`agent_playbook`** carries the universal rules into every session.
+- **`get_guidelines`** serves the curated guide and style packs.
+- **`get_project_context`** serves your `context/*.json`.
+- **`AGENTS.md`** carries your project conventions to coding agents on connect.
+
+<Callout type="info">
+  The fastest way to ship all of this is the turnkey plugin — it bundles the
+  connection config, a starter `AGENTS.md`, and the context wiring so a new agent
+  is productive immediately.
+</Callout>
+
+<Cards>
+  <Card title="Use the plugin" href="/docs/plugin" description="A turnkey plugin that ships connection + rules + context." />
+  <Card title="Get the best output" href="/docs/mcp/best-output" description="The full reasoning behind each hard rule." />
+</Cards>

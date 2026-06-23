@@ -1,0 +1,113 @@
+---
+title: Run a multi-agent build
+description: Drive a parallel swarm of agents on one shared Fantaisa document — disjoint regions, unique names, captured ids, and a single merged undo.
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+Fantaisa's editor serializes frames, so many agents can write to **one shared
+document** safely — *if* every agent stays in its own lane. This guide is the
+discipline that makes a swarm produce a coherent file instead of a collision.
+
+<Callout type="info">
+  The top-class rule: many agents on **one** shared `:3846` doc. The editor
+  serializes writes, so they are safe **only** when every batch is namespaced to a
+  disjoint region with unique names.
+</Callout>
+
+<Steps>
+
+<Step>
+
+### Start a team (or connect several agents)
+
+Spin up an agent team, or point several agents at the same live editor over
+Streamable HTTP at `http://127.0.0.1:3846/mcp`. Do not open a second Fanta
+instance and do not spawn a separate headless server — share the one running doc.
+
+```json title="start_agent_team"
+{"name":"start_agent_team","arguments":{"agents":["header","sidebar","content"]}}
+```
+
+</Step>
+
+<Step>
+
+### Give each agent a disjoint world region
+
+Pack frames compactly, but put each agent's work in a **separate region of world
+space** so exports and reads from one agent never bleed into another's. Keep each
+agent on the page it owns and prefix every batch with `set_active_page`.
+
+```json title="claim a region by placing the section frame there"
+{"name":"create_frame","arguments":{"name":"Header section","x":0,"y":0,"w":1440,"h":120}}
+```
+
+```json title="another agent, far away in world space"
+{"name":"create_frame","arguments":{"name":"Sidebar section","x":0,"y":2000,"w":280,"h":900}}
+```
+
+</Step>
+
+<Step>
+
+### Use unique names and capture ids at creation
+
+Two agents naming a frame `Card` will step on each other's reads. Namespace names
+per agent (`header/Card`, `sidebar/Card`). Because many reads are scoped to the
+**active page**, capture each node id **at creation time** rather than re-querying
+across pages — the same lookup returns nothing once the active page changes.
+
+<Callout type="warn">
+  The classic trap: an active-page-scoped read across frames returns nothing after
+  another agent switches the active page. Capture ids when you create the node and
+  reference those, not a later query.
+</Callout>
+
+</Step>
+
+<Step>
+
+### Build in self-contained batches
+
+Each agent assembles its section bottom-up with `batch_design` — create leaves,
+`reorder` them in, `set_auto_layout` — exactly as in the
+[card guide](/docs/guides/auto-layout-card), but scoped to its own region and
+names. Keep batches in-memory and self-contained so the editor can serialize them
+cleanly.
+
+</Step>
+
+<Step>
+
+### Verify each region, then merge to a single undo
+
+Each agent verifies only its **own** frame (`export_png {node}`, ≤ 1920×1080),
+never a page or the whole canvas. When sections are right, merge the parallel work
+so the combined build collapses into one undo step, then save.
+
+```json title="verify just this agent's frame"
+{"name":"export_png","arguments":{"node":"Header section"}}
+```
+
+```json title="persist the merged result"
+{"name":"save_document","arguments":{}}
+```
+
+</Step>
+
+</Steps>
+
+## The lane checklist
+
+- One shared doc on `:3846` — never a second instance.
+- `set_active_page` prefixing every batch.
+- A disjoint world region per agent; compact within it.
+- Unique, namespaced node names.
+- Ids captured at creation, not re-queried across pages.
+- Per-frame verification only.
+
+<Cards>
+  <Card title="Agent workflows" href="/docs/agents/workflows" description="The standard workflows and handoff receipts agents follow." />
+  <Card title="Version-control your designs" href="/docs/guides/version-control-designs" description="Branch and merge parallel work with the VCS tools." />
+</Cards>

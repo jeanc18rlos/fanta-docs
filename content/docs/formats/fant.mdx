@@ -1,0 +1,77 @@
+---
+title: The .fant container & project directory
+description: Fantaisa's working format is a project directory; .fant is the single-file import/export container — plus save semantics and opt-in image embedding.
+---
+
+Fantaisa keeps two distinct things separate: the **project directory** you edit
+in, and the **`.fant` container** you ship and archive. Conflating them is the
+fastest way to lose work.
+
+## The project directory is the working format
+
+A live Fantaisa document is a **directory on disk**, not a single file. The
+desktop app (`fanta-app`) opens it, and the renderer-agnostic scene graph in
+`fanta-doc` is the model underneath. As you edit, the editor owns the document in
+memory; the directory is the durable home for it.
+
+The live MCP and the in-app AI panel both drive *this* in-memory document. That is
+why the working format and the save discipline below matter for agents as much as
+for humans.
+
+<Callout type="warn">
+  **In-memory state is not auto-persisted.** A relaunch reloads from the directory
+  on disk. If you intend to relaunch the live app, [`save_document`](/docs/mcp/build-loop)
+  **first** — otherwise unsaved edits vanish on reload.
+</Callout>
+
+## The .fant container
+
+`.fant` is a single-file **import/export container** produced by the
+`fanta-format` crate. It is what you use to move a document between machines, hand
+it to a collaborator, or archive a known-good snapshot. It carries:
+
+- a **manifest** describing the document and its assets,
+- **migration** logic so older `.fant` files open in newer builds,
+- and **round-trip** guarantees (covered by round-trip tests) so a save → load
+  cycle preserves the document.
+
+Open or save a `.fant` over MCP by passing the format:
+
+```json title="Open a .fant"
+{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"open_document","arguments":{"path":"/work/brand.fant","format":"fant"}}}
+```
+
+```json title="Export the current document to a .fant"
+{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"save_document","arguments":{"path":"/work/brand.fant"}}}
+```
+
+`open_document` also accepts `"project"` (the working directory), `"fig"` (Figma
+import), and `"blank"`. See the [tool reference](/docs/tools) for the full
+`open_document` / `save_document` contract.
+
+## Image embedding is opt-in
+
+By default a `.fant` references image assets rather than embedding their bytes.
+This is intentional: embedded pixels bloat the container fast, and orphaned bytes
+accumulate across edits. Only embed images when you specifically need a
+self-contained file to hand off.
+
+<Callout type="info">
+  Prefer linking source images or capturing them as editable reference frames over
+  embedding. Embed only when the recipient cannot reach the original asset paths.
+</Callout>
+
+## When to use which
+
+| You want to… | Use |
+| --- | --- |
+| Edit live in the desktop app | The **project directory** |
+| Send a document to another machine | A **`.fant`** container |
+| Archive a snapshot / known-good state | A **`.fant`** container |
+| Get git-native, line-level design diffs | [`.fnx`](/docs/formats/fnx) |
+| Render for the outside world | [Export](/docs/formats/export) PNG/SVG/PDF |
+
+<Cards>
+  <Card title=".fnx design-as-source" href="/docs/formats/fnx" description="When you want code-like diffs and git history instead of a binary container." />
+  <Card title="Export" href="/docs/formats/export" description="Turn the document into PNG, SVG, or PDF." />
+</Cards>

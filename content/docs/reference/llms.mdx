@@ -1,0 +1,52 @@
+---
+title: LLM-first docs
+description: How to feed this documentation to an LLM — the llms.txt and llms-full.txt endpoints, and the Markdown twin of every page.
+---
+
+This documentation is built to be **ingested by agents**, not just read by humans.
+Every page is available as clean Markdown, and the whole site is exposed as flat
+text files an LLM can consume in one shot.
+
+## /llms.txt and /llms-full.txt
+
+The site publishes two machine-friendly endpoints at the domain root:
+
+| Endpoint | Contents |
+| --- | --- |
+| `/llms.txt` | An index of the docs — titles, descriptions, and links — for an LLM to navigate. |
+| `/llms-full.txt` | The **entire** documentation concatenated as plain text, for one-shot ingestion. |
+
+To give an assistant the full context of Fantaisa, paste the full-text URL into
+it:
+
+```text
+https://<docs-domain>/llms-full.txt
+```
+
+The model then has the complete Formats, Guides, Reference, Tools, MCP, Agents,
+and Concepts material in a single pass — no crawling required.
+
+## Every page has a Markdown twin
+
+Each documentation page is also available as raw Markdown. Use the **Copy
+Markdown** / **Open in** controls on any page to grab the clean Markdown source of
+that page — ideal for pasting a single topic into a chat or a prompt without the
+surrounding site chrome.
+
+<Callout type="info">
+  Reach for the **page Markdown** when you want one focused topic in context, and
+  for **`/llms-full.txt`** when you want the whole site. The index at `/llms.txt`
+  is best when you want the model to choose what to read next.
+</Callout>
+
+## Why this matters for Fantaisa
+
+Fantaisa is agent-native: the editor is an MCP server and the docs are written
+LLM-first to match. An agent can read `/llms-full.txt`, learn the
+[build loop](/docs/mcp/build-loop) and the [hard rules](/docs/mcp/best-output),
+then drive the live canvas — all from the same documentation a human reads.
+
+<Cards>
+  <Card title="The build loop" href="/docs/mcp/build-loop" description="The canonical agent flow once the docs are in context." />
+  <Card title="Tool reference" href="/docs/tools" description="The full MCP tool catalog an agent will call." />
+</Cards>

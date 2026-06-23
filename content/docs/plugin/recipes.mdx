@@ -1,0 +1,63 @@
+---
+title: Recipes
+description: Copy-paste prompts and the /design command for driving Fantaisa from Claude Code.
+---
+
+All recipes assume the editor is running (`cargo run -p fanta-app`) and the plugin (or the `fantaisa` MCP server) is connected. See [Install](/docs/plugin).
+
+## The `/design` command
+
+The plugin adds a slash command that kicks off a full build on the live canvas:
+
+```text
+/design a pricing section with three tiers, monthly/yearly toggle, and a highlighted middle plan
+```
+
+Behind the scenes it runs the [build loop](/docs/mcp/build-loop): `agent_playbook` → `get_guidelines` → inspect → build with auto-layout → `review_design` → `export_png` → `save_document`.
+
+## Useful prompts
+
+### Build a screen
+```text
+Design a mobile sign-in screen on a new page. Use auto-layout, a 24px gutter,
+and the Fanta Futurist style from get_guidelines. Verify with export_png on the
+frame, then run review_design and fix anything it flags.
+```
+
+### Make a reusable component
+```text
+Turn the card I just built into a component with "default" and "highlighted"
+variants. Bind the background and border to design tokens. Insert three
+instances in a row.
+```
+
+### Match a reference
+```text
+Here's a reference screenshot at /tmp/ref.png. Create a reference frame for it,
+then build a matching hero section. Iterate with compare_screenshot until the
+similarity passes.
+```
+
+### Parallel build
+```text
+Use start_agent_team with 3 agents to build the dashboard: one does the sidebar,
+one the top bar, one the content grid. Keep each in a disjoint world region and
+give every node a unique name.
+```
+
+### Version a design
+```text
+Begin a VCS task, restyle the buttons to the new brand color, commit with a
+message, finish the task, then promote dev to staging.
+```
+
+<Callout type="warn">
+  If a screenshot or review call ever returns "visible editor timed out", you almost certainly screenshotted a page or the whole canvas. Always pass a frame `node` and keep frames ≤ 1920×1080. See [Troubleshooting](/docs/mcp/troubleshooting).
+</Callout>
+
+## Going further
+
+<Cards>
+  <Card title="Agent workflows" href="/docs/agents/workflows" description="Single vs multi-agent, the merged-undo model, visible cursors." />
+  <Card title="Tool Reference" href="/docs/tools" description="Every tool the recipes use, with parameters." />
+</Cards>

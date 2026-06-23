@@ -1,0 +1,110 @@
+---
+title: Connect an Agent
+description: The 60-second MCP quickstart — wire any AI agent to the running Fantaisa editor and have it design on the live canvas.
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+This is the killer feature: **the running editor is a live MCP server.** Point an AI agent at it and the agent designs on your real canvas, in real time, while you watch.
+
+You'll be connected in about a minute.
+
+<Steps>
+<Step>
+
+### Launch the editor
+
+The desktop app auto-starts the live MCP server on `:3846`.
+
+```bash title="Terminal"
+cargo run -p fanta-app
+```
+
+Leave it running. Everything below talks to this process.
+
+</Step>
+<Step>
+
+### Point your agent at the server
+
+Pick the transport that matches your agent.
+
+<Tabs items={['Claude Code (stdio proxy)', 'HTTP clients / Codex']}>
+<Tab value="Claude Code (stdio proxy)">
+
+Claude Code speaks stdio, so use the `fanta-mcp --live` proxy — it bridges stdio to the visible editor on `:3846`.
+
+```bash title="Terminal"
+claude mcp add fantaisa -- cargo run -p fanta-ai --bin fanta-mcp -- --live
+```
+
+Now restart Claude Code; the `fantaisa` server and its tools appear in the session.
+
+</Tab>
+<Tab value="HTTP clients / Codex">
+
+HTTP-capable clients (including OpenAI Codex) connect directly to the Streamable HTTP endpoint — no proxy needed.
+
+```json title="MCP config"
+{
+  "mcpServers": {
+    "fantaisa": {
+      "url": "http://127.0.0.1:3846/mcp",
+      "transport": "http"
+    }
+  }
+}
+```
+
+The endpoint speaks **JSON-RPC 2.0 (MCP version 2024-11-05)** over Streamable HTTP. Newline-delimited JSON-RPC is also accepted on the same port.
+
+</Tab>
+</Tabs>
+
+<Callout type="info">
+Default address is `http://127.0.0.1:3846/mcp`. Override the bind address with `FANTA_MCP_ADDR` when you start the editor.
+</Callout>
+
+</Step>
+<Step>
+
+### Run the build loop
+
+Ask your agent to start with the official playbook, then load the guides, then build. The canonical opening moves are:
+
+```text title="Prompt"
+Call agent_playbook to get the workflow, then get_guidelines to load
+the guides and style packs. Then create a frame with a title and build
+a simple card inside it using auto-layout.
+```
+
+`agent_playbook` returns the official workflow and `get_guidelines` loads the design guides and style packs — always run these two first so the agent builds the Fantaisa way.
+
+</Step>
+<Step>
+
+### Verify
+
+Have the agent render what it built and check the result visually.
+
+```text title="Prompt"
+Export the frame with export_png and run review_design, then save_document.
+```
+
+`export_png` (or `get_screenshot`) produces a chrome-free image of a specific frame; `review_design` critiques it; `save_document` persists the work.
+
+<Callout type="warn">
+Always pass a specific frame `node` to `export_png` / `get_screenshot` and keep frames ≤ 1920×1080. With no `node` these default to the entire document and time out. Never screenshot a whole page or the canvas.
+</Callout>
+
+</Step>
+</Steps>
+
+## What's next
+
+<Cards>
+  <Card title="MCP: Connect" href="/docs/mcp/connect" description="Full transport details, every client, and connection troubleshooting." />
+  <Card title="Claude plugin" href="/docs/plugin" description="A turnkey Claude plugin — skills and recipes preconfigured for Fantaisa." />
+  <Card title="Quickstart: Claude Code" href="/docs/getting-started/quickstart-claude-code" description="A complete end-to-end tutorial that ships a real screen." />
+</Cards>

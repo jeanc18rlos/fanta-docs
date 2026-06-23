@@ -1,0 +1,49 @@
+---
+title: The Editor
+description: A tour of the Fantaisa desktop app — canvas, toolbar, inspector, surface panels, the docked AI agent panel, and the built-in live MCP server.
+---
+
+The Fantaisa editor is a **native desktop application** (the `fanta-app` crate): a `winit` + `softbuffer` shell with a macOS Skia Ganesh/Metal GPU path for fast rendering, and a native WebView for chat. It is where you design by hand — and, uniquely, it is also a live **MCP server** that AI agents connect to so they can design on the very same canvas you're looking at.
+
+## The layout
+
+- **Canvas** — the infinite [world space](/docs/concepts/pages-world-space) where your pages and frames live. Pan, zoom, select, and draw here.
+- **Toolbar** — the [human tools](/docs/editor/tools): select, hand, rectangle, ellipse, line, polygon, star, text, and pen. Pick a tool, then act on the canvas.
+- **Inspector** — the [properties panel](/docs/editor/inspector) for the current selection: fills, strokes, effects, typography, auto-layout, and variable bindings.
+- **Surface panels** — the six [editor surfaces](/docs/editor/surfaces): Variables, Git, Home, Components, Code, and Prototype.
+- **AI agent panel** — a docked panel that drives CLI agents (Claude Code, Codex, GLM) against the live canvas.
+
+```text title="At a glance"
+┌───────────┬─────────────────────────────┬───────────────┐
+│ surfaces  │            canvas            │   inspector   │
+│ (V/Git/   │     (pages in world space)  │  (selection   │
+│  Home/... │                             │   properties) │
+├───────────┴─────────────────────────────┴───────────────┤
+│  toolbar  ·  AI agent panel (docked)  ·  live MCP :3846  │
+└──────────────────────────────────────────────────────────┘
+```
+
+## Hand and agent share one document
+
+Every change — yours or an agent's — flows through the same [Operations](/docs/concepts/document-model#operations) into one scene graph. An agent can lay out a screen and you can refine it by hand in the same session, or the reverse. There is no separate "AI document."
+
+## It hosts the live MCP
+
+The running editor exposes a **live MCP server on `:3846`**. Agents connect over Streamable HTTP and call the same build tools you'd use by hand — creating nodes, setting auto-layout, binding variables, exporting screenshots — and you watch the canvas update in real time. The docked agent panel orchestrates these CLI agents; you can also point external clients at the socket directly.
+
+<Callout type="info">
+On macOS the Metal layer keeps `framebufferOnly = true` for memory safety. And remember: in-memory document state isn't auto-persisted — **save before relaunching** the app.
+</Callout>
+
+## Explore the editor
+
+<Cards>
+  <Card title="Tools" href="/docs/editor/tools" description="Select, hand, rect, ellipse, line, polygon, star, text, pen — and the Operations they emit." />
+  <Card title="Inspector" href="/docs/editor/inspector" description="The properties panel: fills, strokes, effects, type, auto-layout, and variable binding." />
+  <Card title="Surfaces" href="/docs/editor/surfaces" description="Variables, Git, Home, Components, Code, and Prototype." />
+  <Card title="Keyboard shortcuts" href="/docs/editor/shortcuts" description="The current default shortcut set." />
+</Cards>
+
+<Callout type="info">
+Designing with an agent? Start with [Best output over MCP](/docs/mcp/best-output) and the [Tool Reference](/docs/tools).
+</Callout>

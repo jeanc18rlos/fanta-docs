@@ -1,0 +1,123 @@
+---
+title: 'Quickstart: Claude Code'
+description: End-to-end — use Claude Code to design a sign-in card on the live Fantaisa canvas and export a real artifact.
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+In this tutorial you'll have an AI agent design a working sign-in card on the live canvas — from an empty document to an exported PNG. We use Claude Code, but any MCP-capable agent (Codex, GLM) follows the same loop.
+
+**Prerequisites:** the editor is running (`cargo run -p fanta-app`) and your agent is [connected](/docs/getting-started/connect-an-agent).
+
+## The build loop
+
+Every good agent session follows one loop. Keep it in mind as you read the steps:
+
+```text
+agent_playbook → get_guidelines → inspect → build → verify → save
+```
+
+<Steps>
+<Step>
+
+### Kick off with intent
+
+Give the agent the goal and let it start with the playbook. A good opening prompt:
+
+```text title="Prompt to Claude Code"
+Design a sign-in card on the Fantaisa canvas: a centered card with a
+title, an email field, a password field, and a primary "Sign in" button.
+Start with agent_playbook and get_guidelines, then build it with
+auto-layout. Export and review before saving.
+```
+
+The agent's first tool calls load the official workflow and the design system:
+
+```text
+agent_playbook()
+get_guidelines()
+```
+
+</Step>
+<Step>
+
+### Inspect the canvas
+
+Before building, the agent checks what already exists so it doesn't collide with your work.
+
+```text
+get_editor_state()
+```
+
+It may also call `get_document` or `snapshot_layout` to understand the current page and pick a clear region of world space for the new frame.
+
+</Step>
+<Step>
+
+### Build bottom-up
+
+Nesting is explicit in Fantaisa: `create_*` tools drop nodes on the active page, and the agent reparents them into frames, then applies auto-layout. A typical sequence for the card:
+
+```text
+create_frame(name: "Sign in card", width: 360, height: 420)
+create_text(text: "Welcome back")
+create_text(text: "Email")
+create_text(text: "Password")
+insert_instance(component: "TextField")      // email input
+insert_instance(component: "TextField")      // password input
+insert_instance(component: "Button", label: "Sign in")
+set_auto_layout(node: <card>, direction: "vertical", gap: 16, padding: 24)
+```
+
+The agent reparents each leaf into the card (front-appends in flow order), then calls `set_auto_layout` on the container so the layout engine produces an even vertical rhythm — rather than hand-placing each element.
+
+<Callout type="info">
+There's no resize tool. Text and shape boxes keep their created size, so the agent sizes text boxes for the longest label they'll hold. Fill-to-width comes from auto-layout (`hug` sizing + `align_self: "stretch"`), not absolute positioning.
+</Callout>
+
+</Step>
+<Step>
+
+### Verify visually
+
+The agent renders just the card frame, critiques it, and iterates if needed.
+
+```text
+review_design(node: <card>)
+export_png(node: <card>)
+```
+
+`export_png` is chrome-free and needs no OS permissions. Pass the **frame `node`** and keep it ≤ 1920×1080 — exporting with no node defaults to the whole document and will time out.
+
+</Step>
+<Step>
+
+### Save the artifact
+
+When the card looks right, persist it.
+
+```text
+save_document()
+```
+
+You now have a real, editable sign-in card on the canvas and a PNG you can drop into a PR or share.
+
+<Callout type="warn">
+Remember: in-memory state isn't auto-persisted. If you relaunch the editor before `save_document`, the work is lost.
+</Callout>
+
+</Step>
+</Steps>
+
+## What "good" looks like
+
+A strong result is built as a real auto-layout stack — a vertical card with consistent gaps and padding, inputs that fill the card's width, and a primary button anchored at the bottom. If spacing looks uneven, the agent placed children absolutely instead of using `set_auto_layout`; ask it to rebuild the container as an auto-layout frame.
+
+For multi-section screens, the agent assembles bottom-up: leaves into rows, rows into cards, cards into sections, sections into the page — verifying with `export_png` after each major piece so the look-and-feel doesn't drift.
+
+## Next steps
+
+<Cards>
+  <Card title="Agent workflows" href="/docs/agents/workflows" description="The full repertoire of agent patterns — reference-grounded design, review/revision, media generation." />
+  <Card title="Tools reference" href="/docs/tools" description="Every MCP tool: create, layout, components, inspect, verify, and more." />
+</Cards>

@@ -1,0 +1,176 @@
+---
+title: Get the best output
+description: The hard rules of building on the live canvas — nesting, overrides, fill-to-width, verification — plus prompting guidance.
+---
+
+The live editor is a real document model, not a draw-to-pixels API. Agents that
+respect how it nests, lays out, and renders produce clean, editable designs;
+agents that fight it produce drift, silent no-ops, and timeouts. These nine rules
+are the difference. The in-app brain follows them automatically (they ship inside
+`agent_playbook`); external agents should treat them as law.
+
+## 1. Nesting is explicit
+
+`create_*` and `insert_instance` drop nodes on the **active page**, not inside a
+frame by geometry. A node that *looks* like it is inside a card is still a sibling
+of the card until you reparent it.
+
+- Reparent each node with `reorder {into: <frame>, to: "front"}`. **`front`
+  appends as the last child** — i.e. flow order in an auto-layout stack.
+- Then `set_auto_layout` the container.
+- **Assemble bottom-up:** leaves into rows, rows into cards, cards into sections,
+  sections into the page.
+
+```json title="Reparent, then lay out"
+{ "tool": "reorder", "args": { "node": "Title", "into": "Card", "to": "front" } }
+{ "tool": "set_auto_layout", "args": { "node": "Card", "direction": "vertical", "gap": 8 } }
+```
+
+## 2. Overrides need a PATH for nested targets
+
+`set_instance_override` and `insert_instance` resolve the component **root** or a
+**direct child** by node id. A deeper descendant — a label inside a sub-frame
+inside the instance — needs the full `target` **PATH array**.
+
+```json title="Override a nested label: pass the whole path"
+{
+  "tool": "set_instance_override",
+  "args": {
+    "node": "inst_card",
+    "target": ["row_header", "txt_title"],
+    "text": "Quarterly revenue"
+  }
+}
+```
+
+Give a direct-child id where a path is required and the override **silently
+no-ops** — nothing errors, nothing changes. After you recreate a master child,
+re-point overrides at the new id.
+
+## 3. Fill-to-width = hug + stretch
+
+A child fills its parent's **cross axis** only when **both** hold:
+
+1. The child's own `set_auto_layout primary_sizing` is `hug`. A `fixed` primary
+   sizing **overrides** stretch and the child stays its created width.
+2. `set_layout_child align_self: "stretch"` is set **after** the parent became an
+   auto-layout frame.
+
+```json title="Make a row fill the card width"
+{ "tool": "set_auto_layout", "args": { "node": "Row", "primary_sizing": "hug" } }
+{ "tool": "set_layout_child", "args": { "node": "Row", "align_self": "stretch" } }
+```
+
+Main-axis growth is different: use `fill_container` / `grow` to make a child
+expand along the layout direction.
+
+## 4. There is no resize tool
+
+A text or shape box keeps the size it was created at. **Size text boxes for the
+longest label they will ever hold** — overridden text that is longer than the box
+clips.
+
+The layout resizer (`fanta_doc::layout::size`) preserves real vector and icon
+geometry — it only re-rectangles actual rectangles — so `create_icon` and
+`create_svg` symbols render and scale correctly inside auto-layout instead of
+being squashed.
+
+## 5. Icons and custom SVG
+
+- `create_icon` draws from the **curated built-in icon set**.
+- `create_svg` renders **any** SVG — a path `d` string or a full `<svg>` — and
+  honors its `viewBox` (`view_box` for non-24 art).
+- `mode: "fill"` for solid or multi-contour art; holes need
+  `fill_rule: "evenodd"`.
+- `mode: "outline"` bakes the stroke into a filled path
+  (`PathData::stroke_to_fill`) — crisp at any size, and **preferred over the live
+  `mode: "stroke"`**.
+- A solid + line pair of one glyph = `create_svg` twice (one fill, one outline).
+
+## 6. Verify with a node, and keep frames ≤ 1920×1080
+
+Verification is not optional. Render a **single frame** — `export_png {node}` or
+`get_screenshot {node}` — both chrome-free and requiring no OS permissions. Use
+`compare_screenshot` against a reference and `review_design` before saving.
+
+<Callout type="error">
+  **Always pass a frame `node`.** With no `node`, `export_png` /
+  `get_screenshot` default to `node:"document"` — every page across the entire
+  world space — which never finishes and returns **`visible editor timed out`**.
+  Keep every frame **≤ 1920×1080**. Never screenshot a page, the canvas, or the
+  document.
+</Callout>
+
+## 7. Auto-layout, not absolute placement
+
+Build panels, cards, and rows as **real auto-layout stacks** — assemble
+row-frames, then `set_auto_layout` with a `gap` — never as flat,
+absolutely-positioned children. Uniform spacing then comes from the layout engine
+for free; hand-placed children drift into uneven "y gaps". (This also dogfoods
+Fantaisa's own auto-layout feature.)
+
+## 8. Compact canvas, one disjoint world region per page
+
+`export_png` composites **every page that overlaps the export rect** in world
+space — frame export does not dodge this. So:
+
+- **Each page gets a disjoint world region.** Anchor a page's content at a clear
+  x (e.g. brand pages at `x < 2500`, mockups at `x ≥ 12000`) and build from
+  there.
+- **Within a page, pack frames tightly** — small ~64–120px gutters on a grid.
+  Never scatter frames across thousands of px. Compaction *within* a page is
+  always safe; only page-to-page separation matters for bleed.
+- **Keep component masters on-page** — deleting a `define_component` root empties
+  the component. Keep masters in a tidy library strip next to the work.
+
+## 9. References first
+
+For design-heavy work, ground the look before you build. Capture inspiration —
+generated references, uploaded images, browser screenshots, Dribbble/Pinterest
+mood — with `create_reference_frame`, recording its `source`, a `comment`, the
+`prompt` bias, and `influence`/`weight` so the user can favor or downweight each
+inspiration before every iteration. When asked to build a component, search
+existing components first, gather or generate references, create the reference
+frame, then build the editable master and variants.
+
+---
+
+## Prompting the agent
+
+The rules above are how the agent builds. How *you* prompt decides what it
+builds. The same instincts that work for code apply here.
+
+### Be specific
+
+Vague asks produce vague edits. Name the target, the property, and the value.
+
+| Don't | Do |
+| --- | --- |
+| "Make the button nicer." | "Increase the CTA button's padding to 16px and use the `brand/primary` fill." |
+| "Fix the spacing." | "Set the card stack's auto-layout gap to 12px." |
+| "Make it pop." | "Add a 1px `border/subtle` stroke and a 4% black drop shadow at y=2, blur=8." |
+
+### Give context
+
+Tell the agent *what* it is building and *for whom* before *how*. "This is a
+mobile settings screen; match the **Mobile App** guide and **Figma Clean Dark
+Light** style" sets up the right guide/style pull and the right defaults.
+
+### Iterate broad → refine
+
+Build the structure first, then tune. Ask for the full section in one pass
+("assemble a three-card metrics row with title, value, and trend"), screenshot
+it, then refine the details ("tighten the value-to-trend gap to 4px"). Refining
+before the skeleton exists wastes round-trips.
+
+### Verify with screenshots
+
+End every meaningful step with an `export_png {node}` and a `review_design`. If
+you cannot see it, neither can the agent — and an unscreenshotted build is an
+unverified build. Compare against saved references so the look does not drift
+across iterations.
+
+<Cards>
+  <Card title="The build loop" href="/docs/mcp/build-loop" description="Where each rule fits in the canonical flow." />
+  <Card title="Custom rules & context" href="/docs/mcp/custom-rules" description="Ship these rules to every agent automatically." />
+</Cards>

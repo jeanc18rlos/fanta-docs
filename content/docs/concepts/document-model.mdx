@@ -1,0 +1,64 @@
+---
+title: Document Model
+description: The scene graph at the heart of Fantaisa — nodes with ULID ids, Operations, an undo/redo history stack, snapshots, and a renderer-agnostic core.
+---
+
+Every Fantaisa document is a **scene graph**: a tree of nodes describing what is on the canvas, independent of how it gets drawn. This model lives in the `fanta-doc` crate and is deliberately isolated — it never depends on rendering, the app shell, or AI. Renderers, tools, importers, and agents all read and mutate the *same* model through a small, well-defined surface.
+
+## Nodes and the scene graph
+
+A document holds one or more **pages**, and each page is a tree of **nodes**. A node can be a frame, vector, text, image, group, component instance, and so on. Frames nest other nodes, so the tree mirrors what you see: a card frame containing a row frame containing an icon and a label.
+
+Every node carries:
+
+- A **globally-unique id** — a [ULID](https://github.com/ulid/spec) (a sortable, time-ordered unique identifier). Ids are stable for the life of the node, so tools, overrides, prototype reactions, and agents can refer to a node unambiguously.
+- A **transform** (position, scale, rotation), plus type-specific properties (fills, strokes, text, geometry).
+- A place in the tree — its parent and sibling order. Sibling order is paint order: later children draw on top.
+
+<Callout type="info">
+Because ids are ULIDs, capture the id of a node **when you create it**. Don't rely on looking a node up by name or position later — names aren't unique and positions move.
+</Callout>
+
+## Operations
+
+You never mutate the tree directly. Every change is an **Operation** — create, delete, reparent/reorder, set a property, bind a variable, and so on. Operations are the single chokepoint through which the document changes, applied via `Doc::apply`.
+
+This matters for three reasons:
+
+1. **Undo/redo is free.** Because every change is a recorded Operation, the history stack can reverse and replay it.
+2. **Invariants are preserved.** Importers, the AI tool surface, and human tools all funnel through the same Operations, so the tree stays consistent.
+3. **Agents and humans share one path.** An AI agent emits the same Operations a human tool does — there is no second, divergent mutation API.
+
+```text title="The mutation path"
+human tool  ─┐
+AI / MCP    ─┼─▶ Operation ─▶ Doc::apply ─▶ scene graph + history
+importer    ─┘
+```
+
+## History: undo and redo
+
+The document keeps a **history stack** of applied Operations. Undo reverses the most recent Operation; redo re-applies it. Because history is part of the model — not the UI — undo behaves identically whether a change came from the keyboard, a tool drag, or an agent.
+
+When you design programmatically, group related changes so each undo step is meaningful. A single semantic action (e.g. "build this card") may be many Operations under the hood.
+
+## Snapshots
+
+A **snapshot** is a captured state of the document (or a subtree) at a point in time. Snapshots back features like saving, diffing, and deterministic rendering, and they give tooling a stable view to read from while edits continue. They are how the model exposes "what does this look like right now" without freezing the live document.
+
+## A renderer-agnostic core
+
+The model knows nothing about Skia, Metal, or pixels. [Rendering](/docs/reference/architecture) is a separate concern: the `fanta-render` crate reads the scene graph (and resolves variables and component instances) to produce pixels. The same document could, in principle, be drawn by a different backend without changing a single node.
+
+This separation is why so much is possible on top of one tree:
+
+- **Variables** resolve at render time, so [theming](/docs/concepts/variables) by mode needs no duplicate nodes.
+- **Component instances** expand from their master at render time, so [components](/docs/concepts/components) stay editable.
+- **.fnx** can serialize the same tree as [source code](/docs/concepts/fnx-design-as-source) instead of JSON.
+
+## Related
+
+<Cards>
+  <Card title="Pages & world space" href="/docs/concepts/pages-world-space" description="How pages sit in one shared coordinate space." />
+  <Card title="Architecture" href="/docs/reference/architecture" description="Crate boundaries and dependency direction." />
+  <Card title="Tool Reference" href="/docs/tools" description="The Operations agents emit, grouped by intent." />
+</Cards>

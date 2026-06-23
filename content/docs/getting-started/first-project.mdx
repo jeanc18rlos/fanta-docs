@@ -1,0 +1,66 @@
+---
+title: Your First Project
+description: Create a project, draw a frame, and save — and learn how project directories differ from .fant files.
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+This page walks you through the editor by hand. If you'd rather have an agent build for you, jump to [Connect an agent](/docs/getting-started/connect-an-agent).
+
+## Projects vs. `.fant`
+
+Fantaisa has two formats, and the distinction matters:
+
+- **Project directory** — the *working format*. This is the folder you edit live; the editor reads and writes it as you go.
+- **`.fant` file** — an *import/export container*. Use it to share a design, hand it off, or archive a snapshot. It is not the live working store.
+
+Think of the project directory like a working tree, and `.fant` like a packaged artifact you export when you want to move a design somewhere else.
+
+<Callout type="warn">
+In-memory document state is **not auto-persisted**. Always **save before relaunching** the live app, or unsaved changes are lost.
+</Callout>
+
+## Create and draw
+
+<Steps>
+<Step>
+
+Launch the desktop editor.
+
+```bash title="Terminal"
+cargo run -p fanta-app
+```
+
+</Step>
+<Step>
+
+**Create a new project.** Use the editor's New Project flow to start a fresh project directory. This becomes your live working store.
+
+</Step>
+<Step>
+
+**Add a page.** A document holds one or more pages, each its own region of the infinite canvas. Create a page to draw on.
+
+</Step>
+<Step>
+
+**Draw a frame.** Pick the frame/rectangle tool and drag out a frame on the canvas. Frames are containers — drop text, shapes, and images inside them and they become the backbone of layouts.
+
+</Step>
+<Step>
+
+**Save.** Save the document back to its project directory before you close or relaunch.
+
+</Step>
+</Steps>
+
+## Keep the canvas compact
+
+Pack frames tightly within each page using small gutters, and give unrelated work disjoint regions of world space. Scattering frames across thousands of pixels makes exports and screenshots slow and unwieldy.
+
+## Next steps
+
+<Cards>
+  <Card title="Connect an agent" href="/docs/getting-started/connect-an-agent" description="Let an AI agent design on this same canvas in real time." />
+  <Card title="The editor" href="/docs/editor" description="Tour the panels, tools, and canvas surfaces." />
+</Cards>
