@@ -1,8 +1,8 @@
 {
   "mcpServers": {
-    "fantaisa": {
-      "type": "http",
-      "url": "http://127.0.0.1:3846/mcp"
+    "fanta": {
+      "command": "/Applications/Fanta.app/Contents/MacOS/fanta",
+      "args": ["--mcp-stdio"]
     }
   }
 }

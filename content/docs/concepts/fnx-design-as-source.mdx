@@ -1,56 +1,21 @@
 ---
-title: Design as Source (.fnx)
-description: .fnx represents designs as React/JSX-style source files — git-friendly, code-like diffs — and export_jsx returns the source for any subtree.
+title: FNX design as source
+description: Read and edit the source representation of Fanta designs.
 ---
 
-`.fnx` is Fantaisa's **design-as-source** format. Instead of storing a design as per-node JSON, `.fnx` represents it as **React/JSX-style source files** — one per component or page — that read like code and diff like code. It is produced and consumed by the `fanta-fnx` codec, and it sits on top of the same [document model](/docs/concepts/document-model): the tree is the source of truth; `.fnx` is a code-shaped projection of it.
+# FNX design as source
 
-## What .fnx looks like
+Fanta stores page and component layer trees in FNX files: `pages/<slug>/page.fnx` and `components/<slug>/master.fnx`. FNX is a readable, JSX-like representation of design nodes and properties. It includes explicit node IDs in printed source. Sidecar files still carry supporting identity and ordering information.
 
-A frame becomes a tag; its children nest like JSX children; properties become attributes. A card might serialize roughly like this:
+A source file may express placement through parent-relative transforms, including X and Y translation, and width and height shorthand. It has conveniences for common shapes such as Rect and Ellipse and color values through `fnxColor`. The canvas presents the resolved result.
 
-```jsx title="Card.fnx (illustrative)"
-<Frame name="Card" autoLayout="column" gap={12} padding={16} fill="color/surface">
-  <Text style="title">Welcome back</Text>
-  <Text style="body" fill="color/text-muted">Sign in to continue</Text>
-  <Button label="Continue" fill="color/accent" />
-</Frame>
-```
+## Edit source in Fanta
 
-The exact syntax follows the codec, but the shape is the point: structure is nesting, configuration is attributes, and tokens read by name.
+1. Open the **Code** workspace and select an FNX file.
+2. Make the desired change. Once source is dirty, canvas edits are locked to avoid competing changes.
+3. Save. Fanta validates the whole project, writes the source and sidecar atomically, and reloads the canvas.
+4. If validation fails, read the error, fix the source, and save again.
 
-## Why design as source
+The Code workspace also has a JSON preview for inspection. That view is read-only. Unknown FNX attributes can produce diagnostics without making the source unsaveable; review warnings and check the rendered result.
 
-Storing designs as code-shaped files unlocks the developer workflow for design:
-
-- **Git-native.** `.fnx` files commit, branch, and merge like any source file. Design history lives in your version control, not a proprietary blob.
-- **Code-like diffs.** A pull request shows *what changed* in human-readable lines — "label changed, gap 8→12" — instead of an opaque binary diff. Review becomes possible.
-- **Reads like code.** A component's structure is legible at a glance, which is friendly to both humans and LLMs and pairs naturally with [components](/docs/concepts/components) and [variables](/docs/concepts/variables) (tokens appear by name).
-
-<Callout type="info">
-`.fnx` is design *as* source — the same scene graph, projected to text. It complements binary/container formats rather than replacing the model: edits still flow through [Operations](/docs/concepts/document-model#operations).
-</Callout>
-
-## export_jsx
-
-To get the source for part of a design, call **`export_jsx { node }`**. It returns the `.fnx` for that subtree — a component, a page section, or a whole frame — so you can review it, commit it, or hand it to an LLM as legible context.
-
-```text title="Getting source for a subtree"
-export_jsx { node: <frame id> }  →  .fnx source for that subtree
-```
-
-Because it is just text, the output drops straight into a diff, a code review, or a prompt — no special viewer required.
-
-## When to reach for it
-
-- **Reviewing design changes** the way you review code (PRs, line comments).
-- **Versioning designs** alongside the codebase in the same repository.
-- **Feeding an agent** a compact, readable description of existing structure.
-
-## Related
-
-<Cards>
-  <Card title=".fnx format" href="/docs/formats/fnx" description="The format reference and round-trip details." />
-  <Card title="Figma import" href="/docs/formats/figma-import" description="Bring existing .fig designs into the model." />
-  <Card title="The Code surface" href="/docs/editor/surfaces" description="View and work with design source inside the editor." />
-</Cards>
+FNX printing and syntax are in `crates/fanta-fnx/src/source.rs`, `crates/fanta-fnx/src/sugar.rs`, and `crates/fanta-fnx/src/print.rs`. The Code workspace save path is in `crates/fig_viewer/src/code_workspace.rs` and `crates/fanta-format/src/project/source_edit.rs`.

@@ -1,87 +1,20 @@
 ---
-title: Auto-Layout
-description: Figma-style flex on a frame — direction, gap, padding, alignment, wrap, and hug/fixed/fill sizing — plus the fill-to-width recipe and the no-resize rule.
+title: Auto layout
+description: Arrange children with frame layout controls.
 ---
 
-Auto-layout turns a plain frame into a **flex container**: its children stack along an axis with consistent spacing, padding, and alignment, and the frame resizes to fit them. It is the single most important tool for building panels, cards, rows, and lists that stay tidy as content changes — and it is how you get uniform rhythm without hand-placing every node.
+# Auto layout
 
-import { Step, Steps } from 'fumadocs-ui/components/steps';
+Auto layout arranges a container's children using direction, spacing, padding, alignment, and sizing rules. Use it for repeated items, buttons, cards, and sections that need to respond when their contents change. The inspector separates a container's layout settings from each selected child's sizing and alignment settings.
 
-## What an auto-layout frame controls
+## Set up a layout
 
-Once a frame is an auto-layout frame, it lays out its children using:
+1. Select a frame or another supported container.
+2. Open the **Layout** section in the inspector and enable auto layout.
+3. Choose the direction, spacing, padding, and alignment.
+4. Select a child to adjust its sizing or placement within the layout.
+5. Resize the container or edit child content to check the result.
 
-- **direction** — horizontal (a row) or vertical (a column). This is the **primary axis**; the perpendicular one is the **cross axis**.
-- **spacing** (gap) — the distance between adjacent children.
-- **padding** — inner spacing between the frame edge and its children (per side).
-- **primary alignment** — how children pack along the primary axis (start / center / end / space-between).
-- **counter alignment** — how children align on the cross axis (start / center / end).
-- **wrap** — whether children flow onto multiple lines when they run out of room.
+You can also reach layout actions from the layer context menu. A free-positioned layer may move when you put it into a layout container because the parent now calculates child placement. Check the result on the canvas.
 
-## Sizing modes: hug, fixed, fill
-
-Every node in an auto-layout context has a sizing behavior on each axis:
-
-| Mode | Meaning |
-| --- | --- |
-| **hug** | Shrink to exactly fit contents. A container hugs its children; a child hugs its own content. |
-| **fixed** | Hold a specific size regardless of content or parent. |
-| **fill** | Grow to fill available space in the parent. |
-
-A container that **hugs** grows and shrinks with its children. A child set to **fill** expands to take up the room the parent offers.
-
-## The fill-to-width recipe
-
-A very common goal is making a child stretch across its parent's **cross axis** (e.g. a button or input that spans the full width of a column). This needs two things, in order:
-
-<Steps>
-<Step>
-**Make the parent an auto-layout frame first.** Stretch only resolves against an auto-layout parent.
-</Step>
-<Step>
-**Set the child's own primary sizing to `hug`.** A `fixed` primary sizing *overrides* stretch and the child will not fill. This is the most common reason "stretch" appears to do nothing.
-</Step>
-<Step>
-**Then set `align_self: "stretch"` on the child** — after the parent is already an auto-layout frame.
-</Step>
-</Steps>
-
-```text title="Fill-to-width (cross axis)"
-parent: auto-layout (column)
-child:  primary_sizing = hug      ← NOT fixed, or stretch is ignored
-child:  align_self = "stretch"    ← set AFTER parent is auto-layout
-→ child now spans the parent's full width
-```
-
-For growth along the **main axis** (a child eating leftover space in the flow direction), use `fill_container` / `grow` instead of `align_self`.
-
-<Callout type="warn">
-Order matters. `align_self: "stretch"` set *before* the parent becomes an auto-layout frame silently no-ops. And a child with `fixed` primary sizing will never stretch, no matter what `align_self` says.
-</Callout>
-
-## The no-resize rule
-
-There is **no resize tool**. A text box or shape keeps the size it was created with; auto-layout repositions and (for fill/hug) re-sizes containers, but it does not magically grow a created box to fit longer text.
-
-Two consequences:
-
-- **Size text boxes for the longest label they will ever hold.** If an [instance override](/docs/concepts/components) replaces text with something longer, the extra text clips against the original box.
-- The layout resizer preserves real vector and icon geometry — it only re-rectangles actual rectangles. So [icons and SVG](/docs/concepts/vectors-icons-svg) render and size correctly inside auto-layout frames.
-
-## Build bottom-up
-
-Auto-layout composes. The reliable assembly order is leaves first:
-
-1. Put leaf nodes (icon, label) into a **row** frame; set its auto-layout.
-2. Put rows into a **card** frame; set its auto-layout.
-3. Put cards into a **section**, sections into the **page**.
-
-Building bottom-up means each container hugs real content as you go, so spacing stays predictable instead of fighting half-formed parents.
-
-## Related
-
-<Cards>
-  <Card title="Layout tools" href="/docs/tools/layout" description="set_auto_layout, set_layout_child, and sizing controls." />
-  <Card title="Pages & world space" href="/docs/concepts/pages-world-space" description="Why compact, auto-laid-out frames beat scattered placement." />
-  <Card title="Components & instances" href="/docs/concepts/components" description="Auto-layout plus overrides = reusable, resilient UI." />
-</Cards>
+The canvas supports an 8 px snap grid and nearby node edges and centers while moving objects; snapping is a separate feature from auto layout. Inspector layout controls live in `crates/fig_viewer/src/properties_panel.rs`, and layer actions in `crates/fig_viewer/src/layer_context_ops.rs`.

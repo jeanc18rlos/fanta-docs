@@ -1,36 +1,14 @@
 ---
 title: Guides
-description: Task-oriented walkthroughs for building, componentizing, parallelizing, and version-controlling designs in Fantaisa over MCP.
+description: Practical workflows for the source-backed editor and six MCP tools.
 ---
 
-These guides are end-to-end, copy-pasteable walkthroughs. Each one is a real
-sequence of MCP tool calls for a concrete outcome — building a card, defining a
-variant set, running a swarm, or wiring designs into git. They assume you have a
-live editor and have read [the build loop](/docs/mcp/build-loop).
-
-## Build & componentize
+These workflows use the current Fanta desktop app. Each ends with a screenshot and source diff, since both are needed to review a design change.
 
 <Cards>
-  <Card title="Build a card with auto-layout" href="/docs/guides/auto-layout-card" description="Create leaves, reparent with reorder, set_auto_layout, fill-to-width, and verify with export_png." />
-  <Card title="Build a component & variants" href="/docs/guides/component-variants" description="Reference frame → master → component set → instances with PATH overrides → verify." />
+  <Card title="Auto-layout card" href="/docs/guides/auto-layout-card" />
+  <Card title="Component and instance" href="/docs/guides/component-variants" />
+  <Card title="Coordinate agents" href="/docs/guides/multi-agent-build" />
+  <Card title="Edit .fnx source" href="/docs/guides/design-to-code-fnx" />
+  <Card title="Review with Git" href="/docs/guides/version-control-designs" />
 </Cards>
-
-## Scale & ship
-
-<Cards>
-  <Card title="Run a multi-agent build" href="/docs/guides/multi-agent-build" description="Many agents on one shared doc: disjoint regions, unique names, captured ids, single-undo merge." />
-  <Card title="Design-to-code with .fnx" href="/docs/guides/design-to-code-fnx" description="export_jsx, edit the source, diff it in git, and round-trip back." />
-  <Card title="Version-control your designs" href="/docs/guides/version-control-designs" description="vcs_begin_task → edits → vcs_commit → vcs_finish_task → vcs_promote, plus design locks." />
-</Cards>
-
-## Before you start
-
-Every guide assumes the same front matter, in this order:
-
-1. [`agent_playbook`](/docs/mcp/build-loop) — load the rules of the house.
-2. [`get_guidelines`](/docs/mcp/build-loop) — pull the right guide and style.
-3. Inspect (`get_editor_state` / `get_document` / `snapshot_layout`).
-
-Then follow the guide's steps. See the [tool reference](/docs/tools) for the full
-catalog and [Get the best output](/docs/mcp/best-output) for the hard rules each
-step depends on.

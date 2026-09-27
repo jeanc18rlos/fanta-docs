@@ -1,95 +1,37 @@
 ---
-title: The Fantaisa Plugin
-description: A turnkey Claude Code plugin that wires up the live Fantaisa MCP server and ships the design skills agents need.
+title: Claude Code plugin
+description: Install Fanta's optional Claude Code plugin for the local stdio MCP bridge.
 ---
 
-import { Step, Steps } from 'fumadocs-ui/components/steps';
-import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
-
-The **Fantaisa plugin** makes Claude Code (and any Claude-plugin-compatible client) work against Fantaisa out of the box. It bundles:
-
-- **The MCP server config** — points at the live editor on `http://127.0.0.1:3846/mcp`, so the `fantaisa` tools are available the moment the editor is running.
-- **Skills** — the [Fantaisa build loop, verification, and component workflows](/docs/plugin/skills) encoded as Agent Skills, so the model follows the hard rules (explicit nesting, fill-to-width, verify-with-a-node) without you re-explaining them.
-- **A `/design` command** — a one-liner to kick off a build on the live canvas.
+The plugin in this repository provides a ready-to-use MCP connection, a `/design` command, and three skills for building and checking designs. It talks to the **running Fanta desktop app** through `/Applications/Fanta.app/Contents/MacOS/fanta --mcp-stdio`.
 
 <Callout type="info">
-  The plugin lives in this docs repository under `/plugin`, and the repo doubles as a Claude Code **plugin marketplace** (its `.claude-plugin/marketplace.json`). That means you can install it straight from GitHub.
+  The plugin is optional. Claude Code and Codex can also connect directly using the [agent connection guide](/docs/getting-started/connect-an-agent).
 </Callout>
-
-## Prerequisites
-
-1. The Fantaisa desktop editor is running: `cargo run -p fanta-app` (it serves MCP on `:3846`).
-2. Claude Code is installed (`claude`).
 
 ## Install
 
-<Steps>
-<Step>
-### Add the marketplace
+1. Install Fanta in `/Applications`, launch it, and open a design.
+2. In Claude Code, run:
 
-```bash title="Terminal"
+```bash
 claude plugin marketplace add jeanc18rlos/fanta-docs
+claude plugin install fanta@fanta-docs
 ```
-</Step>
-<Step>
-### Install the plugin
 
-```bash title="Terminal"
-claude plugin install fantaisa@fantaisa-docs
-```
-</Step>
-<Step>
-### Start designing
-
-With the editor running, ask Claude to design — or use the bundled command:
+3. Confirm the `fanta` MCP server is connected, then try:
 
 ```text
-/design a sign-in card with email, password, and a primary button
+/design Add a 320×180 card with a heading and primary button to the current page.
 ```
 
-The agent will call `agent_playbook`, inspect the canvas, build with auto-layout, verify with `export_png`/`review_design`, and save.
-</Step>
-</Steps>
+If Fanta is installed elsewhere, update the executable path or [connect directly](/docs/mcp/connect).
 
-## Don't want the full plugin?
+The local server exposes [`get_editor_state`, `get_guidelines`, `batch_get`, `batch_design`, `get_screenshot`, and `read_fnx_source`](/docs/tools). The plugin teaches Claude to inspect the live design, make an undoable edit, verify the result, and rely on autosave.
 
-You can wire up just the MCP server. Both forms point at the same running editor.
-
-<Tabs items={["Claude Code (HTTP)", "Claude Code (stdio proxy)", ".mcp.json"]}>
-<Tab value="Claude Code (HTTP)">
-```bash title="Terminal"
-claude mcp add fantaisa --transport http http://127.0.0.1:3846/mcp
-```
-</Tab>
-<Tab value="Claude Code (stdio proxy)">
-For clients that prefer stdio, use the `--live` proxy (run from the Fantaisa repo):
-
-```bash title="Terminal"
-claude mcp add fantaisa -- cargo run -p fanta-ai --bin fanta-mcp -- --live
-```
-</Tab>
-<Tab value=".mcp.json">
-Drop this in your project's `.mcp.json`:
-
-```json title=".mcp.json"
-{
-  "mcpServers": {
-    "fantaisa": {
-      "type": "http",
-      "url": "http://127.0.0.1:3846/mcp"
-    }
-  }
-}
-```
-</Tab>
-</Tabs>
-
-See [MCP → Connect](/docs/mcp/connect) for Codex and headless setups.
-
-## What's next
+Older plugin versions pointed to an HTTP service on `:3846` and named tools that the current app does not expose. Update or reinstall the plugin if your installed copy still uses that endpoint.
 
 <Cards>
-  <Card title="Skills" href="/docs/plugin/skills" description="The Agent Skills the plugin ships and what each one does." />
-  <Card title="Recipes" href="/docs/plugin/recipes" description="Copy-paste prompts and the /design command in action." />
-  <Card title="Best output" href="/docs/mcp/best-output" description="The rules the skills enforce — worth reading once." />
+  <Card title="Plugin skills" href="/docs/plugin/skills" description="The bundled skills and when to use them." />
+  <Card title="Recipes" href="/docs/plugin/recipes" description="Prompts for the current six-tool surface." />
 </Cards>

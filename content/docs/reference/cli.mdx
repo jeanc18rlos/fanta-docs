@@ -1,85 +1,22 @@
 ---
 title: CLI & binaries
-description: The Fantaisa command-line binaries — the desktop app, the headless and live-proxy MCP servers, the fidelity CLI — and the environment variables that configure them.
+description: Build and run Fanta, connect MCP, and validate the design loop.
 ---
 
-import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+From the [fanta-edit repository](https://github.com/jeanc18rlos/fanta-edit):
 
-Fantaisa is a Cargo workspace; you run each piece with `cargo run -p <crate>`.
-This page lists the binaries and the environment variables that configure them.
-
-## Binaries
-
-| Command | What it runs |
+| Command | Purpose |
 | --- | --- |
-| `cargo run -p fanta-app` | The desktop editor. Auto-starts the live MCP server on `127.0.0.1:3846`. |
-| `cargo run -p fanta-ai --bin fanta-mcp` | The headless MCP server: stdio JSON-RPC over an in-memory document. |
-| `cargo run -p fanta-ai --bin fanta-mcp -- --live` | A stdio→HTTP proxy from a stdio MCP client to the running editor. |
-| `cargo run -p fanta-fidelity` | The fidelity render/diff CLI for fidelity corpora. |
+| `cargo run -p zed` | Build and run the app; binary name `fanta`. |
+| `cargo build --release -p zed` | Build `target/release/fanta`. |
+| `./script/bundle-mac` | Package the macOS app and DMG. |
+| `./script/clippy` | Repository lint workflow. |
+| `script/smoke-mcp <fanta-binary> <project-dir>` | Exercise the live MCP/design loop against a running app. |
 
-<Tabs items={['Desktop editor', 'Headless MCP', 'Live proxy']}>
+Register the installed app for Claude Code:
 
-<Tab value="Desktop editor">
-
-```bash title="Launch the editor (hosts the live MCP on :3846)"
-cargo run -p fanta-app
+```bash
+claude mcp add -s user fanta -- /Applications/Fanta.app/Contents/MacOS/fanta --mcp-stdio
 ```
 
-The visible canvas is reachable over Streamable HTTP at
-`http://127.0.0.1:3846/mcp`. This is the preferred surface for driving the live
-editor.
-
-</Tab>
-
-<Tab value="Headless MCP">
-
-```bash title="Headless, in-memory document — good for CI and batch generation"
-cargo run -p fanta-ai --bin fanta-mcp
-```
-
-`fanta-mcp` owns its own in-memory document with no UI and speaks JSON-RPC over
-stdio. Keep stdout pure JSON-RPC — logs go to stderr.
-
-</Tab>
-
-<Tab value="Live proxy">
-
-```bash title="Proxy a stdio MCP client to the visible editor"
-cargo run -p fanta-ai --bin fanta-mcp -- --live
-```
-
-Use this when your MCP client only speaks stdio but you want it to drive the
-running desktop editor at `127.0.0.1:3846`.
-
-</Tab>
-
-</Tabs>
-
-<Callout type="info">
-  Streamable-HTTP clients should connect directly to `http://127.0.0.1:3846/mcp`
-  against a running editor — no separate server needed. Use `fanta-mcp --live`
-  only for stdio-only clients.
-</Callout>
-
-## Environment variables
-
-| Variable | Purpose |
-| --- | --- |
-| `ANTHROPIC_API_KEY` | API key for the Anthropic client used by `fanta-ai`. |
-| `FANTA_AI_MODEL` | Override the model the AI surface uses. |
-| `FANTA_LLM_BASE_URL` | Point the LLM client at an alternate, compatible endpoint. |
-| `FANTA_MCP_ADDR` | Override the live MCP bind address (default `127.0.0.1:3846`). |
-| `RUST_LOG` | Standard Rust log filter (logs go to stderr). |
-
-```bash title="Example: run the editor on a different MCP port with debug logs"
-FANTA_MCP_ADDR=127.0.0.1:4000 RUST_LOG=debug cargo run -p fanta-app
-```
-
-```bash title="Example: headless MCP against a custom model"
-ANTHROPIC_API_KEY=sk-... FANTA_AI_MODEL=claude-... cargo run -p fanta-ai --bin fanta-mcp
-```
-
-<Cards>
-  <Card title="Architecture" href="/docs/reference/architecture" description="Which crate each binary lives in and how the MCP surfaces relate." />
-  <Card title="The build loop" href="/docs/mcp/build-loop" description="What to call once a server is running." />
-</Cards>
+For Codex, add `[mcp_servers.fanta]`, `command = "/Applications/Fanta.app/Contents/MacOS/fanta"`, and `args = ["--mcp-stdio"]` to `~/.codex/config.toml`. The bridge requires a running app and focused design. `fanta_live_mcp.enabled` defaults to true in user settings. There is no `FANTA_MCP_ADDR` or `fanta-mcp` binary in this checkout.

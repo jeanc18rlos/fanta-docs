@@ -1,54 +1,24 @@
 ---
-title: Formats & Interop
-description: How Fantaisa stores, versions, imports, and exports designs — the project directory, .fant, .fnx, .fig, and PNG/SVG/PDF.
+title: Formats & interoperability
+description: Choose the editable Fanta project, a snapshot, FNX source, Figma import, or a rendered export.
 ---
 
-Fantaisa has a deliberate split between the format you *work in*, the format you
-*ship*, and the format you *diff*. Understanding which is which prevents the most
-common data-loss mistakes — editing a stale export, or relaunching before a save.
+Fanta's editable document is a project directory with a <code>fanta.json</code> manifest. Pages, components, variables, metadata, and assets live in separate files. The canvas is a live view of those files, and a saved canvas edit updates the affected project files.
 
-## The format story
+## Choose the right output
 
-- **Project directory — the working format.** A live document is a directory on
-  disk, not a single file. The desktop app reads and writes it as you edit. It is
-  the source of truth for the in-app editor and the live MCP.
-- **`.fant` — the container.** A single-file import/export bundle (manifest +
-  migration + round-trip), produced by the `fanta-format` crate. Use it to hand a
-  document to another machine or archive a snapshot. Image embedding is opt-in.
-- **`.fnx` — design as source.** React/JSX-style per-component and per-page
-  *source* files (the `fanta-fnx` codec) that replace per-node JSON. Git-friendly,
-  with code-like diffs. `export_jsx {node}` returns `.fnx` for any subtree.
-- **`.fig` — Figma import.** The `fanta-fig-interop` crate reads Figma's Kiwi
-  format: components, instance overrides, variables, auto-layout, vectors, and
-  effects, validated against a fidelity oracle.
-- **Export — PNG / SVG / PDF.** The `fanta-export` crate and the MCP export tools
-  (`export_png`, `export_svg`, `export_jsx`, `get_screenshot`) render the document
-  for the outside world.
-
-<Callout type="warn">
-  In-memory state is **not** auto-persisted. Save the document before relaunching
-  the live app or the work you just did is gone on reload.
-</Callout>
-
-## Pick a format
-
-<Cards>
-  <Card title=".fant container" href="/docs/formats/fant" description="The project directory working model and the single-file .fant import/export container, plus save semantics." />
-  <Card title=".fnx design-as-source" href="/docs/formats/fnx" description="JSX-style source files for git-native, code-like design diffs and export_jsx." />
-  <Card title="Figma import" href="/docs/formats/figma-import" description="Import .fig via fanta-fig-interop: components, overrides, variables, auto-layout, vectors, effects." />
-  <Card title="Export" href="/docs/formats/export" description="Render to PNG, SVG, and PDF — and the export MCP tools with the ≤1920×1080 rule." />
-</Cards>
-
-## Where each format lives
-
-| Format | Crate | Role |
+| Format | Main purpose | Editable in Fanta? |
 | --- | --- | --- |
-| Project directory | `fanta-app` + `fanta-doc` | Working format the editor reads/writes |
-| `.fant` | `fanta-format` | Single-file import/export container, migration, round-trip |
-| `.fnx` | `fanta-fnx` | Design-as-source codec, `export_jsx` |
-| `.fig` | `fanta-fig-interop` | Figma (Kiwi) import |
-| PNG / SVG / PDF | `fanta-export` | Render output for the outside world |
+| [Fanta project directory](/docs/formats/fant) | Continue designing, version files, and collaborate through Git | Yes |
+| [<code>.fant</code> snapshot](/docs/formats/fant) | Package a design and its assets as one file | Import into an editable project |
+| [<code>.fnx</code> source](/docs/formats/fnx) | Review or edit a page or component master as static JSX-like source | Yes, through the project |
+| [<code>.fig</code> import](/docs/formats/figma-import) | Bring an existing Figma design into Fanta | Imported into an editable project |
+| [PNG, JPG, SVG, PDF](/docs/formats/export) | Share a visual result | Rendered output |
 
-See [Architecture](/docs/reference/architecture) for how these crates fit
-together and [the build loop](/docs/mcp/build-loop) for where `save_document`
-sits in a session.
+The Code workspace can edit FNX when the canvas is clean, then validate and reload it on save. An external editor or agent can also edit the source files.
+
+## Save and version
+
+Keep the project manifest, page or component source, ID sidecars, and referenced assets together in Git. A canvas edit patches the corresponding source, and external file changes are reconciled into the open editor. Invalid source leaves the last valid canvas visible with a diagnostic. If a canvas change and file change overlap, Fanta presents a conflict rather than silently choosing one.
+
+The <code>.fant</code> handler supports import and export at the format layer, but the snapshot itself is not the editable, versioned working format. The confirmed editor export controls produce visual files. See [project and snapshot details](/docs/formats/fant).

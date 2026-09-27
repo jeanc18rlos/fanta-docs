@@ -1,58 +1,14 @@
 ---
 title: Create, insert & arrange
-description: Create shapes, frames, text, icons, SVG, and images, then duplicate, group, reparent, and reorder them.
+description: Create and organize nodes through batch_design.
 ---
 
-These tools drop nodes onto the **active page**, not inside a frame by geometry. To nest, create the leaf, then [`reorder`](#reorder) it `into` the parent (`to:"front"` appends as the last child = flow order). Assemble bottom-up: leaves into rows/cards, rows into sections, sections into the page.
-
-<Callout>
-Nesting is explicit. `create_*` and `insert_instance` never auto-parent by overlap. Reparent with `reorder {into, to:"front"}`, then run [`set_auto_layout`](/docs/tools/layout) on the container.
-</Callout>
-
-## Create
-
-| Tool | Purpose | Key parameters |
-| --- | --- | --- |
-| `create_rect` | Rectangle | `x`, `y`, `w`, `h`, `color`: `"#RRGGBB[AA]"` |
-| `create_ellipse` | Ellipse | `cx`, `cy`, `rx`, `ry`, `color` |
-| `create_frame` | Container frame | `x`, `y`, `w`, `h`, `fill`, `name`, `corner_radius` |
-| `create_text` | Text box | `x`, `y`, `w`, `h`, `content`, `color`, `size`, `weight`, `font_family?` |
-| `create_icon` | Built-in curated glyph | `x`, `y`, `size`, `icon`, `color`, `stroke_width?`=`2`, `name?` |
-| `create_svg` | Any authored SVG | `x`, `y`, `size`, `svg`, `mode`, `color`, `stroke_width?`, `view_box?`, `fill_rule`, `name?` |
-| `place_image` | Place an existing asset | `asset_id`, `x`, `y`, `w`, `h`, `name?` |
-| `import_image` | Import from disk | `path`, `x?`, `y?`, `w?`, `h?`, `max?`=`520`, `name?` |
-| `insert_instance` | Drop a component instance | `component`, `x`, `y`, `name?`, `overrides?:[{prop,value}]` |
-
-**`create_icon` set:** `plus`, `x`, `search`, `home`, `layers`, `cursor`, `frame`, `component`, `chat`, `sparkles`, `pen`, `image`.
-
-**`create_svg` enums:** `mode`: `"fill"` (solid / multi-contour art — holes need `fill_rule:"evenodd"`) \| `"stroke"` (live stroke) \| `"outline"` (bakes the stroke into a filled path; crisp at any size, preferred for line icons). `fill_rule`: `"nonzero"` \| `"evenodd"`. Set `view_box` for non-24 art. A solid + line pair of one glyph = `create_svg` twice (fill, then outline).
-
-<Callout type="warn">
-There is no resize tool. A text or shape box keeps its created size — size text boxes for the longest label they will hold; longer overridden text clips. See [`insert_instance`](/docs/tools/components-instances) for full override detail.
-</Callout>
-
-## Arrange
-
-| Tool | Purpose | Key parameters |
-| --- | --- | --- |
-| `find_empty_space` | Find a free region for new content | `w`, `h`, `padding?`=`32`, `direction?`: `"right"` \| `"bottom"` \| `"left"` \| `"top"` \| `"auto"`, `target?` |
-| `duplicate` | Copy a node | `id`, `dx?`, `dy?` |
-| `group_nodes` | Group nodes | `ids:[]` |
-| `move_node` | Translate a node | `id`, `dx`, `dy` |
-| `delete` | Delete a node | `id` |
-| `set_name` | Rename a node | `id`, `name` |
-| `reorder` <a id="reorder" /> | Reparent + z-order | `id`, `to`: `"back"` \| `"front"`, `into?` |
-
-`reorder` is the workhorse for nesting: pass `into` to reparent and `to:"front"` to append last (flow order). Also documented on the [layout page](/docs/tools/layout#reorder).
-
-## Examples
-
-Create a frame and nest a label inside it:
+`create_node` supports `frame`, `rectangle`, `ellipse`, and `text`. Give world-space `x`, `y`, `width`, and `height`; optionally pass `name`, a solid hex `fill`, `text`, `font_size`, or a parent node ID. Without `parent`, a node goes on the active page.
 
 ```json
-{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"create_frame","arguments":{"x":0,"y":0,"w":240,"h":64,"fill":"#1B1F24","name":"Toolbar","corner_radius":12}}}
+{"label":"Add card","ops":[{"op":"create_node","node_type":"frame","name":"Card","x":100,"y":100,"width":320,"height":180,"fill":"#F7F7F7"}]}
 ```
 
-```json
-{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"create_icon","arguments":{"x":16,"y":20,"size":24,"icon":"sparkles","color":"#9B8CFF","name":"AI"}}}
-```
+The response returns a `created` ID. Use it in a later call when placing a child; the batch has no named temporary-ID bindings. `create_image` takes encoded PNG/JPEG/WebP/GIF bytes, including a data URI, and saves an image asset. It does not fetch a URL. `create_instance` places a linked component copy.
+
+`duplicate`, `group`, `frame_selection`, `ungroup`, `reparent`, `set_index`, and `delete` organize existing nodes. A frame clips and can have a background; a group is plain organization. Deleting a container removes its subtree, so inspect exact IDs first. Any failed operation rolls back the entire batch.

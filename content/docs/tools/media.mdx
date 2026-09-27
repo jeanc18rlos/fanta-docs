@@ -1,41 +1,10 @@
 ---
 title: Generation & references
-description: Generate images, video, audio, and 3D, poll async jobs, and capture inspiration as reference frames.
+description: Place image bytes and understand the boundary of MCP media editing.
 ---
 
-Generation tools are **async**: kick off a job, then poll its state or block until settled before placing the result. Capture inspiration — generated outputs, uploads, web images, Dribbble/Pinterest references — as editable reference frames so the user can favor or downweight each one.
+The `batch_design` operation `create_image` accepts a `data:image/...;base64,...` URI or raw base64 for an encoded PNG, JPEG, WebP, or GIF. You can provide width or height to preserve aspect ratio, and `meta` to record provenance. Fanta ingests it as an asset under `assets/images/` on save.
 
-## Generate
+`create_image` does not fetch `http(s)` URLs. The six-tool external MCP surface has no `generate_image` or `generate_media` tool. Obtain image bytes through an appropriate provider or use Fanta’s separate generation UI where available. Some toolbar AI commands merely open a draft in the Agent Panel; they do not produce a result until the user completes and sends the prompt.
 
-| Tool | Purpose | Key parameters |
-| --- | --- | --- |
-| `generate_image` | Start an image job (async) | `prompt`, `w?`=`768` (`64..2048`), `h?`=`768` (`64..2048`) |
-| `get_image_job` | Read an image job; optionally place it | `id`, `place?`, `x?`, `y?` |
-| `generate_media` | Start a video/audio/3D job | `modality`: `"video"` \| `"audio"` \| `"3d"`, `prompt`, `model` (Replicate model id) |
-| `get_async_state` | All in-flight async state | — |
-| `wait_settled` | Block until jobs settle | `what`: `"all"` \| `"image"` \| `"media"` \| `"ai"`, `timeout_ms?`=`30000` (max `600000`), `poll_ms?` |
-| `get_providers` | External provider config | — |
-
-## References
-
-| Tool | Purpose | Key parameters |
-| --- | --- | --- |
-| `create_reference_frame` | Build an editable inspiration board | `label` \| `name`, `summary` \| `prompt`, `references:[{title,path,kind,source,comment,prompt,influence}]`, `columns?`: `1..4`, `card_w?`, `card_h?`, `x?`, `y?` |
-
-## Examples
-
-Generate an image, wait for it, then place it:
-
-```json
-{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"generate_image","arguments":{"prompt":"isometric dark UI dashboard, neon accents","w":1024,"h":768}}}
-```
-
-```json
-{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"wait_settled","arguments":{"what":"image","timeout_ms":120000}}}
-```
-
-Capture references into a board:
-
-```json
-{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"create_reference_frame","arguments":{"label":"Mood","summary":"dark dashboards","columns":3,"references":[{"title":"Linear","path":"/refs/linear.png","kind":"screenshot","source":"web","comment":"sidebar density","influence":1.0}]}}}
-```
+Inspect imported or placed media on canvas and with `get_screenshot`. See the [known issues](https://github.com/jeanc18rlos/fanta-edit/blob/main/docs/alpha/KNOWN_ISSUES.md) for alpha limitations.

@@ -1,63 +1,32 @@
 ---
-title: Recipes
-description: Copy-paste prompts and the /design command for driving Fantaisa from Claude Code.
+title: Agent recipes
+description: Example requests for the Fanta Claude Code plugin and current local MCP tools.
 ---
 
-All recipes assume the editor is running (`cargo run -p fanta-app`) and the plugin (or the `fantaisa` MCP server) is connected. See [Install](/docs/plugin).
+These examples assume Fanta is running with a project open and the plugin or [direct MCP connection](/docs/mcp/connect) is active.
 
-## The `/design` command
-
-The plugin adds a slash command that kicks off a full build on the live canvas:
+## Build a card
 
 ```text
-/design a pricing section with three tiers, monthly/yearly toggle, and a highlighted middle plan
+/design On the active page, create a 320×180 frame called Welcome card. Add a heading and a primary button inside it. Use auto-layout if needed. Show a screenshot and summarize the .fnx change.
 ```
 
-Behind the scenes it runs the [build loop](/docs/mcp/build-loop): `agent_playbook` → `get_guidelines` → inspect → build with auto-layout → `review_design` → `export_png` → `save_document`.
+## Revise a selection
 
-## Useful prompts
-
-### Build a screen
 ```text
-Design a mobile sign-in screen on a new page. Use auto-layout, a 24px gutter,
-and the Fanta Futurist style from get_guidelines. Verify with export_png on the
-frame, then run review_design and fix anything it flags.
+Inspect the current selection. Change its fill to #4F46E5 and its corner radius to 12. Keep its size and position, then show a screenshot.
 ```
 
-### Make a reusable component
+## Reuse a component
+
 ```text
-Turn the card I just built into a component with "default" and "highlighted"
-variants. Bind the background and border to design tokens. Insert three
-instances in a row.
+Inspect the selected card, make it a component, and add two linked instances. Verify their names and positions in the document tree.
 ```
 
-### Match a reference
+## Review before committing
+
 ```text
-Here's a reference screenshot at /tmp/ref.png. Create a reference frame for it,
-then build a matching hero section. Iterate with compare_screenshot until the
-similarity passes.
+Inspect and screenshot the active page. Check for unparented layers. Read relevant .fnx source and summarize the design changes visible in Git.
 ```
 
-### Parallel build
-```text
-Use start_agent_team with 3 agents to build the dashboard: one does the sidebar,
-one the top bar, one the content grid. Keep each in a disjoint world region and
-give every node a unique name.
-```
-
-### Version a design
-```text
-Begin a VCS task, restyle the buttons to the new brand color, commit with a
-message, finish the task, then promote dev to staging.
-```
-
-<Callout type="warn">
-  If a screenshot or review call ever returns "visible editor timed out", you almost certainly screenshotted a page or the whole canvas. Always pass a frame `node` and keep frames ≤ 1920×1080. See [Troubleshooting](/docs/mcp/troubleshooting).
-</Callout>
-
-## Going further
-
-<Cards>
-  <Card title="Agent workflows" href="/docs/agents/workflows" description="Single vs multi-agent, the merged-undo model, visible cursors." />
-  <Card title="Tool Reference" href="/docs/tools" description="Every tool the recipes use, with parameters." />
-</Cards>
+The agent can use `batch_get` and `get_screenshot` for verification. Export and commit remain app or filesystem workflows, rather than additional local MCP tools.

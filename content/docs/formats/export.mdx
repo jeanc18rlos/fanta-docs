@@ -1,69 +1,24 @@
 ---
-title: Export — PNG, SVG, PDF
-description: Render Fantaisa documents to PNG, SVG, and PDF with fanta-export and the MCP export tools, plus the always-pass-a-node verification rule.
+title: Export designs
+description: Render selected layers or a page to PNG, JPG, SVG, or PDF from Fanta.
 ---
 
-Fantaisa renders documents for the outside world through the `fanta-export`
-crate, which drives PNG, SVG, and PDF output and the resolver paths behind them.
-Over MCP, the same capability is exposed as a small set of export tools you call
-on a node.
+Fanta's visual export controls support PNG, JPG, SVG, and PDF. Add export settings in the inspector, choose a format, and run the export. Raster PNG and JPG presets offer 1x, 2x, and 4x scale. The app writes files into the project's <code>exports/</code> directory.
 
-## Export tools
+## What gets exported
 
-| Tool | Output | Typical use |
-| --- | --- | --- |
-| `export_png` | Rasterized PNG | Final assets, visual verification |
-| `export_svg` | Vector SVG | Hand-off to web / vector pipelines |
-| `export_jsx` | `.fnx` source | Design-to-code (see [.fnx](/docs/formats/fnx)) |
-| `get_screenshot` | Fast PNG | Quick in-loop checks (chrome-free, no OS perms) |
+If layers are selected, each selected layer is exported separately using its visual bounds. With no selection, Fanta exports the active page. Output names are made safe for filenames, and duplicate selected-layer names receive distinct names.
 
-```json title="Export a frame to PNG"
-{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"export_png","arguments":{"node":"Card"}}}
-```
+PNG and JPG are raster images. SVG and PDF are visual outputs, not editable Fanta project files. To keep working with design layers, retain the [native project](/docs/formats/fant).
 
-```json title="Export a frame to SVG"
-{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"export_svg","arguments":{"node":"Card"}}}
-```
+## Size limits
 
-## The two rules that matter
+Raster export is bounded by an 8192-pixel maximum dimension and about 16 million total pixels per output. A large design at 4x may exceed these limits; reduce the scale or export a smaller selection. The export flow reports failures rather than silently writing a partial result.
 
-Both export and screenshot composite the scene, so two constraints keep them fast
-and correct.
+## Agent screenshots are different
 
-<Callout type="error">
-  **Always pass a frame `node`, and keep frames ≤ 1920×1080.** With no `node`,
-  `export_png` / `get_screenshot` default to the whole document — every page across
-  world space — and **time out** (`visible editor timed out`). Never screenshot a
-  page or the canvas.
+The local MCP <code>get_screenshot</code> tool returns PNG image content to the agent for inspection. It captures the active page by default, or a specified page or node, and defaults to a 1024-pixel maximum dimension. It is a review tool, not the inspector's file-export command. The six local MCP tools do not include separate PNG, SVG, PDF, or JSX export methods.
+
+<Callout type="info">
+Canvas comments are project review metadata and should not be expected in visual exports.
 </Callout>
-
-<Callout type="warn">
-  Export composites **every page overlapping the export rect**. Keep pages in
-  separate world regions and pack frames compactly within a page, or an export of
-  one frame can bleed in content from another page. Prefer exporting individual
-  frames by id.
-</Callout>
-
-## Export as verification
-
-In a build session, export is also how you *see* what you built. After assembling
-a section, render the frame and look — then critique with `review_design` before
-saving:
-
-```json title="Screenshot, then critique"
-{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"get_screenshot","arguments":{"node":"Card"}}}
-```
-
-```json
-{"jsonrpc":"2.0","id":4,"method":"tools/call","params":{"name":"review_design","arguments":{"node":"Card"}}}
-```
-
-This is the **verify** step of the build loop. See
-[Export & visual verification](/docs/tools/verify) for the full tool set
-(`compare_screenshot`, `review_design`) and [the build loop](/docs/mcp/build-loop)
-for where it sits.
-
-<Cards>
-  <Card title="Visual verification" href="/docs/tools/verify" description="export_png/svg/jsx, get_screenshot, compare_screenshot, review_design." />
-  <Card title=".fnx design-as-source" href="/docs/formats/fnx" description="export_jsx returns design source instead of pixels." />
-</Cards>

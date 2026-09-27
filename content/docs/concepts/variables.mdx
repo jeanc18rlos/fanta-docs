@@ -1,66 +1,20 @@
 ---
-title: Variables & Modes
-description: Design tokens in collections with modes (light/dark), bound to node properties, so themes switch by mode without duplicating nodes.
+title: Variables
+description: Define reusable values, modes, aliases, and property bindings.
 ---
 
-Variables are Fantaisa's design tokens: named values — colors, numbers, strings, booleans — that node properties point at instead of hard-coding. Because a variable can resolve to different values per **mode**, binding properties to variables is how a single design switches between themes (light/dark, brand A/B, compact/comfortable) with no duplicate nodes.
+# Variables
 
-## Collections and modes
+Variables let one value drive multiple properties. Fanta's Variables workspace lets you create collections, variables, and modes, edit values, create aliases, and bind values to design properties. The active mode can be selected for a scope so the same design can resolve different values.
 
-Variables are organized into **collections**. A collection defines a set of **modes** — for example a `Theme` collection with `Light` and `Dark` modes, or a `Density` collection with `Comfortable` and `Compact`.
+The variable editor handles color, number, string, and boolean values. Imported documents may contain additional variable data, including typography definitions; the current editor controls focus on the types it exposes.
 
-Each variable in the collection holds one value **per mode**:
+## Create a collection and bind a value
 
-```text title="A Theme collection"
-Collection: Theme        modes:  Light        Dark
-  color/bg               value:  #FFFFFF      #0B0B0F
-  color/text             value:  #111111      #F4F4F5
-  color/accent           value:  #2563EB      #60A5FA
-  radius/card            value:  12           12
-```
+1. Open the **Variables** workspace.
+2. Create a collection and a variable in it.
+3. Set a value for each relevant mode.
+4. Return to the canvas, select a layer, and bind a compatible property in the inspector.
+5. Switch modes and inspect the resulting design.
 
-When the active mode changes, every property bound to one of these variables re-resolves. Switch `Theme` to `Dark` and every node bound to `color/bg` repaints — no parallel "dark" copy of the design required.
-
-## Binding node properties
-
-You **bind** a node property to a variable so the property reads its value from the token. Many property kinds can be bound:
-
-- **fill** and **stroke** (color)
-- **corner radius**
-- **opacity**
-- **visibility** (boolean)
-- **text content** (string)
-- numeric properties such as spacing or sizes
-
-Once bound, editing the variable updates every node bound to it at once — the foundation of a consistent design system. Unbinding a property freezes its current resolved value back onto the node.
-
-<Callout type="info">
-Prefer binding over typing raw values for anything that should be consistent across a design: surface colors, text colors, accent, radii, and standard spacings. Raw values are fine for one-off, intentionally-unique cases.
-</Callout>
-
-## Theming by mode
-
-The payoff is theming. A well-tokenized design is themed by flipping a collection's active mode, not by editing nodes:
-
-1. Define the semantic tokens once (`color/bg`, `color/text`, `color/accent`, …).
-2. Give each token a value in every mode.
-3. Bind node fills/strokes/text/etc. to the semantic tokens.
-4. Switch the mode to retheme the whole document.
-
-Because variables resolve at render time, the [renderer](/docs/reference/architecture) produces the right pixels for the active mode from the *same* scene graph — see the [document model](/docs/concepts/document-model) for why that separation holds.
-
-## Tokens, not literals, scale
-
-The discipline that makes large designs maintainable:
-
-- Name tokens **semantically** (`color/text`, `color/surface`) rather than literally (`gray-900`). Semantic names survive a palette change.
-- Reuse a small token set everywhere instead of sprinkling hex codes.
-- Keep mode values aligned — every token should resolve in every mode, or that mode will have holes.
-
-## Related
-
-<Cards>
-  <Card title="Style & variable tools" href="/docs/tools/style-variables" description="Create collections, define modes, set values, and bind properties." />
-  <Card title="Components & instances" href="/docs/concepts/components" description="Tokens + components = a real design system." />
-  <Card title="The Variables surface" href="/docs/editor/surfaces" description="The editor panel for managing collections and modes." />
-</Cards>
+Aliases point one variable at another. Check alias and mode resolution when a bound property appears to use a surprising value. Variable workspace controls are in `crates/fig_viewer/src/variables_workspace.rs`; value types are in `crates/fanta-doc/src/value.rs`.

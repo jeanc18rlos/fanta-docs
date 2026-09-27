@@ -1,130 +1,39 @@
 ---
-title: Agent Workflows
-description: The single-agent build loop in practice, plus the parallel multi-agent model and the discipline for sharing one document.
+title: Agent workflows
+description: Connect an external agent to Fanta's local MCP server and make controlled canvas edits.
 ---
 
-import { Step, Steps } from 'fumadocs-ui/components/steps';
+Fanta exposes a local MCP server from the running desktop app. Its stdio bridge is the Fanta executable with the <code>--mcp-stdio</code> argument. The bridge forwards MCP requests to the app's local Unix socket. Keep Fanta open with a design document loaded while using the tools. This is a local desktop connection, not a public TCP endpoint.
 
-This page covers how agents actually get work done on the canvas — first solo,
-then as a fanned-out team — and the discipline that keeps many agents from
-stepping on each other in one shared document.
+## Connect
 
-## The single-agent loop
+Configure your MCP client to launch the Fanta executable with <code>--mcp-stdio</code>. For example, the command shape is:
 
-Every agent runs the same loop. The point is to **inspect before building** and
-**verify before saving** — never build blind, never save unverified.
+<pre>fanta --mcp-stdio</pre>
 
-<Steps>
-<Step>
+The exact executable path depends on where the app is installed. Fanta's local MCP server is enabled in the default settings. If the client cannot connect, check that the installed app is running and a project or imported <code>.fig</code> document is open.
 
-**Orient.** Call `agent_playbook` then `get_guidelines` to load the rules of
-the road, the style packs, and the token/component conventions for this doc.
+## Available tools
 
-</Step>
-<Step>
+| Tool | Purpose |
+| --- | --- |
+| <code>get_editor_state</code> | Project, pages, active page, components, selection, viewport, editability, and optional free space for a requested size |
+| <code>get_guidelines</code> | Current design rules, coordinate conventions, and recommended working method |
+| <code>batch_get</code> | List a page tree or inspect exact node IDs, with depth and pagination controls |
+| <code>batch_design</code> | Apply an ordered set of design operations as one undoable transaction |
+| <code>get_screenshot</code> | Render a PNG of a page or node region |
+| <code>read_fnx_source</code> | List or read project FNX files in slices |
 
-**Inspect.** Read the live state with `get_editor_state`, `get_document`, or
-`snapshot_layout` so the model knows what already exists before it adds to it.
+The canvas uses world coordinates in pixels, with the origin at the upper left and Y increasing downward. Node IDs must come from the current editor state or a node read. Page listings default to a limited depth and support <code>offset</code> and <code>limit</code>; narrow very large reads rather than trying to fetch an entire imported page at once.
 
-</Step>
-<Step>
+## What an edit can do
 
-**Build.** Create nodes with `create_*` or a batched `batch_design`, then
-assemble bottom-up: leaves into rows, rows into sections, sections into the
-page. Reparent with `reorder` and structure with `set_auto_layout`.
+Structured operations cover creating frames, rectangles, ellipses, text, and bitmap images; placing component instances; changing names, geometry, fills, opacity, visibility, locks, text and typography; strokes, shadows, and auto layout; z-order, rotation, alignment, and distribution; grouping and framing; duplication, components, reparenting, deletion, selection, and viewport changes.
 
-</Step>
-<Step>
+Send related operations together with a clear label. If any operation fails, none of the batch is applied. The response identifies the failed operation. A batch is undoable from Fanta's editor.
 
-**Verify.** Export a frame with `export_png` / `get_screenshot`, optionally
-`compare_screenshot` against a reference, and run `review_design` for a
-deterministic audit.
+Gradient fills, variables, and rich-text runs are outside the structured operation surface. Use <code>read_fnx_source</code> to locate the source, edit the FNX file with your own file tools, and inspect the refreshed canvas. See [FNX source](/docs/formats/fnx).
 
-</Step>
-<Step>
+## Verify visually
 
-**Save.** Persist with `save_document`. In-memory state is not auto-persisted.
-
-</Step>
-</Steps>
-
-```text title="Solo agent — example tool sequence"
-agent_playbook
-get_guidelines
-get_editor_state
-create_frame { name: "Pricing card", width: 320, height: 420 }
-reorder      { node: <card>, into: <section>, to: "front" }
-set_auto_layout { node: <card>, direction: "vertical", gap: 16, padding: 24 }
-export_png   { node: <card> }
-review_design
-save_document
-```
-
-<Callout type="warn">
-Always pass a frame `node` to `export_png` / `get_screenshot`, and keep frames
-≤ 1920×1080. With no `node` these default to the whole document (every page
-across world space) and time out. Never screenshot a page or the bare canvas.
-</Callout>
-
-## The multi-agent model
-
-A `MultiAgentOrchestrator` fans out **N concurrent agents (1–6)**. Each agent
-clones the document and works in isolation, capturing its own `applied_ops`.
-When the team finishes, `run_merged` replays every agent's ops onto the real
-document **inside one history transaction** — so the entire team's work is a
-**single undo step**.
-
-Conflict handling is simple and predictable:
-
-- **New nodes never conflict.** IDs are globally unique, so every agent's
-  freshly-created nodes coexist.
-- **Base-node edits are last-writer-wins** (v0). If two agents edit the same
-  pre-existing node, the last write applied during the merge wins.
-
-### Launch a visible team
-
-Over the MCP, `start_agent_team` spins up a team you can *watch*: it draws
-on-canvas cursors, focus frames, and step markers as the agents work.
-
-```json title="start_agent_team"
-{
-  "prompt": "Build a 3-screen onboarding flow: welcome, permissions, done",
-  "provider": "claude",
-  "agent_count": 3,
-  "visible": true
-}
-```
-
-`provider` is one of `"claude"`, `"codex"`, or `"glm"`; `agent_count` is `1..6`.
-Set `visible: true` for the live cursor/focus/step overlay.
-
-## Discipline for one shared document
-
-When multiple agents work the **same** running document, the editor serializes
-frames so writes are safe — *but only if every batch follows this discipline*.
-Bake these into each agent's instructions:
-
-- **Disjoint world regions.** Give each agent its own region of world space so
-  their work never overlaps geometrically. Pack each region compactly; do not
-  scatter frames across thousands of pixels.
-- **Unique names.** Namespace node names per agent so nothing collides or gets
-  re-resolved by name.
-- **Capture ids at creation.** Reads are active-page-scoped. Don't rely on
-  re-finding a node across pages later — record each id the moment you create
-  it and reuse the captured id.
-- **Prefix `set_active_page`.** Start every batch by setting the active page so
-  cross-page reads and writes target the page you intend.
-
-<Callout type="info">
-These rules apply equally to a launched team and to several independent agents
-you point at the same `:3846` editor. New nodes are conflict-free; the
-discipline is about keeping reads correct and regions clean.
-</Callout>
-
-## Next steps
-
-<Cards>
-  <Card title="Reference-grounded design" href="/docs/agents/reference-grounded" description="Ground a build in inspiration boards before assembling." />
-  <Card title="Review & revision" href="/docs/agents/review-revision" description="Audit and consolidate before you commit." />
-  <Card title="Agent control tools" href="/docs/tools/agent-control" description="The full catalog of team, cursor, and step-marker tools." />
-</Cards>
+After editing, use <code>get_screenshot</code> and compare the result with the brief or reference. It renders the active page by default; pass a page index or node ID to narrow the view. The default maximum output dimension is 1024 pixels and can be changed with <code>max_dimension</code>. A screenshot is a read tool, not a file export. For deliverables, use the [export controls](/docs/formats/export).

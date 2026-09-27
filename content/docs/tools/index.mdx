@@ -1,91 +1,25 @@
 ---
 title: Tool Reference
-description: The complete Fantaisa MCP tool catalog — ~127 JSON-RPC tools for driving the live canvas.
+description: The six external MCP tools and typed operations in batch_design.
 ---
 
-Fantaisa exposes its entire editor as an MCP server. Every action you can take in the desktop app — create a frame, bind a variable, run auto-layout, export a PNG, branch the design, drive a cursor — is a `tools/call` over JSON-RPC. There are **~127 tools** in the catalog, grouped into the categories below.
+Fanta's external MCP server acts on the focused design. Connect with `fanta --mcp-stdio`. It exposes **six** tools, not one tool for every editor command.
 
-## How tools map to the build loop
+| Tool | Purpose |
+| --- | --- |
+| `get_editor_state` | Read project, pages, selection, viewport, editability; optionally ask for `empty_space: [width,height]`. |
+| `get_guidelines` | Read current design and source-editing rules. |
+| `batch_get` | Read exact nodes or a paged page tree. |
+| `batch_design` | Apply typed design ops as one undoable transaction. |
+| `get_screenshot` | Render a page or node region as PNG. |
+| `read_fnx_source` | List or read source files in slices. |
 
-A typical agent build loop chains these categories:
-
-1. **Open / orient** — [`open_document`](#document--pages), [`get_editor_state`](#document--pages) to learn the file, pages, selection, and components.
-2. **Build** — [Create, insert & arrange](/docs/tools/create) leaves; assemble bottom-up into rows, cards, sections.
-3. **Lay out** — [Auto-layout, transform & viewport](/docs/tools/layout) to get uniform rhythm instead of hand-placed drift.
-4. **Style** — [Style, typography & design tokens](/docs/tools/style-variables) for fills, type, gradients, and variable bindings.
-5. **Componentize** — [Components, instances & variants](/docs/tools/components-instances) for reusable masters.
-6. **Verify** — [Export & visual verification](/docs/tools/verify) (`export_png` / `get_screenshot` / `review_design`) and [Read, query & debug](/docs/tools/inspect).
-7. **Ship** — [Version control](/docs/tools/vcs) to branch, commit, and promote.
-
-For the canonical workflow ask the live server itself: call [`agent_playbook`](/docs/tools/agent-control) first, then [`get_guidelines`](/docs/tools/agent-control).
-
-## Transports
+`batch_design` takes `ops: [{"op":"…",…}]` and an optional `label`. Its current ops are `create_node`, `create_image`, `create_instance`, `set_props`, `set_stroke`, `set_shadow`, `set_text_style`, `set_auto_layout`, `set_index`, `rotate`, `align`, `distribute`, `group`, `frame_selection`, `ungroup`, `duplicate`, `create_component`, `reparent`, `delete`, `select`, and `set_viewport`. Ask your MCP client for the live schema to see every field.
 
 <Cards>
-  <Card title="Live editor (preferred)" description="Streamable HTTP at http://127.0.0.1:3846/mcp — drives the running desktop app and its visible canvas." />
-  <Card title="Headless" description="fanta-mcp owns an in-memory document with no UI. Good for CI and batch generation." />
-  <Card title="Live proxy" description="fanta-mcp --live proxies stdio clients to the visible editor at 127.0.0.1:3846." />
-</Cards>
-
-All calls use the JSON-RPC `tools/call` envelope:
-
-```json
-{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"<tool>","arguments":{}}}
-```
-
-## Document & pages
-
-| Tool | Purpose | Key parameters |
-| --- | --- | --- |
-| `open_document` | Load a file or a blank doc | `path`, `format`: `"project"` \| `"fig"` \| `"fant"` \| `"blank"` |
-| `save_document` | Persist the visible document | `path?` |
-| `create_page` | New empty page | `name` |
-| `register_page` | Promote a root frame/group to a page | `id`, `name?`, `active?` |
-| `set_active_page` | Switch the visible page | `id` |
-| `delete_page` | Delete a page (refuses the last one) | `id` |
-| `get_editor_state` | Pencil-style starting point: file, pages, selection, viewport, sample, components, tokens | `include_schema?` |
-| `get_providers` | External provider config (image gen, Figma) | — |
-| `repaint` | Force re-render / relayout | `scope`: `"page"` \| `"node"` \| `"all"`, `node?`, `relayout?`=`true` |
-
-```json
-{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"open_document","arguments":{"path":"/work/brand.fant","format":"fant"}}}
-```
-
-```json
-{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"get_editor_state","arguments":{"include_schema":true}}}
-```
-
-## batch_design — the most important builder
-
-`batch_design` applies many design ops as one transactional batch. Each entry is `{tool, arguments, bind?}`; you may also pass a `script` or `input`. The `bind` field names the node id an op creates so a **later** op can reference it — this is how you build and nest in a single call without round-tripping for ids.
-
-| Tool | Purpose | Key parameters |
-| --- | --- | --- |
-| `batch_design` | Apply many design ops atomically | `operations:[{tool, arguments, bind?}]` \| `script` \| `input` |
-
-```json
-{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"batch_design","arguments":{"operations":[
-  {"tool":"create_frame","arguments":{"x":0,"y":0,"w":320,"h":120,"fill":"#101418","name":"Card"},"bind":"card"},
-  {"tool":"create_text","arguments":{"x":16,"y":16,"w":288,"h":24,"content":"Hello","color":"#FFFFFF","size":18,"weight":600},"bind":"title"},
-  {"tool":"reorder","arguments":{"id":"$title","to":"front","into":"$card"}},
-  {"tool":"set_auto_layout","arguments":{"id":"$card","direction":"vertical","spacing":8,"padding":16}}
-]}}}
-```
-
-Bound ids are referenced as `$<name>` in later operations within the same batch.
-
-## Categories
-
-<Cards>
-  <Card title="Create, insert & arrange" href="/docs/tools/create" description="Shapes, frames, text, icons, SVG, images, instances, duplicate, group, reorder." />
-  <Card title="Auto-layout, transform & viewport" href="/docs/tools/layout" description="set_auto_layout, set_layout_child, reorder, frame_view, focus." />
-  <Card title="Style, typography & tokens" href="/docs/tools/style-variables" description="Fill, stroke, radius, shadow, blur, gradient, blend, type, variables." />
-  <Card title="Components, instances & variants" href="/docs/tools/components-instances" description="define_component, insert_instance, overrides, variant sets." />
-  <Card title="Read, query & debug" href="/docs/tools/inspect" description="get_document, snapshot_layout, query, hit_test, overlays, errors, asserts." />
-  <Card title="Export & visual verification" href="/docs/tools/verify" description="export_png/svg/jsx, get_screenshot, compare_screenshot, review_design." />
-  <Card title="Generation & references" href="/docs/tools/media" description="generate_image, generate_media, async state, reference frames." />
-  <Card title="Prototyping & interactions" href="/docs/tools/prototype" description="Flow start, reactions, transitions." />
-  <Card title="Version control" href="/docs/tools/vcs" description="Design git: branches, diff, tasks, commit, merge, promote." />
-  <Card title="Sessions, input & checkpoints" href="/docs/tools/session" description="Record/replay, pointer/key input, checkpoints, try_edit, commands." />
-  <Card title="Agent orchestration & presence" href="/docs/tools/agent-control" description="Playbook, guidelines, agent teams, cursors, brand pages." />
+  <Card title="Create" href="/docs/tools/create" />
+  <Card title="Layout" href="/docs/tools/layout" />
+  <Card title="Style" href="/docs/tools/style-variables" />
+  <Card title="Inspect" href="/docs/tools/inspect" />
+  <Card title="Verify" href="/docs/tools/verify" />
 </Cards>

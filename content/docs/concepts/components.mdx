@@ -1,71 +1,20 @@
 ---
-title: Components & Instances
-description: Component masters, instances that reference them, overrides (including PATH overrides for nested targets), and variant sets.
+title: Components and instances
+description: Reuse a master design and manage local overrides.
 ---
 
-Components are Fantaisa's reuse primitive. You define a frame as a **master**, place **instances** of it anywhere, and each instance stays linked to the master — edit the master and every instance updates. Per-instance **overrides** let each copy differ where it should (a different label, a different fill) while inheriting everything else.
+# Components and instances
 
-## Masters and instances
+A component is a reusable master layer tree. An instance refers to that master and can carry local overrides. Fanta stores component masters in `components/<slug>/master.fnx`, alongside the project's page source.
 
-A **component master** is a frame promoted to a reusable definition: a button, a card, a list row. An **instance** is a reference to that master placed in the document. Instances are lightweight — they expand from the master at render time rather than copying its node tree — so changing the master propagates to all instances at once.
+## Create and use a component
 
-```text title="One master, many instances"
-Master: Button
-   ├─ frame (auto-layout row)
-   ├─ icon
-   └─ label "Button"
+1. Put the layers you want to reuse in a frame or group, then select that container.
+2. Use the component action in the layer context menu or inspector.
+3. Add an instance from the available component controls.
+4. Select the instance to change supported local properties.
+5. Use the instance controls to reset overrides or detach the instance when you need an independent layer tree.
 
-Instance A ─▶ Button   (label overridden: "Save")
-Instance B ─▶ Button   (label overridden: "Cancel", fill overridden: gray)
-Instance C ─▶ Button   (no overrides — pure inheritance)
-```
+Components can have variants. Variant and instance controls appear in the inspector when relevant. If an instance differs unexpectedly from its master, inspect its overrides before resetting it; reset intentionally discards those local changes.
 
-## Overrides
-
-An **override** changes a property on one instance without touching the master. Common overrides:
-
-- **text** — replace a label's content
-- **fill** / **stroke** — recolor a part
-- **visibility** — show or hide a sub-element
-- **component swap** — replace a nested instance with a different component (e.g. swap the icon)
-
-Everything not overridden continues to track the master. Reset an override to fall back to the inherited value.
-
-<Callout type="info">
-Size text boxes in the master for the **longest** label any instance will hold. Because there is [no resize tool](/docs/concepts/auto-layout#the-no-resize-rule), a longer overridden string clips against the original box.
-</Callout>
-
-## PATH overrides for nested targets
-
-Overrides resolve a target by id, but that only works for the component **root** or a **direct child**. To override something deeper — a leaf inside a sub-frame — you must give the full **PATH array** from the instance root down to the leaf:
-
-```text title="Direct child vs nested target"
-direct child:   override target = <child id>            ✓
-
-nested leaf:    override target = [subgroup, ..., leaf]  ✓  (full path)
-nested leaf:    override target = <leaf id alone>        ✗  (silently no-ops)
-```
-
-If you pass only the descendant's id for a deeply-nested target, the override silently does nothing. Always supply the `[subgroup, …, leaf]` path for descendants inside sub-frames.
-
-<Callout type="warn">
-After you recreate a master child (changing its id), **re-point** any overrides at the new id or path — stale targets quietly stop applying.
-</Callout>
-
-## Variant sets
-
-A **variant set** combines several masters along named **axes** into one switchable component. A button might have a `State` axis (`default` / `hover` / `disabled`) and a `Size` axis (`sm` / `md` / `lg`); selecting a combination picks the matching master.
-
-Variant sets keep families of related states together so an instance can switch variants (e.g. `State = hover`) instead of being swapped for an entirely different component. Combined with [variables](/docs/concepts/variables) for color and spacing, variant sets are the backbone of a real design system.
-
-## Build reference-grounded
-
-When creating a component, the recommended flow is: search existing components first, gather or generate visual references if the direction is open, then build the editable master and its variants — iterating against the references so the look-and-feel doesn't drift. See [Best output over MCP](/docs/mcp/best-output).
-
-## Related
-
-<Cards>
-  <Card title="Component & instance tools" href="/docs/tools/components-instances" description="Create masters, insert instances, set overrides, and define variants." />
-  <Card title="Variables & modes" href="/docs/concepts/variables" description="Token colors and spacing for component consistency." />
-  <Card title="The Components surface" href="/docs/editor/surfaces" description="The editor panel for browsing and managing components." />
-</Cards>
+Component and instance operations are implemented in `crates/fig_viewer/src/properties_ops.rs` and the layer context actions. Storage is defined in `crates/fanta-format/src/project/layout.rs`.

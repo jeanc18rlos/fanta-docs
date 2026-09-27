@@ -1,34 +1,18 @@
 ---
 title: Components, instances & variants
-description: Define reusable component masters, insert instances with overrides, and build variant sets.
+description: Promote a master and place linked instances.
 ---
 
-Components are reusable masters; instances are live copies that inherit from the master and accept per-instance overrides. Build the master once, then insert and override.
-
-## Components & instances
-
-| Tool | Purpose | Key parameters |
-| --- | --- | --- |
-| `define_component` | Promote a node tree to a component master | `root`, `name` |
-| `delete_component` | Delete a component | `component` |
-| `insert_instance` | Drop an instance | `component`, `x`, `y`, `name?`, `overrides?:[{prop,value}]` |
-| `set_instance_override` | Override one instance property | `id`, `target`, `prop`, `value`, `paint_index?`, `override_index?` |
-| `define_component_set` | Group components into a variant set | `components?:[]` \| `nodes?:[]` |
-| `detach_instance` | Detach an instance from its master | `node` |
-| `edit_variant_set` | Edit a variant set's axes/values | `set`, `rename_axis?`, `add_value?`, `remove_value?`, `set_default?`, `set_member_value?` |
-
-<Callout type="warn">
-**Overrides need a path for nested targets.** `insert_instance` and `set_instance_override` resolve the component root or a **direct** child by node id. A descendant inside a sub-frame needs the full `target` **PATH** array `[subgroup, …, leaf]`, or the override silently no-ops. After recreating a master child, re-point overrides at the new id.
-</Callout>
-
-## Examples
-
-Insert an instance and override its label text via a nested path:
+Build a frame or group, read its exact ID, and promote it:
 
 ```json
-{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"insert_instance","arguments":{"component":"btn-primary","x":48,"y":48,"name":"CTA","overrides":[{"prop":"fill","value":"#9B8CFF"}]}}}
+{"label":"Make button component","ops":[{"op":"create_component","id":"<frame-id>"}]}
 ```
 
+The master stays on canvas and the result returns a component ID. Place a copy with `create_instance`, using the ID or a unique component name:
+
 ```json
-{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"set_instance_override","arguments":{"id":"instance-9","target":["content","label"],"prop":"text","value":"Get started"}}}
+{"label":"Place button","ops":[{"op":"create_instance","component":"<component-id>","x":400,"y":120}]}
 ```
+
+An instance inherits its master’s size and follows later master edits. The project stores component source under `components/`, and `get_editor_state` lists component source paths. Variant-set creation and per-instance override editing are not dedicated ops in the six-tool external MCP schema. Inspect existing source and the editor UI before relying on those paths.

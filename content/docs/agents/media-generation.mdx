@@ -1,120 +1,29 @@
 ---
-title: Media Generation
-description: Generate images, video, audio, and 3D asynchronously — results land in the doc or open the matching workbench tab without blocking the editor.
+title: Media generation
+description: Generate images, video, audio, vectors, and masks in Fanta's hosted workspaces.
 ---
 
-import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+Fanta's Generation Workspaces expose Image, Video, Audio, Vector, Design, and Masks modes. Generation uses hosted models and requires sign-in. The app loads the available models from a live catalog, so specific models, prices, and parameters can change.
 
-Agents can generate media directly from the canvas. Generation is **always
-asynchronous** — it never blocks the editor — and results **enter the document**
-(images) or **open the matching workbench tab** (video, audio, 3D).
+## What each mode does
 
-## Images
+| Mode | Typical work |
+| --- | --- |
+| Image | Text-to-image generation, with optional source image and mask workflows |
+| Video | Text-to-video or image-to-video generation |
+| Audio | Speech and music generation |
+| Vector | Prompt-to-SVG and image-to-SVG or vectorization workflows |
+| Design | Draft a design request for review in the Agent Panel |
+| Masks | Create or refine an image mask for supported generation workflows |
 
-`generate_image` starts an async image job and returns a job handle; the result
-enters the doc when it settles. Poll the job with `get_image_job`.
+Generation recipes depend on the selected model. The workspace may accept a local PNG, JPEG, or WebP source, or capture a region of the current canvas. Check the selected model's requirements in the app before submitting. Costs and available outputs are shown by the live catalog and account state.
 
-```json title="generate_image"
-{
-  "prompt": "isometric pricing illustration, soft teal palette, no text",
-  "model": "<replicate-model-id>",
-  "count": 1
-}
-```
+## Use a result
 
-```json title="get_image_job"
-{ "job": "<job-id>" }
-```
+Generated results can be saved and reused. Images can be placed into a Fanta project. SVG results can be inserted as editable vector content. Generated video can become a video node. Audio output can be saved, but the current canvas-placement flow does not add it as an audio layer. Design mode prepares a prompt for the Agent Panel; it is not a direct generative canvas render.
+
+A hosted result remains distinct from the project until you add or save it. Review the generated media, choose the useful output, then inspect its placement and cropping on the canvas.
 
 <Callout type="info">
-Image jobs run off the UI thread, so the canvas stays interactive while a job
-is in flight. The finished image is placed into the document for you — no
-manual import step.
+Model availability, account access, and credits are live service conditions. This page describes the app's supported workflow, not a fixed model roster or guaranteed price.
 </Callout>
-
-## Video, audio, and 3D
-
-`generate_media` covers the heavier modalities. Pass the `modality`, a `prompt`,
-and a Replicate `model` id. The result **auto-saves and opens the matching
-workbench tab** (video, audio, or 3D), ready to edit.
-
-<Tabs items={['Video', 'Audio', '3D']}>
-<Tab value="Video">
-
-```json title="generate_media — video"
-{
-  "modality": "video",
-  "prompt": "slow dolly across a neon-lit product shelf, 4s loop",
-  "model": "<replicate-model-id>"
-}
-```
-
-Opens the video workbench tab with the generated clip.
-
-</Tab>
-<Tab value="Audio">
-
-```json title="generate_media — audio"
-{
-  "modality": "audio",
-  "prompt": "warm ambient pad, 30s, loopable",
-  "model": "<replicate-model-id>"
-}
-```
-
-Opens the audio workbench tab with the generated track.
-
-</Tab>
-<Tab value="3D">
-
-```json title="generate_media — 3d"
-{
-  "modality": "3d",
-  "prompt": "low-poly potted plant, clean topology",
-  "model": "<replicate-model-id>"
-}
-```
-
-Opens the 3D workbench tab with the generated asset.
-
-</Tab>
-</Tabs>
-
-## Waiting for results
-
-You have two ways to wait, depending on whether the agent wants to keep working
-or block on the result:
-
-- **Poll** with `get_image_job` (image jobs) or `get_async_state` (any async
-  job) — non-blocking; check status and pick up the result when ready.
-- **Block** with `wait_settled` — suspend until the job finishes, then continue.
-
-```text title="Generate, then continue when ready"
-generate_image  { prompt: "...", model: "...", count: 1 }   # → job-id
-# Option A — keep working, poll occasionally:
-get_async_state { job: <job-id> }
-# Option B — block until done:
-wait_settled    { job: <job-id> }
-# image is now in the doc → place / arrange / review_design
-```
-
-<Callout type="warn">
-Prefer the offline mock when validating generation wiring, and make at most one
-cheap real provider call (e.g. `count: 1`) only when the provider integration
-itself changed. Generation calls cost money.
-</Callout>
-
-## Generate, then ground
-
-Generated media pairs naturally with
-[reference-grounded design](/docs/agents/reference-grounded): generate
-candidate images, board them with `create_reference_frame`, then build against
-them and compare each iteration.
-
-## Next steps
-
-<Cards>
-  <Card title="Media tools" href="/docs/tools/media" description="Full schemas for generate_image, generate_media, and the async-state tools." />
-  <Card title="Reference-grounded design" href="/docs/agents/reference-grounded" description="Turn generated images into a weighted inspiration board." />
-  <Card title="Review & revision" href="/docs/agents/review-revision" description="Audit a design once the media is in place." />
-</Cards>

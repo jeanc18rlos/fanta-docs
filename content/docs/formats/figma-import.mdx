@@ -1,64 +1,20 @@
 ---
-title: Figma (.fig) import
-description: Import Figma files into Fantaisa via fanta-fig-interop — components, overrides, variables, auto-layout, vectors, and effects — validated against a fidelity oracle.
+title: Import from Figma
+description: Open a .fig file and continue editing it as a native Fanta project.
 ---
 
-Fantaisa imports Figma `.fig` files through the `fanta-fig-interop` crate. It
-reads Figma's **Kiwi** binary format directly and maps it onto Fantaisa's
-renderer-agnostic scene graph, so an imported file becomes a first-class,
-editable document — not a flattened picture.
+Fanta can open a local <code>.fig</code> file and convert it into an editable project. The import path handles Figma document data such as pages, layers, components, instances, auto layout, vectors, effects, and variables where supported by Fanta's document model.
 
-## Import a .fig
+## Open a .fig file
 
-```json title="open_document with the fig format"
-{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"open_document","arguments":{"path":"/work/system.fig","format":"fig"}}}
-```
+Open the file in the desktop app. On first open, Fanta parses it and materializes a sibling Fanta project directory. You can edit the imported design from that first session. The original <code>.fig</code> remains an import source; the sibling project becomes the working copy.
 
-The importer translates at the boundary and preserves the document invariants the
-model relies on, so the result behaves like a native Fantaisa document.
+If you open the same <code>.fig</code> again after a project was created, Fanta redirects to the existing sibling project. This preserves newer edits instead of reimporting the original file over them.
 
-## What's covered
+## Check the result
 
-The importer maps the high-value Figma domains end-to-end:
+Large imported documents can contain thousands of nodes. Inspect the page tree and key components in the editor, then compare visual output against the source. Some source features may not have an exact editable counterpart, and conversion should be verified for the pages you intend to use.
 
-| Domain | Notes |
-| --- | --- |
-| **Components & variants** | Masters, instances, variant sets, instance swap, nested instances |
-| **Instance overrides** | Text / fill / visible overrides, component-prop channels |
-| **Variables & modes** | Collections, modes, per-mode values, color bindings, per-frame mode pinning |
-| **Auto-layout** | Horizontal / vertical, alignment, gap, padding, hug / fixed, child fill / stretch, reverse-z |
-| **Vectors** | Vector geometry, fill rule, arcs, stars / polygons, boolean-op results |
-| **Effects** | Drop / inner shadow, layer & background blur, all 15 blend modes, masks |
-| **Strokes & fills** | Solid / gradient / image paints, stroke align, per-side weights, dashes |
-| **Text** | Family / weight / size, alignment, decoration, per-character style runs, auto-resize |
+For agent inspection, <code>batch_get</code> supports depth limits and pagination. Read smaller portions of a large imported page and request detailed nodes by ID. Capture a screenshot of the page or relevant node to review rendering.
 
-Some properties are partial or deferred by design (for example decorative stroke
-caps, image color adjustments, constraints). The authoritative, per-property
-status lives in the project's Figma coverage matrix; treat the table above as the
-shape of what lands, not an exhaustive contract.
-
-## Fidelity, not approximation
-
-Import correctness is held to a **fidelity oracle**: imported documents are
-rendered and diffed against a cross-renderer reference (built from the OpenPencil
-Figma schema) so the mapping is validated pixel-for-pixel on a corpus, rather than
-trusted by inspection. Where Fantaisa exceeds the oracle — layer masks,
-node-level blend modes, per-side stroke bands, richer auto-layout and variable
-scoping — those are covered by dedicated unit tests.
-
-<Callout type="info">
-  After importing, verify visually with [`export_png {node}`](/docs/formats/export)
-  on individual frames before treating the result as final.
-</Callout>
-
-## After import
-
-An imported `.fig` is a normal document: edit it live, version it as
-[`.fnx`](/docs/formats/fnx), package it as a [`.fant`](/docs/formats/fant), or
-[export](/docs/formats/export) it. Reparenting, overrides, and variable bindings
-all follow the standard [build rules](/docs/mcp/best-output).
-
-<Cards>
-  <Card title="Export" href="/docs/formats/export" description="Render an imported document to PNG, SVG, or PDF." />
-  <Card title="Components & variants" href="/docs/concepts/components" description="How Fantaisa models the masters and variant sets you just imported." />
-</Cards>
+Continue work in the Fanta project directory and keep its project files and assets together. Use [visual export](/docs/formats/export) when you need PNG, JPG, SVG, or PDF output.

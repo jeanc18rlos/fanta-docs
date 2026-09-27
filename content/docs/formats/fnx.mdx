@@ -1,70 +1,22 @@
 ---
-title: .fnx — design as source
-description: Fantaisa's design-as-source format — JSX-style per-component and per-page files that give designs git-native, code-like diffs.
+title: FNX design source
+description: Read and edit pages and component masters as restricted JSX-like project files.
 ---
 
-`.fnx` is Fantaisa's **design-as-source** format: React/JSX-style source files,
-one per component and one per page, produced and parsed by the `fanta-fnx` codec.
-Instead of an opaque per-node JSON blob, a design becomes readable source that
-diffs and merges like code.
+FNX is Fanta's text source for a page or component master. A project stores a page at <code>pages/&lt;slug&gt;/page.fnx</code> and a component master at <code>components/&lt;slug&gt;/master.fnx</code>. Each element is a scene node; literal attributes hold its properties and nested elements hold its children.
 
-## Why design-as-source
+## Edit safely
 
-A traditional design file is a tree of node JSON. A two-pixel nudge produces a
-diff no human can read, and a merge conflict is unresolvable by hand. `.fnx`
-flips that: the document is text that mirrors how the design is *structured*, so:
+FNX is a restricted, static JSX-like grammar, not arbitrary executable React or JavaScript. Preserve an existing element's <code>id</code> when changing that node. Give a copied or newly created node a new ID. Keep its companion <code>.ids.json</code> sidecar with the project; it records identity and ordering information.
 
-- **Diffs are code-like.** A renamed layer, a changed padding, a new variant read
-  as a one-line change in `git diff`.
-- **Git is the version history.** Branch, review, and merge designs with the same
-  tools you use for code.
-- **Designs and code converge.** A JSX-shaped tree of frames, text, and instances
-  is legible to both designers and engineers.
+The Code workspace can edit FNX while the canvas is clean. Fanta locks canvas edits while the source buffer is dirty; saving validates the project, writes the source and sidecar, and reloads the canvas. You can also use an external editor or an agent's file tools. The local MCP <code>read_fnx_source</code> tool reads bounded source slices but does not write files.
 
-## What a .fnx file looks like
+Canvas edits patch affected source while preserving unrelated comments and whitespace where possible. Invalid syntax or unsupported constructs keep the previous valid canvas visible and show a diagnostic. Fix the source and inspect the rendered result. Fanta can also detect overlapping canvas and external edits and surface a conflict.
 
-Each file describes a subtree as nested, named elements with props — frames,
-text, instances, and their layout and style — in the spirit of a component file:
+## When to use it
 
-```jsx title="Card.fnx"
-<Frame name="Card" autoLayout="vertical" gap={8} padding={16} fill="#101418">
-  <Text name="Title" size={18} weight={600} color="#FFFFFF">Revenue</Text>
-  <Text name="Value" size={28} weight={700} color="#FFFFFF">$48,210</Text>
-</Frame>
-```
-
-The codec is the source of truth for the exact grammar; treat the snippet above as
-the shape, not a spec.
-
-## Get .fnx out of a live document with export_jsx
-
-`export_jsx` returns the `.fnx` source for any subtree, so you can lift a built
-frame straight into a source file:
-
-```json title="export_jsx for a node"
-{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"export_jsx","arguments":{"node":"Card"}}}
-```
-
-This is the design-to-code bridge: build visually with the
-[MCP build loop](/docs/mcp/build-loop), then `export_jsx` the result into your
-repository.
-
-## A git workflow for designs
-
-1. **Build or import** a page in the editor.
-2. **`export_jsx`** the page (or component) to a `.fnx` file in your repo.
-3. **Commit** it. The diff is readable, so PR review of a design is real review.
-4. **Edit** either visually (re-export) or in source (hand-edit the `.fnx`).
-5. **Merge** with normal git tooling — conflicts land on lines, not in binary.
+Structured agent operations are best for common shapes, layout, text, images, and components. FNX is useful for source review in Git and for properties outside the structured edit surface, including gradients, variables, and rich-text runs. Keep referenced binary media in <code>assets/</code>; FNX refers to an asset by ID rather than embedding raw bytes.
 
 <Callout type="info">
-  `.fnx` is for source-control and code-convergence. For a portable single-file
-  hand-off use the [`.fant` container](/docs/formats/fant); for the live editor the
-  working format is the [project directory](/docs/formats/fant).
+A design's FNX source is part of its project directory. An isolated FNX file is not the full project: it depends on the manifest, sidecars, shared document data, and referenced assets.
 </Callout>
-
-<Cards>
-  <Card title="Design-as-source concept" href="/docs/concepts/fnx-design-as-source" description="The deeper model: why per-component source replaces per-node JSON." />
-  <Card title="Design-to-code with .fnx" href="/docs/guides/design-to-code-fnx" description="A task guide for round-tripping designs through .fnx and git." />
-  <Card title="Version-control your designs" href="/docs/guides/version-control-designs" description="Branch, commit, and promote designs with the VCS tools." />
-</Cards>

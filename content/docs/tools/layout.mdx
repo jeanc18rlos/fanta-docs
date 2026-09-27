@@ -1,44 +1,12 @@
 ---
 title: Auto-layout, transform & viewport
-description: Build real auto-layout stacks, control child sizing, reparent, and frame the viewport.
+description: Use Fanta’s current layout and transform operations.
 ---
 
-Design with auto-layout, not absolute placement. Build rows, cards, and panels as real auto-layout stacks (assemble row-frames, then `set_auto_layout` with a `gap`), and uniform rhythm comes from the layout engine instead of hand-placed drift.
-
-## Auto-layout & child sizing
-
-| Tool | Purpose | Key parameters |
-| --- | --- | --- |
-| `set_auto_layout` | Turn a frame into an auto-layout container | `id`, `direction`, `spacing`, `padding`, `primary_align`, `counter_align`, `primary_sizing`, `counter_sizing`, `wrap`, `enabled` |
-| `set_layout_child` | Control how a child sizes inside its parent | `id`, `grow`, `primary_sizing`, `fill_container`, `absolute`, `align_self`, `enabled` |
-| `reorder` <a id="reorder" /> | Reparent + z-order | `id`, `to`: `"back"` \| `"front"`, `into?` |
-| `move_node` | Translate a node | `id`, `dx`, `dy` |
-
-<Callout type="warn">
-**Fill-to-width = hug + stretch.** A child fills its parent's CROSS axis only when its own `set_auto_layout primary_sizing` is `hug` (a `fixed` primary sizing overrides stretch) **and** `set_layout_child align_self:"stretch"` is set **after** the parent is already an auto-layout frame. Main-axis growth uses `fill_container` / `grow`.
-</Callout>
-
-The layout resizer preserves real vector/icon geometry and only re-rectangles actual rectangles, so `create_icon` symbols render and size correctly inside auto-layout.
-
-## Viewport
-
-| Tool | Purpose | Key parameters |
-| --- | --- | --- |
-| `frame_view` | Fit the viewport to content/selection/page/node | `target`: `"content"` \| `"selection"` \| `"page"` \| `"node"`, `node?`, `margin?` |
-| `focus` | Frame and highlight a node | `node`, `frame?`=`true`, `margin?`=`48` |
-| `unfocus` | Clear focus | — |
-| `repaint` | Force re-render / relayout | `scope`: `"page"` \| `"node"` \| `"all"`, `node?`, `relayout?` |
-
-## Examples
-
-Make a card a vertical stack with even rhythm:
+`set_auto_layout` takes an `id`, `direction` (`horizontal`, `vertical`, or `none`), and optional `gap`, `padding`, `align_items`, and `justify`. Padding accepts one, two, or four numbers. Once a container is in auto-layout, change layout rules or sibling order instead of setting child `x` and `y`.
 
 ```json
-{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"set_auto_layout","arguments":{"id":"card-1","direction":"vertical","spacing":12,"padding":16,"primary_align":"start","counter_align":"start","primary_sizing":"hug","counter_sizing":"fixed","wrap":false,"enabled":true}}}
+{"label":"Lay out card","ops":[{"op":"set_auto_layout","id":"<frame-id>","direction":"vertical","gap":12,"padding":[20]}]}
 ```
 
-Stretch a row to fill its parent's cross axis (run after the parent is an auto-layout frame):
-
-```json
-{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"set_layout_child","arguments":{"id":"row-1","align_self":"stretch","fill_container":true,"enabled":true}}}
-```
+`align` aligns two or more nodes to a shared edge or center line, or one node to its parent. `distribute` spaces three or more nodes along an axis. `rotate` sets an absolute angle; `set_index` changes sibling z-order; `reparent` moves a node while preserving its world position. `set_viewport` stores canvas center or zoom. The alpha’s grid auto-layout control is not backed by the layout engine; use horizontal or vertical.

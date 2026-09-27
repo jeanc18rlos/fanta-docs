@@ -1,104 +1,23 @@
 ---
 title: MCP Server
-description: The Fantaisa desktop app is a live MCP server — AI agents drive the real, visible canvas in real time.
+description: Six tools connect external agents to the focused Fanta design.
 ---
 
-The Fantaisa desktop app **is** an MCP server. There is no plugin to install, no
-export step, and no headless render farm in the middle: when you run the editor,
-it opens a Model Context Protocol endpoint and any MCP-capable agent — Claude
-Code, OpenAI Codex, GLM, or the in-app brain — connects to the **running editor**
-and mutates the **real document you are looking at**, live.
+Fanta’s MCP server is part of the running desktop app. It uses a private Unix socket, and `fanta --mcp-stdio` bridges stdio clients to it. It acts on the most recently focused design.
 
-This is the core of Fantaisa. Other tools bolt an assistant onto a design app.
-Fantaisa exposes the entire editor as a tool surface, so an agent designs the way
-you do: it creates frames, nests them with auto-layout, binds variables, swaps
-component instances, screenshots its own work, critiques it, and saves — all on
-the canvas in front of you.
+| Tool | Purpose |
+| --- | --- |
+| `get_editor_state` | Read project, pages, selection, viewport, and empty-space placement. |
+| `get_guidelines` | Read the design rules maintained with the operation schema. |
+| `batch_get` | Read exact nodes or a paged page tree. |
+| `batch_design` | Apply typed operations as one undoable transaction. |
+| `get_screenshot` | Render a page or node region as PNG. |
+| `read_fnx_source` | List or read source files in the open project. |
 
-<Callout type="info">
-  Every agent edit is an ordinary `Operation` in the document model — the same
-  undoable, replayable mutation a human click produces. Undo/redo, history, and
-  collaboration treat agent edits and human edits identically.
-</Callout>
-
-## The model
-
-```text
-  Agent (Claude Code / Codex / GLM)
-        │  JSON-RPC 2.0  (MCP 2024-11-05)
-        ▼
-  Fantaisa MCP endpoint  ──►  DocTool intent  ──►  Operation  ──►  live document
-        ▲                                                              │
-        └──────────────  export_png / get_screenshot  ◄───────────────┘
-```
-
-Three properties make this work:
-
-- **One tool surface, everywhere.** The ~127 tools the in-app AI uses are the
-  same tools external agents call. There is no second-class API — anything you
-  can do by hand, an agent can do over MCP, and vice versa.
-- **Mutations go through `DocTool`.** Tools express *intent* (`create_frame`,
-  `set_auto_layout`, `set_instance_override`), which lowers to an `Operation`.
-  Agents never poke app internals; they cannot break document invariants.
-- **Agents read a compact view.** Inspection tools return a small
-  `CanvasContext` — node ids, layout, variables — not arbitrary source state, so
-  the agent reasons about the design, not the renderer.
-
-## Transports
-
-Pick the transport that matches your client and your goal.
-
-| Transport | Endpoint / command | Targets | Use it when |
-| --- | --- | --- | --- |
-| **Streamable HTTP** | `POST http://127.0.0.1:3846/mcp` | The **visible** running editor | Codex and any HTTP-capable client. The default. Override the address with `FANTA_MCP_ADDR`. Newline-delimited JSON-RPC 2.0 is also accepted on the port. |
-| **Headless `fanta-mcp`** | `cargo run -p fanta-ai --bin fanta-mcp` | An **in-memory** doc (no UI) | CI, automation, and batch jobs. Owns its own document; can load a `.fant` or `.fig` and never opens a window. |
-| **`fanta-mcp --live` (proxy)** | `cargo run -p fanta-ai --bin fanta-mcp -- --live` | The **visible** running editor | Stdio-only clients (Claude Code). A thin stdio→HTTP proxy that forwards to the desktop editor at `:3846`. |
-
-<Callout type="info">
-  HTTP and the `--live` proxy drive the **same** visible document — the proxy
-  just lets stdio-only clients reach it. Headless `fanta-mcp` is the odd one out:
-  it owns a private in-memory doc and shows nothing on screen.
-</Callout>
-
-The protocol is **JSON-RPC 2.0**, MCP version **2024-11-05**, in every mode.
-
-## Talking to the endpoint
-
-List the tools, then call one. This is the raw wire format every transport
-speaks — most agents handle it for you.
-
-```bash title="List the available tools"
-curl -s http://127.0.0.1:3846/mcp \
-  -H 'Content-Type: application/json' \
-  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}'
-```
-
-```json title="Call a tool"
-{
-  "jsonrpc": "2.0",
-  "id": 2,
-  "method": "tools/call",
-  "params": {
-    "name": "create_frame",
-    "arguments": { "name": "Card", "x": 0, "y": 0, "w": 320, "h": 180 }
-  }
-}
-```
-
-<Callout type="warn">
-  Always start a real build session with `agent_playbook`, not `tools/list`.
-  The playbook returns the principles, the recommended flow, and the curated
-  tool groups so the agent builds with the grain of the editor. See
-  [The build loop](/docs/mcp/build-loop).
-</Callout>
-
-## Where to go next
+The built-in Agent Panel uses the same `design_surface::DesignOp` vocabulary through its own tools. External MCP clients see these six tools, rather than a tool for every design operation.
 
 <Cards>
-  <Card title="Connect an agent" href="/docs/mcp/connect" description="Claude Code, Codex, and headless setup — copy-paste configs for each client." />
-  <Card title="The build loop" href="/docs/mcp/build-loop" description="agent_playbook → get_guidelines → inspect → build → verify → save, with real tool calls." />
-  <Card title="Get the best output" href="/docs/mcp/best-output" description="The nine hard rules of building on the live canvas, plus prompting guidance." />
-  <Card title="Custom rules & context" href="/docs/mcp/custom-rules" description="Ship AGENTS.md and context/*.json so your conventions reach every agent." />
-  <Card title="Troubleshooting" href="/docs/mcp/troubleshooting" description="Timeouts, page bleed, silent overrides, lost changes — and the fixes." />
-  <Card title="Tool reference" href="/docs/tools" description="All ~127 tools by category: create, layout, style, components, inspect, verify, media, and more." />
+  <Card title="Connect" href="/docs/mcp/connect" />
+  <Card title="Build loop" href="/docs/mcp/build-loop" />
+  <Card title="Tool reference" href="/docs/tools" />
 </Cards>

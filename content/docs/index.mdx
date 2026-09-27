@@ -1,40 +1,26 @@
 ---
-title: Introduction
-description: Fantaisa is a native creative canvas whose app is a live MCP server — agents design on the real document in real time.
+title: Fanta documentation
+description: "Learn Fanta's current alpha: canvas editing, source-backed projects, agents, generation, export, and Git."
 ---
 
-**Fantaisa** is a native, polymorphic creative canvas — vector, bitmap, text, video, 3D, node graphs, and AI artifacts all share the same document semantics (transform, selection, grouping, undo, export).
+Fanta is a native design editor built around an ordinary project folder. Canvas edits write readable `.fnx` files; valid source edits update the canvas. If Git is available, those changes can be reviewed and committed like code.
 
-What makes it different: **the app is itself a live MCP server.** AI coding agents — Claude Code, OpenAI Codex, GLM — connect to the running editor and design on the *real* canvas, with the same tool surface the in-app AI brain uses. Every change is an undoable operation. You watch it happen.
-
-<Callout type="info">
-  New here? The fastest path is the [60-second agent quickstart](/docs/getting-started/connect-an-agent) — launch the editor, point your agent at `http://127.0.0.1:3846/mcp`, and start designing.
-</Callout>
-
-## Two ways to design
+The current release is an **Apple Silicon macOS alpha**. These pages describe [fanta-edit at `cbeab9e`](https://github.com/jeanc18rlos/fanta-edit/tree/cbeab9e6e4149439d39e54664e3f0aec3d0b2f36), with limits called out where they matter. Start with the [full capability map](/docs/capabilities).
 
 <Cards>
-  <Card title="By hand, in the editor" href="/docs/editor" description="A native desktop canvas with tools, an inspector, auto-layout, components, variables, and prototyping — plus a docked AI panel." />
-  <Card title="With an agent, over MCP" href="/docs/mcp" description="Connect Claude Code or Codex to the live editor and drive ~127 design tools through the agent build loop." />
+  <Card title="How Fanta works" href="/docs/capabilities" description="A complete map of current capabilities and alpha limits." />
+  <Card title="Your first project" href="/docs/getting-started/first-project" description="Make a design, inspect its files, and review a change." />
+  <Card title="Connect an agent" href="/docs/getting-started/connect-an-agent" description="Use the six local MCP tools from Claude Code or Codex." />
+  <Card title="The editor" href="/docs/editor" description="Canvas, layers, inspector, Code workspace, and shortcuts." />
+  <Card title="Design as source" href="/docs/concepts/fnx-design-as-source" description="Understand the .fnx files behind the canvas." />
+  <Card title="Import and export" href="/docs/formats" description="Open .fig, place media, and export PNG, JPEG, SVG, or PDF." />
 </Cards>
 
-## Start here
+## A first pass
 
-<Cards>
-  <Card title="Getting Started" href="/docs/getting-started" description="Install, run, and connect an agent in minutes." />
-  <Card title="MCP Server" href="/docs/mcp" description="The centerpiece: transports, the build loop, and how to get the best output." />
-  <Card title="Agents & AI" href="/docs/agents" description="Single and multi-agent workflows, reference-grounded design, review & revision." />
-  <Card title="Claude Plugin & Skills" href="/docs/plugin" description="A turnkey plugin so Claude Code and Codex work against Fantaisa out of the box." />
-  <Card title="Tool Reference" href="/docs/tools" description="Every MCP tool, grouped by purpose, with parameters and JSON-RPC examples." />
-  <Card title="Core Concepts" href="/docs/concepts" description="The document model, pages & world space, auto-layout, components, variables, and .fnx." />
-</Cards>
+1. Use **File → New Design…** or open a `.fig` file. Fanta creates a native project directory.
+2. Work on the canvas, in the inspector, or in the Code workspace. Valid external `.fnx` edits reload the canvas.
+3. Connect an agent to the running app through its local MCP bridge, if you want one.
+4. Let autosave update the project files, review the Git diff, then export a page or selection.
 
-## Built LLM-first
-
-These docs are designed to be read by machines as easily as by people:
-
-- Every page has a Markdown twin — use the **Copy Markdown** / **Open in** buttons at the top of any page.
-- A curated [`/llms.txt`](/llms.txt) index and a full [`/llms-full.txt`](/llms-full.txt) dump let an agent ingest the whole site in one fetch.
-- The [Tool Reference](/docs/tools) mirrors the live tool schemas the editor exposes on `:3846`.
-
-See [Reference → LLM-first docs](/docs/reference/llms) for details.
+The site also serves [`/llms.txt`](/llms.txt), [`/llms-full.txt`](/llms-full.txt), and a Markdown version of each page.

@@ -1,53 +1,26 @@
-# Fantaisa Docs
+# Fanta docs
 
-The documentation site for **Fantaisa** — a native creative canvas whose app is a live MCP server, so AI agents (Claude Code, Codex, GLM) design on the real document in real time.
-
-This repo is two things at once:
-
-1. **A docs site** built with [Fumadocs](https://fumadocs.dev) (Next.js) — LLM-first by default.
-2. **A Claude Code plugin marketplace** — the `fantaisa` plugin + skills live in [`/plugin`](./plugin), and the repo root carries the marketplace manifest at [`.claude-plugin/marketplace.json`](./.claude-plugin/marketplace.json).
+The Fumadocs site for [Fanta](https://github.com/jeanc18rlos/fanta-edit), a native design canvas backed by editable project source. The home page introduces the product; `/docs/capabilities` maps the current alpha in detail; the remaining pages cover setup, editor workflows, MCP, formats, and limits.
 
 ## Develop
 
+Use Node 22 or later, then run:
+
 ```bash
 npm install
-npm run dev      # http://localhost:3000
-npm run build    # production build
+npm run dev
+npm run types:check
+npm run build
 ```
 
-Requires Node 20+. Search is local (Orama); no external services needed.
+The site is a standard Next.js app. Fumadocs supplies local search, per-page Markdown, `/llms.txt`, and `/llms-full.txt`.
 
-## LLM-first features
+## Keep the docs accurate
 
-- **`/llms.txt`** — a curated index of the docs.
-- **`/llms-full.txt`** — the entire docs as one Markdown file (paste into any LLM).
-- **Markdown twin of every page** — via the *Copy Markdown* / *Open in* buttons, or `/llms.mdx/docs/<path>`.
-- **OG images** generated per page.
+The capability map was checked against `fanta-edit` commit `cbeab9e6e4149439d39e54664e3f0aec3d0b2f36` on September 28, 2026. When `fanta-edit` changes, compare the new source with these pages before updating claims. In particular, verify the live MCP tool list, platform support, user-visible controls, generated media flows, format handlers, and alpha limitations. Build and typecheck before publishing.
 
-## Structure
-
-```
-app/                     Next.js App Router (home, /docs, llms.txt routes, OG images)
-content/docs/            All documentation (MDX) + meta.json nav ordering
-lib/                     Source loader, site identity (lib/shared.ts), layout
-plugin/                  The Fantaisa Claude Code plugin (skills, command, MCP config)
-.claude-plugin/          Marketplace manifest (makes this repo installable)
-```
-
-## The plugin
-
-```bash
-# With the Fantaisa editor running (cargo run -p fanta-app):
-claude plugin marketplace add jeanc18rlos/fanta-docs
-claude plugin install fantaisa@fantaisa-docs
-```
-
-See [`/plugin/README.md`](./plugin/README.md) and the **Claude Plugin & Skills** docs section.
+The repository also contains a Claude Code plugin in `plugin/`. Its local MCP configuration should stay aligned with Fanta's current stdio bridge. Draft platform/API files in a working checkout should be verified against the live backend before publication.
 
 ## Deploy
 
-Deploys to [Vercel](https://vercel.com) as a standard Next.js app (zero config).
-
-## License
-
-MIT
+Import this GitHub repository into Vercel as a Next.js project. The `main` branch is the production source. After the initial import, Vercel can build each pushed commit automatically.

@@ -1,95 +1,24 @@
 ---
-title: Review & Revision
-description: Run review_design before finalizing, read annotated screenshots, and use a PR-style comment → consolidate → commit loop.
+title: Review and revision
+description: Inspect an agent's design changes and iterate with screenshots, source files, and undo.
 ---
 
-Fantaisa treats finishing a design like merging code: **review before save.**
-A deterministic audit runs first, you read it (optionally with an annotated
-screenshot), and revisions flow through a PR-style comment → consolidate →
-commit loop.
+Review an agent edit in the editor before treating the design as finished. Fanta provides canvas screenshots, layer inspection, an undoable edit history, and project source files for this loop.
 
-## `review_design`
+## Review a canvas edit
 
-`review_design` is a **deterministic audit** — same input, same verdict — run
-before finalizing. It returns issues, warnings, and passes, plus per-section
-scorecards, and can attach an annotated screenshot.
+Ask the agent to capture a screenshot after applying an edit. Check the target frame at its intended size: alignment, text overflow, clipping, spacing, contrast, image crop, and visual hierarchy. Use <code>batch_get</code> to inspect precise properties when a screenshot is ambiguous. Give the next revision as a short list of observable changes.
 
-It checks, at minimum:
+A <code>batch_design</code> edit is an ordered, atomic undo transaction. If an operation fails, the entire batch rolls back and the result identifies the failing operation. If a completed batch is wrong, undo it in Fanta or request a corrective batch. Work with exact node IDs obtained from the current document.
 
-- **Hierarchy** — loose children directly on the page (not inside a frame).
-- **Spacing / gutters** — gaps below the minimum (default **96**).
-- **Overlap** — pairwise overlap between nodes that should not collide.
-- **Component reuse** — repeated structure that should be a component instance.
-- **Design-token coverage** — fills/spacing/text that bypass tokens.
-- **Text overflow / contrast** — clipped labels and low-contrast text.
-- **Empty sections** — frames that ended up with no content.
+## Review source changes
 
-### Scorecard shape
+Pages and component masters can be stored as FNX files inside a project. Read them through <code>read_fnx_source</code> or your normal file tools. External edits to an open project's FNX files are picked up by the editor after a short delay. A source parse error leaves the last valid canvas state visible while you fix the file. See [FNX source](/docs/formats/fnx).
 
-The result is structured so an agent can act on it and a human can scan it:
+Source files are useful for Git review. Check the actual canvas too: a clean textual diff alone does not establish that the rendered design is correct.
 
-```json title="review_design — result"
-{
-  "issues": [
-    { "kind": "overlap", "nodes": ["card-2", "card-3"], "detail": "12px overlap" },
-    { "kind": "loose_child", "node": "title", "detail": "page child not in a frame" }
-  ],
-  "warnings": [
-    { "kind": "gutter", "node": "row-1", "detail": "gap 64 < min 96" },
-    { "kind": "token", "node": "badge", "detail": "raw fill #1A1A1A bypasses tokens" }
-  ],
-  "passes": ["text-contrast", "no-empty-sections", "component-reuse"],
-  "scorecards": [
-    { "section": "Pricing", "score": 82, "issues": 1, "warnings": 1 },
-    { "section": "Footer",  "score": 95, "issues": 0, "warnings": 0 }
-  ],
-  "screenshot": "review-annotated.png"
-}
-```
+## Comments and handoff
 
-<Callout type="info">
-Pass the option to attach an annotated screenshot and the audit marks each
-flagged node visually — the fastest way to see *where* a gutter or overlap
-problem lives, not just that it exists.
-</Callout>
+Fanta's canvas comments can attach pins to design positions and hold replies, mentions, attachments, and resolved state. They are stored as project page metadata. Use them for local review context; do not assume comments appear in PNG, JPG, SVG, or PDF exports.
 
-## Review before save
-
-Make the audit a gate, not an afterthought. The canonical loop ends with
-verify → save, and `review_design` is the verify step that decides whether the
-work is ready:
-
-```text title="Gate the save on the review"
-build / revise
-export_png   { node: <frame> }
-review_design                  # read issues + scorecards
-# fix issues, re-run, repeat until clean enough
-save_document
-```
-
-## The PR-style revision loop
-
-Revisions are handled like a pull request, so feedback is explicit and the
-history is legible:
-
-1. **Comment.** Pin comments on the surface where something needs to change —
-   each pin is a concrete, located request, like a line comment in a PR.
-2. **Consolidate.** When you say "consolidate," the agent gathers the pinned
-   comments and the review findings and applies them in one pass.
-3. **Commit.** The consolidated revision is saved as the next version, so the
-   change log reads as a sequence of reviewed revisions rather than a blur of
-   edits.
-
-<Callout type="warn">
-Don't skip the review to "save time." An unaudited save is how loose children,
-sub-minimum gutters, and token-bypassing fills slip into a document — exactly
-the issues `review_design` is built to catch.
-</Callout>
-
-## Next steps
-
-<Cards>
-  <Card title="Verification tools" href="/docs/tools/verify" description="export_png, get_screenshot, compare_screenshot, review_design." />
-  <Card title="Reference-grounded design" href="/docs/agents/reference-grounded" description="Iterate against saved references between reviews." />
-  <Card title="Agent workflows" href="/docs/agents/workflows" description="Where review fits in the single- and multi-agent loops." />
-</Cards>
+When the design is ready, export the selected layers or active page from the editor. For another editable copy, keep the native project directory or use a supported snapshot workflow. See [formats and interoperability](/docs/formats).

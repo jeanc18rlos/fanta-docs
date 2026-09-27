@@ -1,104 +1,13 @@
 ---
 title: Design-to-code with .fnx
-description: Round-trip designs through .fnx — export_jsx a built frame, edit the source, diff it in git, and bring changes back into the editor.
+description: Edit design source and let the canvas reload.
 ---
 
-import { Step, Steps } from 'fumadocs-ui/components/steps';
+A Fanta page is `.fnx` source under `pages/`; a component master has source under `components/`. Canvas operations autosave into those files, and file edits in your own code editor reload the open canvas.
 
-`.fnx` is design-as-source: JSX-style files that make a design diff and merge like
-code. This guide round-trips a frame between the visual editor and source — the
-practical loop for designers and engineers working on the same artifact.
+1. Use `get_editor_state` to find the source path. `read_fnx_source` lists files and pages text; follow `truncated` and `next_offset` when reading large files.
+2. Edit the `.fnx` with ordinary file tools, keeping its syntax well formed. Do not touch generated `*.ids.json` sidecars or `fanta.json`.
+3. Save, let Fanta reload, then call `get_editor_state` and `get_screenshot` to confirm the result.
+4. Review and commit the Git diff.
 
-<Steps>
-
-<Step>
-
-### Build (or import) a frame
-
-Assemble a section in the editor with the normal
-[build loop](/docs/mcp/build-loop), or open an imported
-[`.fig`](/docs/formats/figma-import). Anything in the document can become source.
-
-</Step>
-
-<Step>
-
-### export_jsx the subtree
-
-`export_jsx` returns the `.fnx` source for a node and its descendants. Write it
-into your repository as a component or page file.
-
-```json title="export_jsx for a node"
-{"name":"export_jsx","arguments":{"node":"Card"}}
-```
-
-The result is JSX-shaped source — named frames, text, and instances with their
-layout and style props — not opaque node JSON.
-
-```jsx title="Card.fnx (illustrative)"
-<Frame name="Card" autoLayout="vertical" gap={6} padding={16} fill="#101418">
-  <Text name="Title" size={14} weight={600} color="#9AA4B2">Revenue</Text>
-  <Text name="Value" size={28} weight={700} color="#FFFFFF">$48,210</Text>
-</Frame>
-```
-
-</Step>
-
-<Step>
-
-### Commit and diff in git
-
-Commit the `.fnx` file. Now design history *is* git history, and a design change
-reads as a normal diff — reviewable in a pull request.
-
-```bash title="diff a design change"
-git add Card.fnx
-git commit -m "card: bump value type to 28/700"
-git diff HEAD~1 -- Card.fnx
-```
-
-A padding tweak or a new variant is a one-line change, not an unreadable blob.
-
-</Step>
-
-<Step>
-
-### Edit in source or in the editor
-
-You can change the design two ways:
-
-- **In source** — hand-edit the `.fnx` (rename a layer, change a token, adjust
-  padding) and review the diff.
-- **In the editor** — make the change visually, `export_jsx` again, and let git
-  show the delta.
-
-Either path produces the same readable diff, which is the point: designers and
-engineers converge on one source of truth.
-
-</Step>
-
-<Step>
-
-### Bring it back into the document
-
-Open the project to load updated source into the live editor, then verify the
-frame visually before saving.
-
-```json title="verify the round-tripped frame"
-{"name":"export_png","arguments":{"node":"Card"}}
-```
-
-</Step>
-
-</Steps>
-
-<Callout type="info">
-  Use `.fnx` for source-control and code-convergence. For a portable single file
-  hand-off use the [`.fant` container](/docs/formats/fant) instead.
-</Callout>
-
-<Cards>
-  <Card title="Design-as-source concept" href="/docs/concepts/fnx-design-as-source" description="Why per-component source replaces per-node JSON." />
-  <Card title=".fnx format" href="/docs/formats/fnx" description="The format reference, grammar shape, and export_jsx contract." />
-  <Card title="Version-control your designs" href="/docs/guides/version-control-designs" description="Branch and promote with the in-editor VCS tools." />
-</Cards>
+`.fnx` is design source, not a promise of production React export. The current external MCP server has no `export_jsx` tool; implement application code in your own project.

@@ -1,33 +1,10 @@
 ---
 title: Version control
-description: Design git — branches, diffs, scoped tasks, commits, merges, and dev/staging/prod promotion.
+description: Review and commit source-backed design changes with Git.
 ---
 
-Fantaisa has built-in design version control. Agents work inside scoped **tasks** (a page/region lock), commit, then finish the task to merge their work. Channels run `dev` → `staging` → `prod`.
+Canvas edits autosave as `.fnx` source in a project folder, so `git diff` shows the change. **File → Review Changes** opens a review UI; **File → Commit…** records the reviewed change. Fanta initializes Git for a new project when system Git is available, unless the folder is already inside a repository.
 
-## Tools
+The external MCP server has no `vcs_begin_task`, `vcs_commit`, or `vcs_promote` tools. An agent can edit through MCP and use ordinary Git tools against the project folder if its environment allows. Screenshot the result and review the source diff before committing.
 
-| Tool | Purpose | Key parameters |
-| --- | --- | --- |
-| `vcs_status` | Branch, channel, pending task, dirty/conflict state, design locks | — |
-| `vcs_branches` | List branches | — |
-| `vcs_diff` | Diff two refs | `from?`, `to?` |
-| `vcs_begin_task` | Start a scoped edit task | `provider?`=`"mcp"`, `task_id?`, `page?`, `region?:[x,y,w,h]`, `allow_globals?` |
-| `vcs_commit` | Commit pending changes | `message?`=`"Fanta edit"` |
-| `vcs_finish_task` | Finish and merge the current task | `message?`=`"Agent task"` |
-| `vcs_abort_task` | Abandon the current task | — |
-| `vcs_merge` | Merge a source branch | `source`, `target?`=`"dev"` |
-| `vcs_promote` | Promote a channel | `target`: `"staging"` \| `"prod"` |
-| `vcs_checkout` | Switch branch | `branch` |
-
-## Examples
-
-Begin a region-scoped task, commit, and finish:
-
-```json
-{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"vcs_begin_task","arguments":{"page":"page-home","region":[0,0,1440,1024],"allow_globals":false}}}
-```
-
-```json
-{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"vcs_finish_task","arguments":{"message":"Rebuild hero section"}}}
-```
+Without Xcode Command Line Tools, Fanta may save without creating `.git`. Install the tools or run `git init` in the project folder to enable the Git workflow.

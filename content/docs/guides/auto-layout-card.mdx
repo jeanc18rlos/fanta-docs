@@ -1,130 +1,16 @@
 ---
 title: Build a card with auto-layout
-description: A step-by-step MCP walkthrough for assembling an auto-layout card — create leaves, reparent with reorder, lay out, fill-to-width, and verify.
+description: Create and verify a small vertical composition.
 ---
 
-import { Step, Steps } from 'fumadocs-ui/components/steps';
+1. Call `get_guidelines`, then `get_editor_state` with `empty_space: [360,220]`. Use its coordinates for the new top-level frame.
+2. Use `batch_design` to `create_node` with `node_type: "frame"`, a name, size 360 × 220, and a solid fill. Give the batch a label such as `"Create sign-in card"`.
+3. Read the returned frame ID. In a later batch, create heading and supporting text nodes with that ID as `parent`. Give text boxes enough width and height.
+4. Use `set_auto_layout` with `direction: "vertical"`, `gap`, and `padding`; style text with `set_text_style`. Auto-layout controls child positions, so do not also set child `x`/`y`.
+5. Screenshot the frame, correct spacing if needed, then review the autosaved `.fnx` diff.
 
-This guide builds a metric card as a real auto-layout stack — the way you should
-build every panel, card, and row. The output is a frame whose padding, gap, and
-fill-to-width come from the layout engine, not from hand-placed coordinates.
-
-<Callout type="info">
-  Build with auto-layout, **not** absolute placement. Hand-positioned children
-  drift into uneven gaps; an auto-layout stack gets uniform rhythm for free and
-  dogfoods the feature.
-</Callout>
-
-<Steps>
-
-<Step>
-
-### Create the leaves
-
-Nodes drop on the **active page**, not inside any frame — placement comes later.
-Create the container frame and its text children first.
-
-```json title="batch_design: create the container and leaves"
-{"name":"batch_design","arguments":{"ops":[
-  {"tool":"create_frame","args":{"name":"Card","w":320,"h":160,"fill":"#101418"}},
-  {"tool":"create_text","args":{"name":"Title","text":"Revenue","size":14,"weight":600,"color":"#9AA4B2"}},
-  {"tool":"create_text","args":{"name":"Value","text":"$48,210","size":28,"weight":700,"color":"#FFFFFF"}}
-]}}
+```json
+{"label":"Lay out card","ops":[{"op":"set_auto_layout","id":"<frame-id>","direction":"vertical","gap":12,"padding":[20]}]}
 ```
 
-</Step>
-
-<Step>
-
-### Reparent each leaf with reorder
-
-Nesting is **explicit**. Move each child into the frame with
-`reorder {into, to:"front"}`. `front` appends as the last child, i.e. flow order,
-so reparent in the order you want them stacked.
-
-```json title="reorder children into the card"
-{"name":"batch_design","arguments":{"ops":[
-  {"tool":"reorder","args":{"node":"Title","into":"Card","to":"front"}},
-  {"tool":"reorder","args":{"node":"Value","into":"Card","to":"front"}}
-]}}
-```
-
-</Step>
-
-<Step>
-
-### Turn the frame into an auto-layout stack
-
-Now `set_auto_layout` the container. Use `hug` for the primary axis so the card
-grows to fit its content; set gap and padding for rhythm.
-
-```json title="set_auto_layout on the card"
-{"name":"set_auto_layout","arguments":{
-  "node":"Card","direction":"vertical","gap":6,"padding":16,
-  "primary_sizing":"hug","counter_sizing":"fixed"
-}}
-```
-
-<Callout type="warn">
-  There is **no resize tool**. A text or shape box keeps its created size, so size
-  text boxes for the longest label they will ever hold — longer overridden text
-  clips.
-</Callout>
-
-</Step>
-
-<Step>
-
-### Make a child fill the card's width
-
-Fill-to-width is **hug + stretch**. A child fills its parent's cross axis only
-when its own `primary_sizing` is `hug` (a `fixed` primary sizing overrides
-stretch) **and** `set_layout_child align_self:"stretch"` is set *after* the parent
-is an auto-layout frame.
-
-```json title="stretch the value across the card"
-{"name":"batch_design","arguments":{"ops":[
-  {"tool":"set_auto_layout","args":{"node":"Value","direction":"horizontal","primary_sizing":"hug"}},
-  {"tool":"set_layout_child","args":{"node":"Value","align_self":"stretch"}}
-]}}
-```
-
-Main-axis growth uses `fill_container` / `grow` instead.
-
-</Step>
-
-<Step>
-
-### Verify with a screenshot, then critique
-
-Render the **single frame** — chrome-free, no OS permissions — and look. Then run
-`review_design` before you save.
-
-```json title="export the frame"
-{"name":"export_png","arguments":{"node":"Card"}}
-```
-
-```json title="critique it"
-{"name":"review_design","arguments":{"node":"Card"}}
-```
-
-<Callout type="error">
-  Always pass a frame `node` and keep frames **≤ 1920×1080**. With no `node`,
-  `export_png` defaults to the whole document and times out. Never screenshot a
-  page or the canvas.
-</Callout>
-
-</Step>
-
-</Steps>
-
-## Assemble upward
-
-Repeat the pattern to build bigger things: leaves into rows, rows into cards,
-cards into sections, sections into the page. Each level is the same four moves —
-create, reorder-in, `set_auto_layout`, then stretch where needed.
-
-<Cards>
-  <Card title="Auto-layout concept" href="/docs/concepts/auto-layout" description="The sizing model behind hug, fixed, fill, and stretch." />
-  <Card title="Build a component & variants" href="/docs/guides/component-variants" description="Turn a finished card into a reusable master." />
-</Cards>
+Horizontal and vertical auto-layout work; grid is not active in this alpha.
