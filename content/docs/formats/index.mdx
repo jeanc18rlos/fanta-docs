@@ -3,7 +3,7 @@ title: Formats & interoperability
 description: Choose the editable Fanta project, a snapshot, FNX source, Figma import, or a rendered export.
 ---
 
-Fanta's editable document is a project directory with a <code>fanta.json</code> manifest. Pages, components, variables, metadata, and assets live in separate files. The canvas is a live view of those files, and a saved canvas edit updates the affected project files.
+Fanta's editable document is a project directory with a <code>fanta.json</code> manifest. Pages, components, variables, metadata, and assets live in separate files. The persistent [Project Assets](/docs/editor/assets) library also keeps named media before it is placed on a page. The canvas is a live view of those files, and a saved canvas edit updates the affected project files.
 
 ## Choose the right output
 
@@ -19,6 +19,6 @@ The Code workspace can edit FNX when the canvas is clean, then validate and relo
 
 ## Save and version
 
-Keep the project manifest, page or component source, ID sidecars, and referenced assets together in Git. A canvas edit patches the corresponding source, and external file changes are reconciled into the open editor. Invalid source leaves the last valid canvas visible with a diagnostic. If a canvas change and file change overlap, Fanta presents a conflict rather than silently choosing one.
+Keep the project manifest, page or component source, ID sidecars, asset library metadata, and media bytes together in Git. A canvas edit patches the corresponding source, and external file changes are reconciled into the open editor. Invalid source leaves the last valid canvas visible with a diagnostic. If a canvas change and file change overlap, Fanta presents a conflict rather than silently choosing one.
 
 The <code>.fant</code> handler supports import and export at the format layer, but the snapshot itself is not the editable, versioned working format. The confirmed editor export controls produce visual files. See [project and snapshot details](/docs/formats/fant).

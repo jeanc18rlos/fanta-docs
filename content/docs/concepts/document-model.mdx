@@ -5,7 +5,7 @@ description: How Fanta stores projects, pages, layers, components, assets, and r
 
 # Document model
 
-A Fanta design is a local project folder. New Design creates a project with a page. The folder contains `fanta.json`, `pages/<slug>/page.fnx`, `components/<slug>/master.fnx`, document metadata under `doc/`, and assets under `assets/`. The FNX files describe the editable layer trees; sidecar files preserve details such as identity and ordering. Generated previews and exports are ignored by Git.
+A Fanta design is a local project folder. New Design creates a project with a page. The folder contains `fanta.json`, `pages/<slug>/page.fnx`, `components/<slug>/master.fnx`, document metadata under `doc/`, and media bytes under `assets/`. `doc/asset_library.json` records reusable media names and kinds even before an asset is placed on a page. The FNX files describe the editable layer trees; sidecar files preserve details such as identity and ordering. Generated previews and exports are ignored by Git.
 
 A page has a root and its own layer tree. Frames, shapes, text, images, paths, groups, sections, slices, component instances, and other node kinds live in that tree. Properties include geometry, paints, typography, effects, layout, variable bindings, and prototype interactions. The editor exposes those properties through the canvas and inspector according to the selected node.
 
@@ -17,7 +17,7 @@ A page has a root and its own layer tree. Frames, shapes, text, images, paths, g
 4. Switch to the Code workspace when you need to inspect or edit FNX. Save valid source to update the canvas.
 5. Use **File → Review Changes** or **Commit** when you want to inspect or record project changes in Git.
 
-Opening a bare `.fig` file creates an editable sibling Fanta project and leaves the original file untouched. `.fig` is an import format, not Fanta's native save target. Fanta can also import `.fant` files. Export from the inspector to PNG, JPG, SVG, or PDF; export is separate from saving the project.
+Opening a bare `.fig` file attempts to create an editable sibling Fanta project and leaves the original file untouched. If the location cannot be written, Fanta keeps the imported design in memory until it can save a project. `.fig` is an import format, not Fanta's native save target. Fanta can also import `.fant` files. Export from the inspector to PNG, JPG, SVG, or PDF; export is separate from saving the project.
 
 Fanta watches project files for external edits. If the canvas has no unsaved changes, an external edit can reload. With local edits, Fanta attempts a three-way merge and surfaces conflicts for review. Keep the project folder together when sharing or moving it.
 

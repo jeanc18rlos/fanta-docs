@@ -9,4 +9,4 @@ Open a design in Fanta and [connect Claude Code](/docs/getting-started/connect-a
 
 Claude Code should call `get_guidelines` and `get_editor_state` with `empty_space: [360, 220]`, then inspect nearby nodes with `batch_get`. It can create the frame with `batch_design`; the result returns the new ID for a later batch that adds children. A batch is one undo step and rolls back on error. There are no `$name` temporary bindings between its operations.
 
-`get_screenshot` can target the new frame ID. The canvas edit autosaves to `.fnx`; **File → Review Changes** shows the Git diff. Ask for a focused correction and another screenshot if the result needs work.
+`get_screenshot` can target the new frame ID. The canvas edit autosaves to `.fnx`; **File → Review Changes** shows the Git diff in a non-Store build when the project is in Git. Ask for a focused correction and another screenshot if the result needs work.

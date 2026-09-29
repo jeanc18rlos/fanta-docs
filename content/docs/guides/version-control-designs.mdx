@@ -3,11 +3,11 @@ title: Version-control your designs
 description: Review the source diff behind each canvas change.
 ---
 
-Fanta writes canvas edits to the design project after a short autosave delay. The folder is initialized as a Git repository when Git is available, except when already inside another repository. A `.fig` import creates a source-backed project beside the original file; commit the project, not the import alone.
+Fanta writes canvas edits to the design project after a short autosave delay. In non-Store builds, it initializes the folder as a Git repository when a bundled or system Git is available, unless the folder is already inside another repository. A `.fig` import attempts to create a source-backed project beside the original file; commit the project, not the import alone.
 
 1. Make a canvas or `.fnx` edit.
 2. Inspect a screenshot of the changed frame or page.
-3. Choose **File → Review Changes** or run `git diff` in the project. Confirm the source diff matches the intended visual result.
-4. Commit through **File → Commit…** or your Git client, including any new assets the design uses.
+3. In a non-Store build, choose **File → Review Changes** or run `git diff` in the project. Confirm the source diff matches the intended visual result.
+4. Commit through **File → Commit…** or your Git client, including any new assets the design uses. A separate Git client is the dependable path for a Mac App Store build.
 
-The external MCP server edits the design but does not commit it. The old `vcs_*` tool names are absent. If no `.git` was created because system Git was unavailable, install Xcode Command Line Tools or initialize the repository yourself.
+The external MCP server edits the design but does not commit it. The old `vcs_*` tool names are absent. If no `.git` was created in a non-Store build, check the bundled or system Git and initialize the repository with a Git client. Mac App Store feature builds intentionally skip automatic `git init`.

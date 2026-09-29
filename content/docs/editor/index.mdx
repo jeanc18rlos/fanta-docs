@@ -7,17 +7,17 @@ description: Navigate Fanta's canvas, workspaces, modes, and panels.
 
 Fanta's editor has three main workspaces: **Canvas**, **Variables**, and **Code**. Canvas is where you select and draw layers. Variables manages reusable values and modes. Code shows the project's source and lets you edit FNX with validation before it returns to the canvas.
 
-Within the canvas, modes include **Design**, **Motion**, **Draw**, **Code**, **Prototype**, and **Comments**. The available panels and controls follow the selected mode and layer. The Layers panel organizes pages and nodes; the inspector edits the current selection. A toolbar gives you selection, shape, drawing, text, and view tools.
+Within the canvas, modes include **Design**, **Motion**, **Draw**, **Code**, **Prototype**, and **Comments**. The available panels and controls follow the selected mode and layer. The Layers panel organizes pages and nodes; the file inspector's **Assets** section places stored media; the design inspector edits the current selection. A toolbar gives you selection, shape, drawing, text, and view tools.
 
 ## A typical session
 
 1. Create a design with **File → New Design**, or open an existing design.
 2. Select a page and create a frame, shape, text layer, or other supported node.
 3. Select the layer on the canvas or in Layers. Use the inspector for precise properties.
-4. Organize the tree through Layers: rename, hide, lock, group, reorder, or move a layer to another page.
+4. Organize the tree through Layers: rename, hide, lock, group, reorder, or move a layer to another page. Use **Assets** to place a stored image, SVG, video, or audio result.
 5. Use **Variables** for shared values, **Code** for FNX source, and **Present** for prototype testing.
 6. Export a selection or page through the inspector when you need a deliverable.
 
 Fanta saves its local project after a short idle period. The project is a folder, so keep its metadata, pages, components, and assets together. Read [Document model](/docs/concepts/document-model) for the file structure.
 
-Learn the [tools](/docs/editor/tools), [inspector](/docs/editor/inspector), [surfaces](/docs/editor/surfaces), and [shortcuts](/docs/editor/shortcuts). Editor modes and workspaces are defined in `crates/fig_viewer/src/editor_session.rs`.
+Learn the [tools](/docs/editor/tools), [inspector](/docs/editor/inspector), [Project Assets](/docs/editor/assets), [surfaces](/docs/editor/surfaces), [Settings](/docs/editor/settings), and [shortcuts](/docs/editor/shortcuts). Editor modes and workspaces are defined in `crates/fig_viewer/src/editor_session.rs`.

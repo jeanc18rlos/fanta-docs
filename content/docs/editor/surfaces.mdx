@@ -11,6 +11,10 @@ The canvas shows the active page and its selectable layers. The Layers panel let
 
 The Pages area of Layers creates, selects, renames, duplicates, reorders, and deletes pages. It also includes a page link action and name/text search and replace.
 
+## Files and Project Assets
+
+The file inspector shows project files and an **Assets** section for stored images, SVG, video, and audio. Generated results can be added to this library without creating a page layer. Choose a target page under **Place in** and use the asset row's **+** button when you want a layer. Missing files or unsupported formats show a disabled placement action with a reason. [Project Assets →](/docs/editor/assets)
+
 ## Variables
 
 The Variables workspace manages collections, modes, values, aliases, and bindings. Create a collection and variable, set mode values, then bind compatible selected layer properties. Scope a mode to preview a different value set.
@@ -23,6 +27,6 @@ The Code workspace displays source files from the local project. FNX source is e
 
 Use the Prototype inspector controls to connect triggers and actions, then **Present** to test the flow. The Comments mode and tool provide an annotation surface.
 
-Fanta has a live local design tool interface for agents. Its operations cover creating common nodes, changing style and layout properties, and inspecting structure; it does not use a required fixed HTTP port. See [agent integration](/docs/plugin) for the current setup if present in this documentation site.
+Fanta has a live local design tool interface for agents. Its operations cover creating common nodes, changing style and layout properties, and inspecting structure; it does not use a required fixed HTTP port. See [agent integration](/docs/plugin) and [Settings](/docs/editor/settings) for current setup and build differences.
 
 Layer behavior is in `crates/fig_viewer/src/design_panel.rs` and `crates/fig_viewer/src/layer_context_ops.rs`. Variables and Code are in `crates/fig_viewer/src/variables_workspace.rs` and `crates/fig_viewer/src/code_workspace.rs`.

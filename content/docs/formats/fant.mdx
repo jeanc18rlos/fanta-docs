@@ -14,10 +14,11 @@ The working Fanta document is a directory containing <code>fanta.json</code>. It
 | <code>pages/&lt;slug&gt;/page.fnx</code> | Page node tree |
 | <code>components/&lt;slug&gt;/master.fnx</code> | Component master node tree |
 | <code>doc/variables.json</code> and related files | Tokens, modes, metadata, motion, and prototype state |
+| <code>doc/asset_library.json</code> | Names and kinds of reusable project media, including unplaced assets |
 | <code>assets/</code> | Source binary assets, with an integrity index |
 | <code>exports/</code> | Derived files from visual export |
 
-Readable slugs are paths, while IDs identify pages and nodes. Keep IDs stable when editing existing content. Commit the manifest, source, sidecars, and referenced assets together.
+Readable slugs are paths, while IDs identify pages and nodes. Keep IDs stable when editing existing content. Commit the manifest, source, sidecars, asset library, and referenced media together. [Project Assets](/docs/editor/assets) explains how a stored result becomes a page layer.
 
 Fanta saves canvas changes back to project files. It also watches for external edits and branch changes. The project writer uses atomic file replacement and a transaction journal for multi-file updates. If source is invalid or a canvas and external edit conflict, inspect the diagnostic instead of assuming the editor discarded or accepted either version. The Code workspace can edit FNX when the canvas is clean; an external editor can change it too.
 

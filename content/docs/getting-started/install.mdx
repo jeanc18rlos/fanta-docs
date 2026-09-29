@@ -1,11 +1,13 @@
 ---
 title: Install & Build
-description: Install the macOS alpha or build the fanta executable.
+description: Install the non-Store macOS alpha, build from source, and understand Store build limits.
 ---
 
-## Install the alpha
+## Install the non-Store alpha
 
-The current DMG targets Apple Silicon. macOS 26.6.2 is the only version recorded in the release rehearsal; Intel and other macOS versions are unverified. Download the alpha DMG from your Fanta release channel, open it, and drag Fanta to Applications. The bundle is ad-hoc signed. If macOS blocks first launch, use **System Settings → Privacy & Security → Open Anyway** after attempting to open it. See the [release notes](https://github.com/jeanc18rlos/fanta-edit/blob/main/docs/alpha/RELEASE_NOTES.md).
+The documented alpha DMG targets Apple Silicon. macOS 26.6.2 is the only version recorded in the release rehearsal; Intel and other macOS versions are unverified. Download the alpha DMG from your Fanta release channel, open it, and drag Fanta to Applications. The bundle is ad-hoc signed. If macOS blocks first launch, use **System Settings → Privacy & Security → Open Anyway** after attempting to open it. See the [release notes](https://github.com/jeanc18rlos/fanta-edit/blob/main/docs/alpha/RELEASE_NOTES.md).
+
+The source also contains a separate Mac App Store feature build. A package version or uploaded review build does not establish a public Store release, so check Fanta's official distribution channel for availability before using Store-specific instructions. This guide's DMG and external-agent steps describe a non-Store build.
 
 ## Build from source
 
@@ -16,5 +18,9 @@ cargo run -p zed
 ```
 
 The Cargo package is `zed`; its binary is `fanta`. Use `cargo build --release -p zed` for a release binary. The repository uses `./script/clippy` for linting.
+
+## Mac App Store build differences
+
+In a build compiled with `mac_app_store`, Fanta does not automatically initialize Git repositories. It cannot launch command-backed MCP servers, external agent processes, terminal tasks, or external formatters from inside the app, and remote project connections are disabled; remote HTTP MCP servers remain available. The in-app live canvas MCP server is a separate setting, and an external client's bridge to a packaged Store build needs validation. File access follows macOS's user-selected Open and Save permissions. See [Settings and build differences](/docs/editor/settings).
 
 Next choose **File → New Design…** or **File → Open…** to import a `.fig` file. See [Your First Project](/docs/getting-started/first-project).

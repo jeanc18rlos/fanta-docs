@@ -5,7 +5,7 @@ description: "Learn Fanta's current alpha: canvas editing, source-backed project
 
 Fanta is a native design editor built around an ordinary project folder. Canvas edits write readable `.fnx` files; valid source edits update the canvas. If Git is available, those changes can be reviewed and committed like code.
 
-The current release is an **Apple Silicon macOS alpha**. These pages describe [fanta-edit at `cbeab9e`](https://github.com/jeanc18rlos/fanta-edit/tree/cbeab9e6e4149439d39e54664e3f0aec3d0b2f36), with limits called out where they matter. Start with the [full capability map](/docs/capabilities).
+The documented download remains an **Apple Silicon macOS alpha**. These pages track [fanta-edit main at `ebabb405`](https://github.com/jeanc18rlos/fanta-edit/tree/ebabb405779ef9772b8b2de6f227ad5a9776bdc6), with build and release limits called out where they matter. Some source capabilities may reach a packaged release later. Start with the [full capability map](/docs/capabilities).
 
 <Cards>
   <Card title="How Fanta works" href="/docs/capabilities" description="A complete map of current capabilities and alpha limits." />
@@ -13,12 +13,13 @@ The current release is an **Apple Silicon macOS alpha**. These pages describe [f
   <Card title="Connect an agent" href="/docs/getting-started/connect-an-agent" description="Use the six local MCP tools from Claude Code or Codex." />
   <Card title="The editor" href="/docs/editor" description="Canvas, layers, inspector, Code workspace, and shortcuts." />
   <Card title="Design as source" href="/docs/concepts/fnx-design-as-source" description="Understand the .fnx files behind the canvas." />
-  <Card title="Import and export" href="/docs/formats" description="Open .fig, place media, and export PNG, JPEG, SVG, or PDF." />
+  <Card title="Project Assets" href="/docs/editor/assets" description="Save and place generated image, SVG, video, and audio assets." />
+  <Card title="Import and export" href="/docs/formats" description="Open .fig and export PNG, JPEG, SVG, or PDF." />
 </Cards>
 
 ## A first pass
 
-1. Use **File → New Design…** or open a `.fig` file. Fanta creates a native project directory.
+1. Use **File → New Design…** or open a `.fig` file. Fanta creates a native project directory when it can write to the chosen location.
 2. Work on the canvas, in the inspector, or in the Code workspace. Valid external `.fnx` edits reload the canvas.
 3. Connect an agent to the running app through its local MCP bridge, if you want one.
 4. Let autosave update the project files, review the Git diff, then export a page or selection.

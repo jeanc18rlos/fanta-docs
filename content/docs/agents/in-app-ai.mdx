@@ -13,9 +13,11 @@ The built-in design tools include <code>design_state</code>, <code>design_edit</
 
 ## AI provider and account
 
-Fanta's default settings include a managed Fanta AI provider. The app also exposes settings for connecting your own supported provider credentials. Provider availability and model choices can change, so inspect the app's current settings for the options available to your account.
+Fanta's default settings include a managed Fanta AI provider. After sign-in, the provider reads the current chat-model catalog from the service and shows each model's supported tools, images, context size, and credit information when supplied. The app also exposes settings for connecting your own supported provider credentials. Provider availability and model choices can change, so inspect **Settings → AI & Models** for the options available to your account.
 
-Hosted generation is a separate model catalog and credit workflow. It requires sign-in; some jobs require credits. See [media generation](/docs/agents/media-generation).
+The built-in agent also registers `evaluate_with_jev` for typed decisions about supplied text or structured state. It can ask one to eight named boolean, choice, or score questions and returns structured answers instead of a chat reply. The request is limited to 8 KiB, requires Fanta sign-in, and is unavailable in restricted agent mode. The tool describes a minimum charge of one Fanta credit for a successful call; actual availability and billing depend on the connected service. This is an in-app agent tool, not one of the six external canvas MCP tools.
+
+Hosted generation is a separate model catalog and credit workflow. It requires sign-in; some jobs require credits. See [media generation](/docs/agents/media-generation) and [Settings](/docs/editor/settings).
 
 ## Review what changed
 

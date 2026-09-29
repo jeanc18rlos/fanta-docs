@@ -5,6 +5,8 @@ description: Six tools connect external agents to the focused Fanta design.
 
 Fanta’s MCP server is part of the running desktop app. It uses a private Unix socket, and `fanta --mcp-stdio` bridges stdio clients to it. It acts on the most recently focused design.
 
+The connection instructions below are for a non-Store build. Fanta's Settings can also configure local or remote MCP tools for its own in-app agent. The Mac App Store feature build blocks Fanta from launching local MCP commands, while remote HTTP tools remain available. That is a different direction from an external client connecting to Fanta's live canvas server. [Build differences →](/docs/editor/settings)
+
 | Tool | Purpose |
 | --- | --- |
 | `get_editor_state` | Read project, pages, selection, viewport, and empty-space placement. |

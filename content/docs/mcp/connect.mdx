@@ -3,7 +3,7 @@ title: Connect an agent
 description: Launch the stdio bridge to the running editor.
 ---
 
-1. Run Fanta and focus an open design. A source build uses `cargo run -p zed`; the installed binary is `/Applications/Fanta.app/Contents/MacOS/fanta`.
+1. Run a non-Store Fanta build and focus an open design. A source build uses `cargo run -p zed`; the non-Store app binary is `/Applications/Fanta.app/Contents/MacOS/fanta` when installed there.
 2. Register the installed binary. Claude Code:
 
    ```bash
@@ -21,3 +21,5 @@ description: Launch the stdio bridge to the running editor.
 3. Restart the client, confirm its MCP list contains Fanta’s six tools, and look for an **Agent connected** toast.
 
 `fanta_live_mcp.enabled` defaults to true in Fanta user settings. Setting it false turns the local server off. The bridge checks that the discovered app process is alive, so a stale socket-discovery file after an unclean quit does not count as a connection. See [Troubleshooting](/docs/mcp/troubleshooting).
+
+These steps are verified for non-Store builds. The Mac App Store feature build prevents Fanta from launching local command-backed MCP servers as a client, while remote HTTP servers remain supported. That restriction is separate from the inbound live canvas server; the packaged Store bridge has not been verified. See [Settings and build differences](/docs/editor/settings).

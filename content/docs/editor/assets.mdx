@@ -1,0 +1,23 @@
+---
+title: Project Assets
+description: Keep generated and existing media in a Fanta project and place it on a page.
+---
+
+The **Assets** section of the file inspector lists media stored with the open project. It includes generated results added through **Add to project** and supported image, video, or audio files already used by the design. Each row shows a name, media type, size, and a preview when available. Assets remain in the project even when they are not placed on a page.
+
+## Add and place generated media
+
+1. Open a project canvas and create an image, SVG, video, or audio result in [Generation Workspaces](/docs/agents/media-generation).
+2. Select the result and choose **Add to project**. Fanta copies supported media into the project and records it in `doc/asset_library.json`.
+3. Expand **Assets** in the file inspector. Choose the destination under **Place in**, then use the **+** button on the asset row. Its tooltip says **Place on selected page**.
+4. Inspect the new layer. Fanta places it near the center of the visible canvas and fits large media within the viewport. You can place a stored asset on another page later.
+
+PNG, JPEG, and WebP become bitmap layers. A supported SVG is parsed into editable vector content. MP4 becomes a video layer. WAV, MP3, and FLAC become audio layers with a decoded duration. On macOS, selected audio and video layers have playback controls in **Motion** or **Prototype** mode.
+
+## Storage and limits
+
+Project media bytes are stored under `assets/`; the library's names and kinds are stored in `doc/asset_library.json`. Commit those files with the page source so another copy of the project can resolve the media. See [Document model](/docs/concepts/document-model).
+
+**Add to project** rejects an empty result, a file over 128 MiB, or an unsupported media format. A raster image over 32 megapixels cannot be placed on the canvas. SVG must parse as supported editable vectors; MP4 and audio must decode to usable media. Missing or unsupported assets remain visible in the inspector with the placement action disabled and a reason. Placing also requires a page and a clean, editable source state.
+
+Masks cannot be added to Assets as standalone media. They remain inputs to supported generation workflows.

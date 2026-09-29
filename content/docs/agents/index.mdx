@@ -16,6 +16,8 @@ Fanta combines an editable design canvas with an in-app agent, a local MCP conne
 
 The local MCP server exposes six tools: <code>get_editor_state</code>, <code>get_guidelines</code>, <code>batch_get</code>, <code>batch_design</code>, <code>get_screenshot</code>, and <code>read_fnx_source</code>. The in-app agent has corresponding design-state, edit, screenshot, and generation-placement tools. Their interfaces are related, but do not assume that every in-app action has a matching MCP tool.
 
+The documented external-agent bridge and in-app local agent process workflows apply to a non-Store build. A Mac App Store feature build prevents Fanta from launching local external agent and MCP processes or terminal tools. Remote HTTP MCP connections can still be configured in Settings. [Build differences →](/docs/editor/settings)
+
 ## A reliable design loop
 
 1. Open a Fanta project or an imported Figma document in the desktop app.

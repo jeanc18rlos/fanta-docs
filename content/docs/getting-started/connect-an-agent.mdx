@@ -3,7 +3,7 @@ title: Connect an Agent
 description: Configure Claude Code or Codex for Fanta’s local MCP bridge.
 ---
 
-Keep Fanta running with a design focused. The app starts a local MCP server over a private Unix socket by default. `fanta --mcp-stdio` bridges a client’s stdio JSON-RPC to the running app. There is no fixed HTTP port.
+Keep a **non-Store Fanta build** running with a design focused. The app starts a local MCP server over a private Unix socket by default. `fanta --mcp-stdio` bridges a client’s stdio JSON-RPC to the running app. There is no fixed HTTP port. This command is verified for the non-Store build; connecting an external client to a packaged Mac App Store build needs separate validation.
 
 ## Claude Code
 
@@ -11,7 +11,7 @@ Keep Fanta running with a design focused. The app starts a local MCP server over
 claude mcp add -s user fanta -- /Applications/Fanta.app/Contents/MacOS/fanta --mcp-stdio
 ```
 
-Use your own binary path if you built from source. The welcome page has a **Copy command** button.
+Use your own binary path if you built from source. The non-Store welcome page has a **Copy command** button.
 
 ## Codex
 
@@ -24,3 +24,5 @@ args = ["--mcp-stdio"]
 ```
 
 Restart the client. A successful connection shows an **Agent connected** toast in Fanta. The server lists six tools: `get_editor_state`, `get_guidelines`, `batch_get`, `batch_design`, `get_screenshot`, and `read_fnx_source`. Start with guidelines and editor state, then [follow the build loop](/docs/mcp/build-loop).
+
+Fanta's in-app **MCP & Tools** settings are a different connection direction: they configure tools the built-in agent calls. A Mac App Store feature build cannot start local command-backed MCP servers from inside Fanta; it can use remote HTTP servers. [Settings and build differences →](/docs/editor/settings)

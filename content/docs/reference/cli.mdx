@@ -13,10 +13,10 @@ From the [fanta-edit repository](https://github.com/jeanc18rlos/fanta-edit):
 | `./script/clippy` | Repository lint workflow. |
 | `script/smoke-mcp <fanta-binary> <project-dir>` | Exercise the live MCP/design loop against a running app. |
 
-Register the installed app for Claude Code:
+Register a non-Store installed app for Claude Code:
 
 ```bash
 claude mcp add -s user fanta -- /Applications/Fanta.app/Contents/MacOS/fanta --mcp-stdio
 ```
 
-For Codex, add `[mcp_servers.fanta]`, `command = "/Applications/Fanta.app/Contents/MacOS/fanta"`, and `args = ["--mcp-stdio"]` to `~/.codex/config.toml`. The bridge requires a running app and focused design. `fanta_live_mcp.enabled` defaults to true in user settings. There is no `FANTA_MCP_ADDR` or `fanta-mcp` binary in this checkout.
+For Codex, add `[mcp_servers.fanta]`, `command = "/Applications/Fanta.app/Contents/MacOS/fanta"`, and `args = ["--mcp-stdio"]` to `~/.codex/config.toml`. The bridge requires a running app and focused design. `fanta_live_mcp.enabled` defaults to true in user settings. There is no `FANTA_MCP_ADDR` or `fanta-mcp` binary in this checkout. The packaged Mac App Store bridge has not been verified; its in-app local MCP subprocesses are disabled.

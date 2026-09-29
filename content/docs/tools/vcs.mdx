@@ -3,8 +3,8 @@ title: Version control
 description: Review and commit source-backed design changes with Git.
 ---
 
-Canvas edits autosave as `.fnx` source in a project folder, so `git diff` shows the change. **File → Review Changes** opens a review UI; **File → Commit…** records the reviewed change. Fanta initializes Git for a new project when system Git is available, unless the folder is already inside a repository.
+Canvas edits autosave as `.fnx` source in a project folder, so `git diff` shows the change when the project is in a repository. In non-Store builds, **File → Review Changes** opens a review UI and **File → Commit…** records the reviewed change. A new project is initialized when a bundled or system Git is available, unless the folder is already inside a repository.
 
 The external MCP server has no `vcs_begin_task`, `vcs_commit`, or `vcs_promote` tools. An agent can edit through MCP and use ordinary Git tools against the project folder if its environment allows. Screenshot the result and review the source diff before committing.
 
-Without Xcode Command Line Tools, Fanta may save without creating `.git`. Install the tools or run `git init` in the project folder to enable the Git workflow.
+The non-Store app bundle includes Git, so Xcode Command Line Tools are not normally required. Mac App Store feature builds save projects without automatic `git init`; use a separate Git client for version history there.
