@@ -9,6 +9,14 @@ The inspector reflects the current selection. Select one layer for its full set 
 
 Common sections include geometry and rotation, corners and smoothing, appearance and opacity, blend mode, fills and strokes, typography, image fitting, layout and child layout, effects, prototype interactions, variable bindings, components and instances, and export. Use the inspector when exact dimensions or values matter; canvas handles are faster for rough adjustments.
 
+## Paints and effects
+
+The paint list supports adding and removing fills or strokes, toggling individual paint visibility, changing a paint kind, and editing gradient stops in a popover. A gradient edit previews on the canvas and commits as an undoable change. The effects list supports drop and inner shadows. Available controls depend on the selected node and paint.
+
+## Text on Path
+
+A selected TextPath layer exposes typography plus controls for where text starts on the path, direction (forward or reverse), and which side of the path carries the text. Start can be edited as a segment and position or as an offset along the current contour. This layer has a focused property set: paragraph spacing and indentation, list controls, vertical alignment, text resize and truncation, and some decoration and case controls are read-only because they do not exist on text paths. The text fill is limited to color and opacity.
+
 ## Export
 
 1. Select one or more layers to export each selected layer. To export the active page, clear the selection and activate that page.
@@ -19,6 +27,6 @@ Common sections include geometry and rotation, corners and smoothing, appearance
 
 Raster export is limited to 8192 px per side and 16 million total pixels. If a requested size exceeds a limit, reduce the scale or dimensions. Exporting the active page scopes output to that page. Multiple selected layers can be exported as targets.
 
-Fills include solid colors, gradients, patterns, images, and shaders. Video paint is available on macOS. The renderer maps the supported blend modes to Skia. Some imported or visible controls may have incomplete editing paths and show a notice. Inner shadow rendering has a TODO path, so check effects in the exported result.
+Fills include solid colors, gradients, patterns, images, and shaders. Video paint is available on macOS. The renderer maps the supported blend modes to Skia. Some imported or visible controls may have incomplete editing paths and show a notice. Drop shadows and inner shadows render as effects. For any imported design or unusual paint combination, inspect the exported result.
 
 Inspector UI and snapshots are in `crates/fig_viewer/src/properties_panel.rs` and `crates/fig_viewer/src/properties_snapshot.rs`; export limits and formats are in `crates/fig_viewer/src/export.rs`. Paint handling is in `crates/fanta-render/src/paint.rs`.

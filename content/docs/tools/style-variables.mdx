@@ -1,6 +1,6 @@
 ---
 title: Style, typography & design tokens
-description: Apply supported styles and know the current MCP limits.
+description: Apply styles and create reusable variables with modes and bindings.
 ---
 
 | `batch_design` operation | Change |
@@ -8,7 +8,7 @@ description: Apply supported styles and know the current MCP limits.
 | `set_props` | Name, position, size, opacity, first solid fill, corner radius, text, hidden, locked. |
 | `set_stroke` | Single outline color, width and alignment; width 0 removes it. |
 | `set_shadow` | First drop shadow or all drop shadows with `remove: true`. |
-| `set_text_style` | Font family, weight, size, line height, letter spacing, alignment, glyph color for the whole text node. |
+| `set_text_style` | Font family, weight, size, line height, letter spacing, alignment, glyph color, and text-box sizing for the whole text node. |
 
 Colors use `#RRGGBB` or `#RRGGBBAA`; omitted fields are unchanged. For example:
 
@@ -16,4 +16,20 @@ Colors use `#RRGGBB` or `#RRGGBBAA`; omitted fields are unchanged. For example:
 {"label":"Style title","ops":[{"op":"set_text_style","id":"<text-id>","font_weight":700,"font_size":24,"color":"#202020"}]}
 ```
 
-The document can express more than this external MCP vocabulary. Variables, gradients, and per-run rich text are not separate `batch_design` ops. Locate the relevant `.fnx` with `read_fnx_source`, read the complete section, edit the file with ordinary file tools, and verify its reload and Git diff. Do not treat a partial source slice as a whole page.
+## Reusable variables
+
+Call `get_design_system` before adding tokens. It returns collections, modes, typed variables, component metadata, and source paths. Use `collection`, `offset`, and `limit` to page a large library; `include_bindings: true` includes bindings on selected nodes. Existing names must be unique when used in place of IDs.
+
+Use `create_variable_collection` (default mode `Default`), `add_variable_mode`, `create_variable`, and `set_variable_value` to create values by mode. Variable kinds are `color`, `float`, `string`, `boolean`, and `typography`; a value can also alias another variable using `{"alias":"<variable-id-or-unique-name>"}`. `set_variable_mode` selects a collection mode for the document or pins one to a frame. `bind_variable` and `unbind_variable` connect values to node properties.
+
+```json
+{"label":"Create theme color","ops":[{"op":"create_variable_collection","name":"Theme","modes":["Light","Dark"]},{"op":"create_variable","collection":"Theme","name":"surface/accent","kind":"color","value":"#2255EE"}]}
+```
+
+After reading the returned IDs, set the second mode and bind a node:
+
+```json
+{"label":"Apply theme color","ops":[{"op":"set_variable_value","variable":"surface/accent","mode":"Dark","value":"#88AAFF"},{"op":"bind_variable","id":"<node-id>","property":{"prop":"fill_color"},"variable":"surface/accent"}]}
+```
+
+Binding targets include indexed fill and stroke color or stroke width, corner radius, opacity, visibility, text content, text style, and clip width or height. Use the live schema to check type compatibility. For gradients and per-run rich text beyond these ops, read the complete `.fnx` section and validate a complete candidate with `validate_fnx_source` before saving.

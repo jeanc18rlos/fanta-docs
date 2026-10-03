@@ -5,9 +5,9 @@ description: How Fanta stores projects, pages, layers, components, assets, and r
 
 # Document model
 
-A Fanta design is a local project folder. New Design creates a project with a page. The folder contains `fanta.json`, `pages/<slug>/page.fnx`, `components/<slug>/master.fnx`, document metadata under `doc/`, and media bytes under `assets/`. `doc/asset_library.json` records reusable media names and kinds even before an asset is placed on a page. The FNX files describe the editable layer trees; sidecar files preserve details such as identity and ordering. Generated previews and exports are ignored by Git.
+A Fanta design is a local project folder. New Design creates a project with a page. The folder contains `fanta.json`, `pages/<slug>/page.fnx`, `components/<slug>/master.fnx`, document metadata under `doc/`, and media bytes under `assets/`. `doc/asset_library.json` records reusable media names and kinds even before an asset is placed on a page. The FNX files describe the editable layer trees; sidecar files preserve details such as identity and ordering. Generated previews and exports are ignored by Git. Fanta also seeds `fanta.md`, a project-local design brief for product intent, audience, foundations, layout, reusable components, and acceptance checks; existing edits to it are preserved.
 
-A page has a root and its own layer tree. Frames, shapes, text, images, paths, groups, sections, slices, component instances, and other node kinds live in that tree. Properties include geometry, paints, typography, effects, layout, variable bindings, and prototype interactions. The editor exposes those properties through the canvas and inspector according to the selected node.
+A page has a root and its own layer tree. Frames, shapes, text, images, paths, groups, sections, slices, component instances, and other node kinds live in that tree. Properties include geometry, paints, typography, effects, layout, variable bindings, motion clips, and prototype interactions. Page metadata can also hold comments, measurements, and developer annotations. The editor exposes those properties through the canvas and inspector according to the selected node.
 
 ## Work with a project
 
@@ -23,4 +23,4 @@ Fanta watches project files for external edits. If the canvas has no unsaved cha
 
 ## Source references
 
-The folder layout is defined in `crates/fanta-format/src/project/layout.rs` and `crates/fanta-format/src/project/project.rs`. New Design and import behavior are in `crates/fig_viewer/src/new_design.rs` and `crates/fig_viewer/src/document.rs`. Source saving is in `crates/fanta-format/src/project/source_edit.rs`.
+The folder layout is defined in `crates/fanta-format/src/project/layout.rs` and `crates/fanta-format/src/project.rs`. New Design and import behavior are in `crates/fig_viewer/src/new_design.rs` and `crates/fig_viewer/src/document.rs`. Source saving is in `crates/fanta-format/src/project/source_edit.rs`.

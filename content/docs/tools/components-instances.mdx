@@ -1,6 +1,6 @@
 ---
 title: Components, instances & variants
-description: Promote a master and place linked instances.
+description: Promote masters, combine variants, expose properties, and place linked instances.
 ---
 
 Build a frame or group, read its exact ID, and promote it:
@@ -15,4 +15,12 @@ The master stays on canvas and the result returns a component ID. Place a copy w
 {"label":"Place button","ops":[{"op":"create_instance","component":"<component-id>","x":400,"y":120}]}
 ```
 
-An instance inherits its master’s size and follows later master edits. The project stores component source under `components/`, and `get_editor_state` lists component source paths. Variant-set creation and per-instance override editing are not dedicated ops in the six-tool external MCP schema. Inspect existing source and the editor UI before relying on those paths.
+An instance inherits its master’s size and follows later master edits. The project stores component source under `components/`; `get_editor_state` lists component paths and `get_design_system` reports component properties and variant sets.
+
+To make variants, first promote two or more standalone master nodes with `create_component`, then pass their **master node IDs** to `combine_variants`. The result creates a set; use the returned set ID (or its unique name) in `create_instance`. `create_component_property` can expose a `variant` axis or a `text`, `boolean`, `number`, `color`, or `instance_swap` property on a component. For a field on a descendant, use `bind_component_property` with its node ID, a compatible `target` such as `{"prop":"text_content"}`, and the exposed property ID or unique name. `set_instance_property` changes an instance's exposed property; the value must match its kind.
+
+```json
+{"label":"Add button variants","ops":[{"op":"combine_variants","ids":["<default-master-node-id>","<hover-master-node-id>"],"name":"Button"}]}
+```
+
+Read `get_design_system` after each structural step to obtain exact set, property, and axis values. An invalid target or property value fails the batch and rolls it back.

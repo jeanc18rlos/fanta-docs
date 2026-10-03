@@ -21,11 +21,19 @@ The Variables workspace manages collections, modes, values, aliases, and binding
 
 ## Code
 
-The Code workspace displays source files from the local project. FNX source is editable. When you begin editing, Fanta locks canvas edits until you save or leave the dirty source state. Saving validates the project, writes the source and sidecar, then reloads the canvas. Errors appear in the editor. The JSON view is a read-only preview.
+The Code workspace displays source files from the local project. FNX source is editable. When you begin editing, Fanta locks canvas edits until you save or leave the dirty source state. Saving validates the project, writes the source and sidecar, then reloads the canvas. Errors appear in the editor. The JSON view is a read-only preview. When an in-app agent is writing the selected FNX file, Code shows the agent name and follows its live source location. Choose **Pause follow** to navigate independently, and **Follow** to resume.
+
+## Dev mode
+
+Dev mode is a read-only artwork inspection session with page-bound measurements and annotations. It starts on a loaded canvas, activates Inspect, and offers **Inspect**, **Hand**, **Measurement**, **Annotation**, and **Saved Code**. The Code workspace is read-only while Dev mode is active; Variables is unavailable. A **Readiness unavailable** control is disabled in the current build. See [Dev mode](/docs/editor/dev-mode) for the workflow.
+
+## Motion
+
+Motion mode shows the animation timeline and Motion inspector. Create or select a clip, add an animation to one selected layer, and preview or edit keyframes at the playhead. See [Motion](/docs/editor/motion) for properties, timing, and current limits.
 
 ## Prototype and comments
 
-Use the Prototype inspector controls to connect triggers and actions, then **Present** to test the flow. The Comments mode and tool provide an annotation surface.
+Use the Prototype inspector controls to connect triggers and actions, then **Present** to test the flow. The Comments mode and tool provide a page-anchored discussion surface with threads, replies, attachments, mentions, resolution, and time-linked comments on motion clips. The document Comments panel lists comments across pages and opens the selected thread. See [Comments](/docs/editor/comments) for mentions, attachments, replies, and reviewed Agent drafts.
 
 Fanta has a live local design tool interface for agents. Its operations cover creating common nodes, changing style and layout properties, and inspecting structure; it does not use a required fixed HTTP port. See [agent integration](/docs/plugin) and [Settings](/docs/editor/settings) for current setup and build differences.
 

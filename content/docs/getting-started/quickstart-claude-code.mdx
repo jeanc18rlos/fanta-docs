@@ -1,12 +1,14 @@
 ---
 title: 'Quickstart: Claude Code'
-description: Make and inspect one source-backed change through MCP.
+description: Make and inspect one source-backed design change through MCP.
 ---
 
 Open a design in Fanta and [connect Claude Code](/docs/getting-started/connect-an-agent). Try this prompt:
 
-> Read Fanta’s design guidelines and active page. Find space for a 360 × 220 card, add a named frame and text, arrange them vertically, then show me a screenshot. Review the resulting source diff.
+> Read Fanta's design guidelines and active page. Find space for a 360 × 220 card, add a named frame and text, arrange them vertically, then show me a screenshot. Review the resulting source diff.
 
-Claude Code should call `get_guidelines` and `get_editor_state` with `empty_space: [360, 220]`, then inspect nearby nodes with `batch_get`. It can create the frame with `batch_design`; the result returns the new ID for a later batch that adds children. A batch is one undo step and rolls back on error. There are no `$name` temporary bindings between its operations.
+Claude Code should call <code>get_guidelines</code> and <code>get_editor_state</code> with <code>empty_space: [360, 220]</code>, then inspect nearby nodes with <code>batch_get</code>. It can create the frame with <code>batch_design</code>; the result returns a node ID for a later batch that adds children. A batch is one undo step and rolls back on error. There are no temporary name bindings between operations.
 
-`get_screenshot` can target the new frame ID. The canvas edit autosaves to `.fnx`; **File → Review Changes** shows the Git diff in a non-Store build when the project is in Git. Ask for a focused correction and another screenshot if the result needs work.
+For source editing, ask the agent to read the page path returned by <code>get_editor_state</code>, prepare the complete FNX document, call <code>validate_fnx_source</code> with that candidate, then write the file only after validation succeeds. The open canvas reloads valid saved source. The project-local <code>AGENTS.md</code> explains syntax and stable IDs; <code>fanta.md</code> records the design brief.
+
+<code>get_screenshot</code> can target the new frame ID. The canvas edit autosaves to FNX; **File → Review Changes** shows the Git diff in a non-Store build when the project is in Git. Ask for a focused correction and another screenshot if the result needs work.

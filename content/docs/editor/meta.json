@@ -1,1 +1,1 @@
-{ "title": "The Editor", "icon": "PenTool", "pages": ["index", "tools", "inspector", "assets", "surfaces", "settings", "shortcuts"] }
+{ "title": "The Editor", "icon": "PenTool", "pages": ["index", "tools", "inspector", "assets", "surfaces", "motion", "dev-mode", "comments", "settings", "shortcuts"] }

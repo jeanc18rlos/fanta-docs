@@ -7,7 +7,9 @@ description: Read and edit the source representation of Fanta designs.
 
 Fanta stores page and component layer trees in FNX files: `pages/<slug>/page.fnx` and `components/<slug>/master.fnx`. FNX is a readable, JSX-like representation of design nodes and properties. It includes explicit node IDs in printed source. Sidecar files still carry supporting identity and ordering information.
 
-A source file may express placement through parent-relative transforms, including X and Y translation, and width and height shorthand. It has conveniences for common shapes such as Rect and Ellipse and color values through `fnxColor`. The canvas presents the resolved result.
+A source file may express placement through parent-relative transforms, including X and Y translation, and width and height shorthand. It has conveniences for common shapes such as Rect and Ellipse and color values through `fnxColor`. A TextPath element stores its own path geometry and text. The canvas presents the resolved result.
+
+The project also seeds `fanta.md` for design intent and `AGENTS.md` for project-local agent guidance. These are supporting files; page and component artwork remains in FNX. Fanta preserves a customized `fanta.md` when scaffolding editor support.
 
 ## Edit source in Fanta
 
@@ -18,4 +20,4 @@ A source file may express placement through parent-relative transforms, includin
 
 The Code workspace also has a JSON preview for inspection. That view is read-only. Unknown FNX attributes can produce diagnostics without making the source unsaveable; review warnings and check the rendered result.
 
-FNX printing and syntax are in `crates/fanta-fnx/src/source.rs`, `crates/fanta-fnx/src/sugar.rs`, and `crates/fanta-fnx/src/print.rs`. The Code workspace save path is in `crates/fig_viewer/src/code_workspace.rs` and `crates/fanta-format/src/project/source_edit.rs`.
+FNX printing and syntax are in `crates/fanta-fnx/src/source.rs`, `crates/fanta-fnx/src/sugar.rs`, and `crates/fanta-fnx/src/print.rs`; TextPath declarations are in `crates/fanta-format/src/project/fnx.d.ts`. The Code workspace save path is in `crates/fig_viewer/src/code_workspace.rs` and `crates/fanta-format/src/project/source_edit.rs`.

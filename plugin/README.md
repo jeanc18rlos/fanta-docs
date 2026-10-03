@@ -9,7 +9,7 @@ claude plugin marketplace add jeanc18rlos/fanta-docs
 claude plugin install fanta@fanta-docs
 ```
 
-The plugin uses `/Applications/Fanta.app/Contents/MacOS/fanta --mcp-stdio`. For other install paths, configure the MCP command manually. The current server has six tools: `get_editor_state`, `get_guidelines`, `batch_get`, `batch_design`, `get_screenshot`, and `read_fnx_source`. Edits are undoable and Fanta autosaves.
+The plugin uses `/Applications/Fanta.app/Contents/MacOS/fanta --mcp-stdio`. For another install path or Fanta user-data directory, copy the connection command from the running app and configure the MCP command manually. The current server has 13 tools for canvas state and edits, design-system inspection, screenshots, FNX validation, image import, comments, and agent activity. Edits are undoable and Fanta autosaves.
 
 ```text
 /design Add a 320×180 card with a heading and primary button to the current page.

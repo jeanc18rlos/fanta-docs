@@ -9,7 +9,7 @@ A reference is most useful when the agent can compare it with the actual Fanta c
 
 Include the reference image or a clear description, the intended canvas size, any required copy and assets, and the elements that must remain. Identify an existing page, frame, or node if the task is a revision. Ask the agent to read the editor state and relevant nodes before changing the document.
 
-For an empty page, <code>get_editor_state</code> can look for space for a requested width and height. A <code>batch_get</code> call then exposes exact node IDs and details. <code>get_screenshot</code> gives the agent a visual baseline. These reads help it place new work without guessing IDs or overwriting nearby content.
+For an empty page, <code>get_editor_state</code> can look for space for a requested width and height. A <code>batch_get</code> call then exposes exact node IDs and details. <code>get_design_system</code> shows existing tokens and components, while <code>get_screenshot</code> gives the agent a visual baseline. These reads help it place new work without guessing IDs or overwriting nearby content.
 
 ## Build and compare
 
@@ -19,10 +19,10 @@ For an empty page, <code>get_editor_state</code> can look for space for a reques
 4. Capture a screenshot of the page or target node.
 5. Compare hierarchy, spacing, type, color, and crop with the reference; adjust the mismatches.
 
-The structured edit surface supports solid colors, basic typography, strokes, shadows, components, and layout. It cannot directly set every design property. For gradients, variables, and rich-text runs, inspect the [FNX source](/docs/formats/fnx) and edit the relevant project file.
+The structured edit surface supports solid colors, typography, strokes, shadows, variables, component variants, and layout. It cannot directly set every design property. For gradients and rich-text runs, inspect the [FNX source](/docs/formats/fnx), validate the complete candidate, and edit the relevant project file.
 
 ## Keep the result editable
 
-Use native frames, text, and shapes for the layout. Place bitmap images where the reference contains photography or raster detail. Hosted image and vector generation can supply new assets; generated SVG can become editable vector layers when added to the design. Verify the result in Fanta before exporting.
+Use native frames, text, and shapes for the layout. Place bitmap images where the reference contains photography or raster detail. Hosted image and vector generation can supply new assets. <code>prepare_design_asset</code> opens a user-reviewed image or SVG prompt without submitting it; <code>import_image</code> saves a returned raster file or URL to project Assets without placing a layer. Generated SVG can become editable vector layers when added to the design. Verify the result in Fanta before exporting.
 
 A reference image is guidance, not proof of pixel-for-pixel equivalence. Compare screenshots at the same target dimensions, and inspect text, clipping, and responsive behavior in the live editor.

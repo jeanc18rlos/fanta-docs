@@ -9,7 +9,7 @@ Fanta's visual export controls support PNG, JPG, SVG, and PDF. Add export settin
 
 If layers are selected, each selected layer is exported separately using its visual bounds. With no selection, Fanta exports the active page. Output names are made safe for filenames, and duplicate selected-layer names receive distinct names.
 
-PNG and JPG are raster images. SVG and PDF are visual outputs, not editable Fanta project files. To keep working with design layers, retain the [native project](/docs/formats/fant).
+PNG and JPG are raster images. SVG and PDF are visual outputs, not editable Fanta project files. To keep working with design layers, retain the [native project](/docs/formats/fant). Canvas comments and editor measurement annotations are review aids; they are excluded from rendered output.
 
 ## Size limits
 
@@ -17,8 +17,4 @@ Raster export is bounded by an 8192-pixel maximum dimension and about 16 million
 
 ## Agent screenshots are different
 
-The local MCP <code>get_screenshot</code> tool returns PNG image content to the agent for inspection. It captures the active page by default, or a specified page or node, and defaults to a 1024-pixel maximum dimension. It is a review tool, not the inspector's file-export command. The six local MCP tools do not include separate PNG, SVG, PDF, or JSX export methods.
-
-<Callout type="info">
-Canvas comments are project review metadata and should not be expected in visual exports.
-</Callout>
+The local MCP <code>get_screenshot</code> tool returns PNG image content to the agent for inspection. It captures the active page by default, or a specified page or node, and defaults to a 768-pixel maximum dimension; the requested maximum is clamped to 16–1568 pixels. It is a review tool, not the inspector's file-export command. The 13 local MCP tools do not include a separate file export method for PNG, SVG, PDF, or JSX.

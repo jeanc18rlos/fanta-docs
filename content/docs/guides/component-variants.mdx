@@ -1,15 +1,17 @@
 ---
 title: Build a component & variants
-description: Create a reusable master and place a linked instance.
+description: Create masters, combine variants, and customize an instance.
 ---
 
 1. Build a frame or group for the reusable element and inspect its exact ID with `batch_get`.
 2. Promote it with `{"op":"create_component","id":"<frame-id>"}` in `batch_design`. The master stays on canvas, and the response includes its component ID.
-3. Place a linked copy with `create_instance`, passing that ID and world `x`/`y` coordinates. A unique name also works, but an ID avoids ambiguity.
-4. Change the master, screenshot an instance, and inspect the component source under `components/`.
+3. For states such as Default and Hover, promote each standalone master and pass their master node IDs to `combine_variants`. Use `get_design_system` to read the returned set and axis values.
+4. Expose a `variant` axis or a text, boolean, number, color, or instance-swap property with `create_component_property`. For a descendant field, bind it with `bind_component_property` using the descendant node ID and a compatible target such as `{"prop":"text_content"}`.
+5. Place a linked copy with `create_instance`, passing the component or set ID and world `x`/`y` coordinates. Use `set_instance_property` with an exposed property ID or unique name and a value of the right type.
+6. Change the master, screenshot an instance, and inspect the component source under `components/`.
 
 ```json
-{"label":"Place button","ops":[{"op":"create_instance","component":"<component-id>","x":480,"y":120}]}
+{"label":"Place button","ops":[{"op":"create_instance","component":"<component-or-set-id>","x":480,"y":120}]}
 ```
 
-Master and instance operations are in the external MCP schema. Variant-set creation and per-instance overrides are not dedicated MCP ops in this alpha. Inspect the editor UI and `.fnx` representation before using those paths.
+Master, variant-set, and exposed instance-property operations are in the external MCP schema. Read `get_design_system` after structural changes; invalid values fail and roll back the batch.

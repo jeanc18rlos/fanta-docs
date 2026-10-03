@@ -3,9 +3,11 @@ title: Getting Started
 description: Install Fanta, create a source-backed design, and connect an agent.
 ---
 
-Fanta is a macOS design editor whose working format is a project folder of `.fnx` source. Canvas edits autosave into that folder; editing the source in your own code editor reloads the canvas. Choosing **File → New Design…** creates `fanta.json`, `pages/`, `components/`, and an `AGENTS.md` seed. Opening a Figma `.fig` attempts to create the same editable project beside the import. Git makes the design reviewable when a repository is available.
+Fanta is a macOS design editor. Its working document is a project folder with a <code>fanta.json</code> manifest and readable <code>.fnx</code> design source. Canvas edits save into that folder; editing valid source in a code editor reloads the canvas. **File → New Design…** creates the manifest, page and component directories, and project-local <code>AGENTS.md</code>, <code>fanta.md</code>, FNX type declarations, and editor configuration. Use <code>fanta.md</code> to record the design brief, audience, visual direction, foundations, component system, and acceptance checks.
 
-This is an Apple Silicon alpha. The release build was driven through MCP, while several mouse and keyboard paths are documented from source and tests. Read the [known issues](https://github.com/jeanc18rlos/fanta-edit/blob/main/docs/alpha/KNOWN_ISSUES.md).
+You can also open a Figma <code>.fig</code> file and continue in an editable Fanta project. In a non-Store build, Git can track the source changes. [Your first project](/docs/getting-started/first-project) walks through a canvas edit, its FNX source, and review.
+
+Fanta's local MCP bridge lets an external agent inspect and edit the open canvas. The app copies a connection command for the running installation and its data directory; use that command for your project. [Connect an agent](/docs/getting-started/connect-an-agent) explains the setup.
 
 <Cards>
   <Card title="Install and build" href="/docs/getting-started/install" />

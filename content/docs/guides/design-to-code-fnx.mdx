@@ -5,8 +5,8 @@ description: Edit design source and let the canvas reload.
 
 A Fanta page is `.fnx` source under `pages/`; a component master has source under `components/`. Canvas operations autosave into those files, and file edits in your own code editor reload the open canvas.
 
-1. Use `get_editor_state` to find the source path. `read_fnx_source` lists files and pages text; follow `truncated` and `next_offset` when reading large files.
-2. Edit the `.fnx` with ordinary file tools, keeping its syntax well formed. Do not touch generated `*.ids.json` sidecars or `fanta.json`.
+1. Use `get_editor_state` to find the source path. `read_fnx_source` lists files and pages text; its `offset` is a 1-based line number. Follow `truncated` and `next_offset` when reading large files.
+2. Edit a complete `.fnx` candidate with ordinary file tools, keeping its syntax well formed. Call `validate_fnx_source` with the project-relative path and complete candidate before writing. Do not touch generated `*.ids.json` sidecars or `fanta.json`.
 3. Save, let Fanta reload, then call `get_editor_state` and `get_screenshot` to confirm the result.
 4. Review and commit the Git diff.
 

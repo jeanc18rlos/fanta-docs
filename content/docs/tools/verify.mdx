@@ -3,7 +3,7 @@ title: Export & visual verification
 description: Use PNG screenshots for MCP review and the editor UI for exports.
 ---
 
-`get_screenshot` renders the active page to PNG. Pass `page` for another page, `node` for a node region, or `max_dimension` to cap its longer side (default 1024 px). The result is MCP image content, so an agent can inspect the actual rendered design.
+`get_screenshot` renders the active page to PNG. Pass `page` for another page, `node` for a node region, or `max_dimension` to cap its longer side (default 768 px, maximum 1568 px). Pass an exact `motion_clip` ID from `get_editor_state.motion_clips` and a `playhead_ms` sample time to inspect authored motion. The result is MCP image content, so an agent can inspect the actual rendered design.
 
 After `batch_design`, screenshot the changed frame, compare it with the intended layout, make a targeted correction, and inspect another screenshot. Review the `.fnx` diff after autosave. A successful operation response alone is not a visual check.
 

@@ -1,11 +1,14 @@
 ---
 title: Your First Project
-description: See how a canvas edit becomes .fnx source and a Git diff.
+description: See how a canvas edit becomes FNX source and a Git diff.
 ---
 
-1. Choose **File → New Design…** and select a new folder, or **File → Open…** to import a Figma `.fig`. Fanta attempts to create a project folder beside the import; if the location is not writable, save the imported design to a folder you can access.
-2. Draw a rectangle or frame. About a second after editing stops, Fanta saves the change into the project folder. The working source is under `pages/`, not inside the original `.fig`.
-3. Open the **Code** workspace to inspect and edit the page's `.fnx`. Save valid source to reload the canvas. You can also edit the file in another code editor; the open canvas reloads shortly after save.
-4. In a non-Store build, choose **File → Review Changes** or inspect `git diff`. Use **File → Commit…** when the screenshot and source diff agree. Fanta initializes Git when a bundled or system Git is available, unless the project is already inside a repository.
+1. Choose **File → New Design…** and select a new folder, or **File → Open…** to import a Figma <code>.fig</code>. Fanta attempts to create a project beside the import; if the location is not writable, save the imported design to a folder you can access.
+2. Open <code>fanta.md</code> in the project root and record the intended audience, visual direction, palette, typography, layout rules, and acceptance checks. Fanta seeds this brief without replacing an existing one. The adjacent <code>AGENTS.md</code> explains how agents should edit the design source.
+3. Draw a rectangle or frame. About a second after editing stops, Fanta saves the change into the project folder. The working source is under <code>pages/</code>, not inside the original <code>.fig</code>.
+4. Open the **Code** workspace to inspect and edit the page's <code>.fnx</code>. Save valid source to reload the canvas. You can also edit the file in another code editor; the open canvas reloads shortly after save.
+5. In a non-Store build, choose **File → Review Changes** or inspect the Git diff. Use **File → Commit…** when the screenshot and source diff agree. Fanta initializes Git when a bundled or system Git is available, unless the project is already inside a repository.
 
-Let a canvas edit autosave before modifying the same nodes in `.fnx`, and let source reload before continuing on canvas. Leave `*.ids.json` sidecars and `fanta.json` to Fanta. The non-Store app bundle includes Git, so Xcode Command Line Tools are not normally needed for project initialization. Mac App Store feature builds do not initialize Git automatically; use an external Git client if you want version history.
+**File → Save As…** makes a new local project copy with the current edits and assets, then continues saving to the new folder. The original stays in place. Choose a new destination rather than an occupied or nested project folder. Save or discard unfinished FNX source edits and finish active canvas previews before using Save As.
+
+Let a canvas edit autosave before modifying the same nodes in FNX, and let source reload before continuing on canvas. Keep the manifest, <code>*.ids.json</code> sidecars, <code>fanta.md</code>, and assets with the project. The non-Store app bundle includes Git, so Xcode Command Line Tools are not normally needed for project initialization. Mac App Store feature builds do not initialize Git automatically; use an external Git client for version history.

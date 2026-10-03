@@ -1,10 +1,10 @@
 ---
 title: Agent orchestration & presence
-description: Start with live guidelines and state; coordinate agents outside Fanta.
+description: Show live agent activity and coordinate edits without a task lock.
 ---
 
-Fanta’s six-tool external MCP surface has no `agent_playbook`, agent-team, cursor-presence, or task-lock tool. Start a session with `get_guidelines` and `get_editor_state` to identify the focused design and active page.
+Start a session with `get_guidelines` and `get_editor_state` to identify the focused design and active page. `report_agent_activity` shows an external agent's current work location and action in Fanta. Give each agent a stable `agent_id`, a readable `agent_name`, and an `action`; optionally include `page`, exact `node`, world coordinates as `[x,y]`, `project_root`, or `source_path`. Report before inspecting or editing a frame and periodically during longer source work. Set `active: false` when finished. Unrefreshed reports expire after about 30 seconds.
 
-If several agents work on one project, assign distinct nodes or `.fnx` files and use one coordinator to review their screenshots and Git diffs. `batch_design` is atomic and undoable, but it is not a cross-agent lock.
+If several agents work on one project, assign distinct nodes or `.fnx` files and use one coordinator to review their screenshots and Git diffs. `batch_design` is atomic and undoable, but activity reports do not lock nodes or files. The external MCP surface has no `spawn_agent`, `agent_playbook`, or task-lock tool.
 
-The built-in Agent Panel uses design tools and can receive draft prompts from toolbar commands. Those drafts require a manual send and a configured provider. The in-app and external agent interfaces should not be conflated.
+The built-in Agent Panel uses design tools and reports its own identity and activity. Its profile and permission controls differ from the external MCP interface.

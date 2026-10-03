@@ -3,6 +3,12 @@ title: Changelog
 description: What this source-aligned Fanta documentation covers.
 ---
 
+## October 3, 2026 source update
+
+The docs now track `fanta-edit` main at [`182b111c`](https://github.com/jeanc18rlos/fanta-edit/tree/182b111c18415c4170abf31a9660ec11231fd2d2). The external live MCP bridge registers 13 tools. New tools inspect the design system, prepare an image or SVG generation draft for user review, validate FNX without writing, import an image into the project, read and reply to comments, and report an agent's local canvas activity. `batch_design` also has operations for child layout, variables and modes, variant sets, component properties, and instance values.
+
+The editor source adds direct local image and MP4 placement, proportional scaling, arrow drawing, Text on Path, Motion keyframes and playback, persistent measurements and annotations, and a guarded Dev inspection session. Project creation seeds a `fanta.md` design specification. Save As, media playback and trimming, account views, and source save recovery also changed. These pages describe the committed implementation; public packaging and service availability still depend on the build and deployment.
+
 ## September 29, 2026 source update
 
 The docs now track `fanta-edit` main at [`ebabb405`](https://github.com/jeanc18rlos/fanta-edit/tree/ebabb405779ef9772b8b2de6f227ad5a9776bdc6). Its implemented changes include a persistent Project Assets panel; placement of generated image, SVG, MP4, and WAV/MP3/FLAC audio assets; audio preview, duration, seeking, and save fixes; catalog-driven generation controls; managed chat-model discovery; the in-app Jev evaluation tool; and a new Settings window with MCP, account, billing, and privacy sections.
@@ -11,8 +17,8 @@ The source also contains a Mac App Store feature build with process and Git rest
 
 ## Current alpha documentation
 
-This edition describes the Zed-derived Fanta app and its `.fnx` project workflow. It corrects earlier references to a separate `fanta-app` executable, fixed HTTP MCP port, and per-action MCP roster. The current external interface has six tools through `fanta --mcp-stdio`.
+This edition introduced the Zed-derived Fanta app and its `.fnx` project workflow. It corrected earlier references to a separate `fanta-app` executable, fixed HTTP MCP port, and per-action MCP roster. At that source revision the external interface had six tools through `fanta --mcp-stdio`; the October 3 source revision above extends it to 13.
 
 The docs cover project creation, Git review, Figma import, the agent build loop, source editing, and the supported alpha editor paths. The [source](https://github.com/jeanc18rlos/fanta-edit) and its [known issues](https://github.com/jeanc18rlos/fanta-edit/blob/main/docs/alpha/KNOWN_ISSUES.md) remain the record of implementation and validation status.
 
-Some visible controls are not connected. Grid auto-layout, several blend/effect modes, and some toolbar actions are examples. The known issues separate observed release behavior from source-only or unit-tested paths.
+At that revision, several visible controls were not connected. Grid auto-layout and some blend/effect modes remain incomplete in the October source. The older known-issues log separates observed release behavior from source-only or unit-tested paths, but it predates several newer editor features.

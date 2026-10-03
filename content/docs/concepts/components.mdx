@@ -15,6 +15,8 @@ A component is a reusable master layer tree. An instance refers to that master a
 4. Select the instance to change supported local properties.
 5. Use the instance controls to reset overrides or detach the instance when you need an independent layer tree.
 
-Components can have variants. Variant and instance controls appear in the inspector when relevant. If an instance differs unexpectedly from its master, inspect its overrides before resetting it; reset intentionally discards those local changes.
+Components can have variants and exposed text, boolean, number, color, instance-swap, and variant properties. Variant and instance controls appear in the inspector when relevant. If an instance differs unexpectedly from its master, inspect its overrides before resetting it; reset intentionally discards those local changes.
+
+An external agent can promote a frame or group with `create_component`, combine two or more standalone master node IDs with `combine_variants`, expose a property with `create_component_property`, bind it to a compatible descendant field with `bind_component_property`, and change an instance with `set_instance_property`. Read `get_design_system` between structural steps for exact set IDs, axes, properties, and allowed values. Invalid property types roll back the batch. See [components and variants](/docs/tools/components-instances).
 
 Component and instance operations are implemented in `crates/fig_viewer/src/properties_ops.rs` and the layer context actions. Storage is defined in `crates/fanta-format/src/project/layout.rs`.

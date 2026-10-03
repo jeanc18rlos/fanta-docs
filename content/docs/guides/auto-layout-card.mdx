@@ -6,11 +6,11 @@ description: Create and verify a small vertical composition.
 1. Call `get_guidelines`, then `get_editor_state` with `empty_space: [360,220]`. Use its coordinates for the new top-level frame.
 2. Use `batch_design` to `create_node` with `node_type: "frame"`, a name, size 360 × 220, and a solid fill. Give the batch a label such as `"Create sign-in card"`.
 3. Read the returned frame ID. In a later batch, create heading and supporting text nodes with that ID as `parent`. Give text boxes enough width and height.
-4. Use `set_auto_layout` with `direction: "vertical"`, `gap`, and `padding`; style text with `set_text_style`. Auto-layout controls child positions, so do not also set child `x`/`y`.
+4. Use `set_auto_layout` with `direction: "vertical"`, `gap`, `padding`, and intentional axis sizing; style text with `set_text_style`, using `auto_height` when a paragraph should wrap. Use `set_layout_child` for a child's growth or alignment. Auto-layout controls child positions, so do not also set child `x`/`y`.
 5. Screenshot the frame, correct spacing if needed, then review the autosaved `.fnx` diff.
 
 ```json
-{"label":"Lay out card","ops":[{"op":"set_auto_layout","id":"<frame-id>","direction":"vertical","gap":12,"padding":[20]}]}
+{"label":"Lay out card","ops":[{"op":"set_auto_layout","id":"<frame-id>","direction":"vertical","gap":12,"padding":[20],"primary_sizing":"hug","counter_sizing":"fixed"}]}
 ```
 
 Horizontal and vertical auto-layout work; grid is not active in this alpha.

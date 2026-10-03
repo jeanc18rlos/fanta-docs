@@ -7,7 +7,7 @@ description: Define reusable values, modes, aliases, and property bindings.
 
 Variables let one value drive multiple properties. Fanta's Variables workspace lets you create collections, variables, and modes, edit values, create aliases, and bind values to design properties. The active mode can be selected for a scope so the same design can resolve different values.
 
-The variable editor handles color, number, string, and boolean values. Imported documents may contain additional variable data, including typography definitions; the current editor controls focus on the types it exposes.
+The variable editor handles color, number, string, and boolean values. The agent operation schema also accepts typed `typography` variables. Imported documents may contain additional variable data; inspect the current design system before changing it.
 
 ## Create a collection and bind a value
 
@@ -18,3 +18,9 @@ The variable editor handles color, number, string, and boolean values. Imported 
 5. Switch modes and inspect the resulting design.
 
 Aliases point one variable at another. Check alias and mode resolution when a bound property appears to use a surprising value. Variable workspace controls are in `crates/fig_viewer/src/variables_workspace.rs`; value types are in `crates/fanta-doc/src/value.rs`.
+
+## Work through an agent
+
+Call `get_design_system` (or in-app `design_system`) first to read collection IDs, modes, typed values, and selected-node bindings. The external `batch_design` operations can create collections and variables, add a mode, set values or aliases per mode, set an active mode for the document or a frame, and bind or unbind compatible properties. Binding targets include fill or stroke color, stroke width, corner radius, opacity, visibility, text content or style, and clip size. Use exact IDs from the response for follow-up edits; names work only when unique.
+
+The managed variable sources are `doc/variables.json` and `doc/active_modes.json`. If you edit one directly, validate the complete candidate with `validate_fnx_source` before saving and inspect the canvas after reload. See [style and variables](/docs/tools/style-variables) for an MCP example.

@@ -1,33 +1,42 @@
 ---
 title: Fanta projects and .fant snapshots
-description: Understand the editable project directory and the single-file snapshot format.
+description: Understand the editable project directory and single-file snapshot format.
 ---
 
-The working Fanta document is a directory containing <code>fanta.json</code>. It holds the design as project files and assets, making page and component changes inspectable in Git.
+The working Fanta document is a directory containing <code>fanta.json</code>. It holds the design as source files and assets, so page and component changes are inspectable in Git.
 
 ## Project layout
 
 | Path | Contains |
 | --- | --- |
-| <code>fanta.json</code> | Project identity and schema information |
+| <code>fanta.json</code> | Project identity and format version |
 | <code>pages/&lt;slug&gt;/page.json</code> | Page identity, name, and order |
 | <code>pages/&lt;slug&gt;/page.fnx</code> | Page node tree |
 | <code>components/&lt;slug&gt;/master.fnx</code> | Component master node tree |
 | <code>doc/variables.json</code> and related files | Tokens, modes, metadata, motion, and prototype state |
 | <code>doc/asset_library.json</code> | Names and kinds of reusable project media, including unplaced assets |
-| <code>assets/</code> | Source binary assets, with an integrity index |
+| <code>assets/</code> | Source binary assets with an integrity index |
+| <code>AGENTS.md</code> | Project-local guide to editing FNX and using an agent |
+| <code>fanta.md</code> | Project design brief: audience, direction, foundations, reusable system, and acceptance checks |
+| <code>fnx.d.ts</code> and editor configuration | Local FNX declarations and formatting support |
 | <code>exports/</code> | Derived files from visual export |
 
-Readable slugs are paths, while IDs identify pages and nodes. Keep IDs stable when editing existing content. Commit the manifest, source, sidecars, asset library, and referenced media together. [Project Assets](/docs/editor/assets) explains how a stored result becomes a page layer.
+Readable slugs are paths; IDs identify pages and nodes. Keep IDs stable when editing existing content. Commit the manifest, source, sidecars, design brief, asset library, and referenced media together. Fanta seeds <code>fanta.md</code> only when absent and preserves customized <code>AGENTS.md</code>. [Project Assets](/docs/editor/assets) explains how stored media becomes a page layer.
 
-Fanta saves canvas changes back to project files. It also watches for external edits and branch changes. The project writer uses atomic file replacement and a transaction journal for multi-file updates. If source is invalid or a canvas and external edit conflict, inspect the diagnostic instead of assuming the editor discarded or accepted either version. The Code workspace can edit FNX when the canvas is clean; an external editor can change it too.
+Current projects use **layout version 4**. Their FNX can print readable component names and variable paths. Older version 3 projects can open in the current app and upgrade on save. An older build that supports only version 3 rejects a version 4 manifest; use a current app for an upgraded project. See [FNX source](/docs/formats/fnx) for the reference syntax.
+
+Fanta saves canvas changes back to project files. It watches for external edits and branch changes, uses atomic file replacement and a transaction journal for multi-file updates, and reports invalid source or overlapping edits. The Code workspace can edit FNX when the canvas is clean; an external editor can change it too.
+
+## Save As
+
+Choose **File → Save As…** to copy the current design and assets into a new local folder. The open document then saves to that copy while the original remains available. The destination must be new and separate from the original or another project. Finish an active canvas preview and save or discard unfinished FNX edits before using Save As.
 
 ## The .fant format
 
 A <code>.fant</code> file is a single-file design snapshot. The format handler can import and export the document together with its assets. Opening a snapshot materializes an editable Fanta project; the original snapshot is not the live, versioned working document.
 
 <Callout type="info">
-The format library supports writing <code>.fant</code> snapshots, but the editor controls verified in the current app expose PNG, JPG, SVG, and PDF visual exports. For routine design handoff, share the editable project directory or one of those visual exports according to the recipient's needs.
+The format library supports writing <code>.fant</code> snapshots, but the editor controls confirmed in the current app expose PNG, JPG, SVG, and PDF visual exports. For routine handoff, share the editable project directory or a visual export according to the recipient's needs.
 </Callout>
 
-See [FNX source](/docs/formats/fnx) for editing project files and [visual export](/docs/formats/export) for deliverables.
+See [visual export](/docs/formats/export) for rendered deliverables.

@@ -7,33 +7,40 @@ In a non-Store build, Fanta exposes a local MCP server from the running desktop 
 
 ## Connect
 
-Configure your MCP client to launch the Fanta executable with <code>--mcp-stdio</code>. For example, the command shape is:
+Choose **Help → Connect Claude Code / Codex…** in a non-Store Fanta build. It copies project-scoped configuration using the running executable and its user data directory. The command shape is:
 
-<pre>fanta --mcp-stdio</pre>
+<pre>fanta --mcp-stdio --user-data-dir &lt;copied Fanta data directory&gt;</pre>
 
-The exact executable path depends on where the app is installed. Fanta's local MCP server is enabled in the default settings. If the client cannot connect, check that the installed app is running and a project or imported <code>.fig</code> document is open.
+The exact executable path depends on where the app is installed. Put the copied Codex snippet in the project's <code>.codex/config.toml</code>, or run the copied Claude Code command from the project directory. Fanta's local MCP server is enabled in the default settings. If the client cannot connect, check that the installed app is running and a project or imported <code>.fig</code> document is open. See [connection steps](/docs/mcp/connect).
 
 ## Available tools
 
 | Tool | Purpose |
 | --- | --- |
 | <code>get_editor_state</code> | Project, pages, active page, components, selection, viewport, editability, and optional free space for a requested size |
+| <code>get_design_system</code> | Collections, modes, typed variables, bindings, component properties, and variant sets |
+| <code>prepare_design_asset</code> | Open an image or SVG generation draft for user review; does not submit it |
 | <code>get_guidelines</code> | Current design rules, coordinate conventions, and recommended working method |
 | <code>batch_get</code> | List a page tree or inspect exact node IDs, with depth and pagination controls |
 | <code>batch_design</code> | Apply an ordered set of design operations as one undoable transaction |
-| <code>get_screenshot</code> | Render a PNG of a page or node region |
+| <code>get_screenshot</code> | Render a PNG of a page, node, or motion-clip sample |
 | <code>read_fnx_source</code> | List or read project FNX files in slices |
+| <code>validate_fnx_source</code> | Check a complete FNX or managed JSON source candidate without writing |
+| <code>import_image</code> | Save a file, HTTP(S) URL, or base64 image in project Assets without placing a layer |
+| <code>list_comments</code> | Read page review threads, unresolved by default |
+| <code>reply_comment</code> | Reply to a thread and optionally resolve it |
+| <code>report_agent_activity</code> | Show the agent's action and canvas or source-file focus |
 
 The canvas uses world coordinates in pixels, with the origin at the upper left and Y increasing downward. Node IDs must come from the current editor state or a node read. Page listings default to a limited depth and support <code>offset</code> and <code>limit</code>; narrow very large reads rather than trying to fetch an entire imported page at once.
 
 ## What an edit can do
 
-Structured operations cover creating frames, rectangles, ellipses, text, and bitmap images; placing component instances; changing names, geometry, fills, opacity, visibility, locks, text and typography; strokes, shadows, and auto layout; z-order, rotation, alignment, and distribution; grouping and framing; duplication, components, reparenting, deletion, selection, and viewport changes.
+Structured operations cover creating frames, rectangles, ellipses, text, and bitmap images; placing component instances; changing names, geometry, fills, opacity, visibility, locks, text and typography; strokes, shadows, container and child auto layout; z-order, rotation, alignment, and distribution; grouping and framing; duplication, components, variants, exposed instance properties, variable collections, modes, aliases, and bindings; reparenting, deletion, selection, and viewport changes.
 
 Send related operations together with a clear label. If any operation fails, none of the batch is applied. The response identifies the failed operation. A batch is undoable from Fanta's editor.
 
-Gradient fills, variables, and rich-text runs are outside the structured operation surface. Use <code>read_fnx_source</code> to locate the source, edit the FNX file with your own file tools, and inspect the refreshed canvas. See [FNX source](/docs/formats/fnx).
+Gradient fills and rich-text runs are outside the structured operation surface. Use <code>read_fnx_source</code> to locate the complete source, <code>validate_fnx_source</code> to check a candidate before writing, and inspect the refreshed canvas. See [FNX source](/docs/formats/fnx).
 
 ## Verify visually
 
-After editing, use <code>get_screenshot</code> and compare the result with the brief or reference. It renders the active page by default; pass a page index or node ID to narrow the view. The default maximum output dimension is 1024 pixels and can be changed with <code>max_dimension</code>. A screenshot is a read tool, not a file export. For deliverables, use the [export controls](/docs/formats/export).
+After editing, use <code>get_screenshot</code> and compare the result with the brief or reference. It renders the active page by default; pass a page index or node ID to narrow the view. The default maximum output dimension is 768 pixels, capped at 1568. An existing <code>motion_clip</code> ID plus <code>playhead_ms</code> samples animation. A screenshot is a read tool, not a file export. For deliverables, use the [export controls](/docs/formats/export).

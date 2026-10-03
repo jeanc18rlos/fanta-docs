@@ -3,7 +3,7 @@ title: Media generation
 description: Generate, preview, save, and place hosted image, video, audio, and vector results.
 ---
 
-Fanta's Generation Workspaces expose **Image**, **Video**, **Audio**, **Vector**, **Design**, and **Masks** modes. Hosted generation requires sign-in. The app loads a searchable model catalog from the service, so the available models, controls, account access, and credit estimates can change.
+Fanta's Generation Workspaces expose **Image**, **Video**, **Audio**, **Vector**, **Design**, and **Masks** modes. Hosted generation requires sign-in. The app loads a searchable model catalog from the service, so models, controls, account access, and credit estimates can change. Check the selected model's controls and estimated cost before submitting.
 
 ## What each mode does
 
@@ -16,19 +16,23 @@ Fanta's Generation Workspaces expose **Image**, **Video**, **Audio**, **Vector**
 | Design | Prepare a design request for review in the Agent Panel. |
 | Masks | Create or refine a mask for a supported image workflow. |
 
-Starter templates help begin image, video, audio, and SVG requests: editorial and product images, cinematic and atmospheric video, narration and music, or a geometric symbol and monogram. Pick a model and recipe before setting its controls. Fanta reads the selected model's capabilities to show relevant options, such as video duration, resolution, audio, camera controls, or an optional ending frame. The supported inputs and output formats depend on that model. A source image can come from a local PNG, JPEG, or WebP file or a captured canvas region where the recipe permits it. Check the controls and estimated cost shown before submitting.
+Starter templates help begin image, video, audio, and SVG requests: editorial and product images, cinematic and atmospheric video, narration and music, or a geometric symbol and monogram. Pick a model and recipe before setting its controls. Fanta reads the model's capabilities to show relevant options, such as video duration, resolution, audio, camera controls, or an optional ending frame. Supported inputs and output formats depend on that model. A source image can come from a local PNG, JPEG, or WebP file or a captured canvas region where the recipe permits it.
+
+## Agent-prepared assets
+
+An agent using the local canvas MCP bridge can call <code>prepare_design_asset</code> with an image or SVG idea. Fanta opens the existing generation composer with the prompt filled in. If the suggested model is compatible and present in the live catalog, Fanta selects it; otherwise you choose an available model. **The tool does not submit a job.** Review the prompt, model, controls, and cost in the composer, then choose **Generate** when ready.
+
+An agent can also use <code>import_image</code> to register an image made elsewhere. It accepts exactly one local path, HTTP or HTTPS URL, or base64 source; it returns the saved project asset ID and path. Importing does not place a new canvas layer. Use the Assets panel or an FNX edit to use the image. The import is limited to 32 MiB, and remote downloads time out after 60 seconds.
 
 ## Review and save a result
 
-Select an output to preview it. On macOS, the result view can play generated video and audio. The audio player shows the decoded duration before playback and supports seeking, ten-second jumps, speed, mute, and volume controls. **Save result** writes the chosen output to a file you select; Fanta can use media already loaded for the preview. In a Mac App Store build, the Save dialog grants access to the selected destination.
+Select an output to preview it. On macOS, the result view can play generated video and audio. The audio player shows the decoded duration before playback and supports seeking, ten-second jumps, speed, mute, and volume controls. **Save result** writes the chosen output to a file you select; Fanta can use media already loaded for preview. In a Mac App Store build, the Save dialog grants access to the selected destination.
 
-Recent experiments use a descriptive creation title when the service can provide one, with a local prompt-based label as fallback.
-
-An output in the generation history is separate from the current design until you add it. You can reuse supported raster results as a source for another run. A mask is used in a supported masking workflow and cannot be added to project Assets as a standalone canvas asset. Design mode prepares a prompt for the Agent Panel; it is not a direct generative canvas render.
+Recent experiments use a descriptive creation title when the service can provide one, with a local prompt-based label as fallback. An output in generation history is separate from the current design until you add it. You can reuse supported raster results as a source for another run. A mask is used in a supported masking workflow and cannot be added to project Assets as a standalone canvas asset. Design mode prepares a prompt for the Agent Panel; it asks the agent to inspect FNX source, prefer source edits where practical, and verify the result with screenshots. It is not a direct generative canvas render.
 
 ## Add a result to a project
 
-With a project canvas open, choose **Add to project** for a supported result. Fanta copies it into the project's asset storage and records its name and kind in the persistent asset library. Open **Assets** in the file inspector, choose the target under **Place in**, and use the **+** button on the asset row. You can place the same stored asset again without repeating the generation.
+With a project canvas open, choose **Add to project** for a supported result. Fanta copies it into the project's asset storage and records its name and kind in the persistent asset library. Open **Assets** in the file inspector, choose the target under **Place in**, and use the **+** button on the asset row. You can place the same stored asset again without repeating generation.
 
 | Result | Project placement |
 | --- | --- |
@@ -37,7 +41,13 @@ With a project canvas open, choose **Add to project** for a supported result. Fa
 | MP4 | Video layer |
 | WAV, MP3, or FLAC | Audio layer |
 
-The placed media is centered in the visible viewport and scaled to fit. On macOS, select an audio or video layer in **Motion** or **Prototype** mode to use its playback controls. See [Project Assets](/docs/editor/assets) for the full workflow and limits. Some generation views also offer **Add to design** directly for image, SVG, or video results. Even if that direct button appears beside audio, use the project Assets route: the direct path does not decode audio for placement.
+The placed media is centered in the visible viewport and scaled to fit. On macOS, select an audio or video layer in **Motion** or **Prototype** mode to use its playback controls. Video preparation uses the playable timeline duration, including clips with MP4 edit lists, for placement and trimming. See [Project Assets](/docs/editor/assets) for the full workflow and limits. Some generation views also offer **Add to design** directly for image, SVG, or video results. Even if that direct button appears beside audio, use the project Assets route: the direct path does not decode audio for placement.
+
+## Place local media without generation
+
+The canvas toolbar's media placement command opens a **Place image or MP4 video** file picker. It accepts one PNG, JPEG, WebP, GIF, BMP, TIFF, or MP4 at a time. It places the media on the active, visible, editable page, centers it in the viewport, scales it down to fit within about 80% of the visible area, and selects the new layer. The placement is one undo step. A local audio file uses the project Assets workflow instead.
+
+Local image placement is limited to 32 MiB, 32 megapixels, and 16,384 pixels per side. Local MP4 placement is limited to 100 MiB and requires the macOS decoder; video preview also has a 32 megapixel resolution limit. Generated-result downloads and Add to project have a separate 128 MiB media cap, although generated bitmap assets still have a 32 MiB image preparation limit. Fanta reports an error if decoding or preparation fails. Finish a pending source edit or canvas preview before placing local media.
 
 <Callout type="info">
 Adding or placing an asset requires an editable project. Save or discard unfinished FNX source edits first. Model availability, credits, and prices are live service conditions; this page describes the app workflow rather than a fixed catalog or guaranteed price.

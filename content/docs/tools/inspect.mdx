@@ -5,6 +5,10 @@ description: Inspect the open project and page tree without mutating them.
 
 `get_editor_state` reports the project root, pages, active page, selection, viewport, components, editability, and hints. Pass `empty_space: [width,height]` to find a free top-left for a new top-level frame.
 
+`get_design_system` reports collections, modes, paginated typed variables, component properties and variant sets. Pass `collection`, `offset`, and `limit` to narrow large libraries; `include_bindings: true` reads variable bindings on selected nodes. `list_comments` reads unresolved review threads by default.
+
 `batch_get` without `ids` lists a page. It defaults to active page, depth 2, and 200 direct children. The result reports `child_count`, `children_offset`, `children_limit`, and `more_children`; continue with `offset` and `limit` until done. Pass exact `ids` for detailed nodes and `include_geometry: true` for world bounds. A result over 256 KiB is refused rather than truncated; narrow depth, child count, IDs, or geometry.
 
-`read_fnx_source` without `path` lists source files. With a project-relative path, it returns source text with `truncated`, `next_offset`, and a notice. Follow those fields before making whole-file edits. Imported `.fig` pages may be much wider than one result.
+`read_fnx_source` without `path` lists source files. With a project-relative path, it returns source text with `truncated`, `next_offset`, and a notice. `offset` is a 1-based **line** number; `limit` counts lines. The default text budget is 64 KiB per call, with `max_bytes` capped at 1 MiB. Follow `next_offset` before making whole-file edits. Imported `.fig` pages may be much wider than one result.
+
+`validate_fnx_source` accepts a project-relative `path` and optional complete `source` candidate. With `source`, it checks the candidate without writing it; without `source`, it checks the saved file. It also checks managed design-system JSON such as variable and component-set sources. Repair diagnostics before saving a candidate with file tools.

@@ -1,0 +1,30 @@
+---
+title: Dev mode
+description: Inspect saved artwork and leave page-bound implementation notes.
+---
+
+# Dev mode
+
+Dev mode is for reading a loaded design and recording implementation details. Enter it from the mode switcher or press **Shift D** while the canvas has focus. Fanta switches to **Inspect** and shows a compact toolbar with Inspect, Hand, Measurement, Annotation, **Saved Code**, and an exit to Design.
+
+Dev mode keeps artwork and FNX source read-only. You can inspect a layer and open the saved Code workspace, but you cannot use the Variables workspace until you return to Design. Save or cancel active source edits, art edits, or comment drafts before changing the Dev session. A **Readiness unavailable** button is present but disabled in the current build.
+
+## Measurements
+
+1. Select **Measurement** or press **Shift M**.
+2. Drag on the visible page from the start point to the end point. Hold Shift while dragging when you want the constrained measurement behavior.
+3. Select a measurement to inspect it. With the Measurement tool, drag either endpoint to adjust it or drag its segment or label to move it. You can copy or delete a selected measurement from its controls.
+
+Measurements belong to the page, so switching pages shows that page's measurements. They are stored as page metadata and participate in document undo and redo. They are separate from the artwork layer tree. An interrupted drag keeps a preview that can be canceled with Escape.
+
+## Annotations
+
+1. Select **Annotation** or press **Shift T**.
+2. Click the page, write a note, and choose **Add**.
+3. Select its pin or choose it from **Annotations on this page**. You can copy its text, edit it, move the pin, or delete it.
+
+Notes stay at a fixed page position and record author and creation time. Unsaved note text is retained if an operation is interrupted so you can copy or cancel it. Annotations are also page metadata, separate from ordinary layers.
+
+**Inspect** can read existing measurements and notes without moving or editing them. Measurement and Annotation tools require an editable design page for changes. The marks are available in Design and Dev canvas sessions.
+
+Implementation: mode boundaries and toolbar are in `crates/fig_viewer/src/view_dev_mode.rs`; page marks and their controls are in `crates/fig_viewer/src/measurements.rs`, `crates/fig_viewer/src/annotations.rs`, `crates/fig_viewer/src/view_measurements.rs`, and `crates/fig_viewer/src/view_annotations.rs`.

@@ -13,10 +13,10 @@ From the [fanta-edit repository](https://github.com/jeanc18rlos/fanta-edit):
 | `./script/clippy` | Repository lint workflow. |
 | `script/smoke-mcp <fanta-binary> <project-dir>` | Exercise the live MCP/design loop against a running app. |
 
-Register a non-Store installed app for Claude Code:
+With a project open in a non-Store Fanta build, choose **Connect External Agent** in Fanta. It copies project-scoped Codex and Claude Code instructions with the running app's actual executable and user-data directory. The Claude Code command has this shape:
 
 ```bash
-claude mcp add -s user fanta -- /Applications/Fanta.app/Contents/MacOS/fanta --mcp-stdio
+claude mcp add --scope project --transport stdio fanta -- /Applications/Fanta.app/Contents/MacOS/fanta --mcp-stdio --user-data-dir '<Fanta data directory>'
 ```
 
-For Codex, add `[mcp_servers.fanta]`, `command = "/Applications/Fanta.app/Contents/MacOS/fanta"`, and `args = ["--mcp-stdio"]` to `~/.codex/config.toml`. The bridge requires a running app and focused design. `fanta_live_mcp.enabled` defaults to true in user settings. There is no `FANTA_MCP_ADDR` or `fanta-mcp` binary in this checkout. The packaged Mac App Store bridge has not been verified; its in-app local MCP subprocesses are disabled.
+Use the copied command verbatim so the instance path is correct. For Codex, Fanta provides a `[mcp_servers.fanta]` snippet for the trusted project's `.codex/config.toml`. The bridge requires a running app and focused design. `fanta_live_mcp.enabled` defaults to true in user settings. There is no `FANTA_MCP_ADDR` or `fanta-mcp` binary in this checkout. The packaged Mac App Store bridge has not been verified; its in-app local MCP subprocesses are disabled.

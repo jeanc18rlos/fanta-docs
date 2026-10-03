@@ -17,4 +17,6 @@ Auto layout arranges a container's children using direction, spacing, padding, a
 
 You can also reach layout actions from the layer context menu. A free-positioned layer may move when you put it into a layout container because the parent now calculates child placement. Check the result on the canvas.
 
+Agents can set a horizontal or vertical container with `set_auto_layout`, including `gap`, `padding`, cross-axis alignment, main-axis distribution, `fixed` or `hug` sizing on each axis, min and max size, wrapping, and `counter_gap`. `set_layout_child` controls a child's growth, cross-axis alignment, or absolute participation. `set_text_style` offers `fixed`, `auto_height`, and `auto_width` text sizing. For a button, use a horizontal Hug layout and an auto-width label; for a card, choose a fixed width and auto-height paragraph text. Grid is not active in the current layout engine. See [layout operations](/docs/tools/layout).
+
 The canvas supports an 8 px snap grid and nearby node edges and centers while moving objects; snapping is a separate feature from auto layout. Inspector layout controls live in `crates/fig_viewer/src/properties_panel.rs`, and layer actions in `crates/fig_viewer/src/layer_context_ops.rs`.

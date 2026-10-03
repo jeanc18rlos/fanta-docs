@@ -27,11 +27,13 @@ claude plugin install fanta@fanta-docs
 
 If Fanta is installed elsewhere, update the executable path or [connect directly](/docs/mcp/connect).
 
-The local server exposes [`get_editor_state`, `get_guidelines`, `batch_get`, `batch_design`, `get_screenshot`, and `read_fnx_source`](/docs/tools). The plugin teaches Claude to inspect the live design, make an undoable edit, verify the result, and rely on autosave.
+The local server exposes [13 tools](/docs/tools), including design-system inspection, FNX validation, asset import, comment review, agent activity, and the original canvas edit and screenshot tools. The plugin teaches Claude to inspect the live design, make an undoable edit, verify the result, and rely on autosave.
+
+The bundled MCP configuration uses the default `/Applications/Fanta.app` path. For a different app location or user-data directory, use the exact connection command copied from the running Fanta instance and update the plugin's MCP configuration.
 
 Older plugin versions pointed to an HTTP service on `:3846` and named tools that the current app does not expose. Update or reinstall the plugin if your installed copy still uses that endpoint.
 
 <Cards>
   <Card title="Plugin skills" href="/docs/plugin/skills" description="The bundled skills and when to use them." />
-  <Card title="Recipes" href="/docs/plugin/recipes" description="Prompts for the current six-tool surface." />
+  <Card title="Recipes" href="/docs/plugin/recipes" description="Prompts for the current local MCP surface." />
 </Cards>

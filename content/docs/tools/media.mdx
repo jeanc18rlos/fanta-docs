@@ -5,6 +5,8 @@ description: Place image bytes and understand the boundary of MCP media editing.
 
 The `batch_design` operation `create_image` accepts a `data:image/...;base64,...` URI or raw base64 for an encoded PNG, JPEG, WebP, or GIF. You can provide width or height to preserve aspect ratio, and `meta` to record provenance. Fanta ingests it as an asset under `assets/images/` on save.
 
-`create_image` does not fetch `http(s)` URLs. The six-tool external MCP surface has no `generate_image` or `generate_media` tool. Obtain image bytes through an appropriate provider or use Fanta’s separate generation UI where available. Some toolbar AI commands merely open a draft in the Agent Panel; they do not produce a result until the user completes and sends the prompt.
+`create_image` does not fetch `http(s)` URLs. Use `import_image` with exactly one of `path` (absolute or project relative), HTTP(S) `url`, or base64 `source` to save an image into the project's Assets panel. It returns an asset ID and saved path but does **not** create a canvas layer. A URL import has a download timeout and image-size limit. Use a separate placement workflow or valid FNX source edit when the design needs that asset on canvas.
+
+`prepare_design_asset` accepts `kind: "image"` or `"svg"`, a prompt, and optional `preferred_model`. It opens the existing generation composer for the user to review; it does not submit a request or spend credits. The external MCP surface has no direct `generate_image` or `generate_media` tool. Some toolbar AI commands also open drafts that require the user to send them.
 
 Inspect imported or placed media on canvas and with `get_screenshot`. See the [known issues](https://github.com/jeanc18rlos/fanta-edit/blob/main/docs/alpha/KNOWN_ISSUES.md) for alpha limitations.

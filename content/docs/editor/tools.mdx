@@ -11,19 +11,26 @@ The toolbar includes selection tools, shapes, frames, drawing tools, text, comme
 
 **Move** selects layers and moves them. Click a layer, Shift or Command click to extend the selection, or drag from empty canvas to draw a marquee. Double-click drills into a container's child; an initial click on a nested layer can select the outer frame first. Selection shows resize and rotation handles. **Scale** is a dedicated tool for scaling selected content. Arrow keys nudge by 1 px; Shift plus an arrow nudges by 10 px. Escape cancels an active interaction.
 
-**Path Selection** targets paths. Rectangle Selection, Ellipse Selection, Lasso, Polygonal Lasso, and Magic Wand provide area selection. **Crop** edits an image's visible area. **Hand** pans the view; hold Space to pan temporarily.
+**Inspect** selects artwork for inspection in Dev mode without editing it. **Path Selection** targets paths. Rectangle Selection, Ellipse Selection, Lasso, Polygonal Lasso, and Magic Wand provide area selection. **Crop** edits an image's visible area. **Hand** pans the view; hold Space to pan temporarily.
 
 Moving layers can snap to the 8 px grid and to other layers' edges or centers. Watch the canvas guides when positioning objects.
 
 ## Create and draw
 
 - **Frame**, **Section**, and **Slice** establish structure or export areas.
-- **Rectangle**, **Ellipse**, **Line**, **Polygon**, and **Star** create geometry.
+- **Rectangle**, **Ellipse**, **Line**, **Arrow**, **Polygon**, and **Star** create geometry.
 - **Pen** builds paths; **Node Edit** adjusts their geometry.
 - **Brush**, **Pencil**, and **Eraser** provide freehand drawing and editing.
 - **Text** creates text layers.
 - **Comment** places a comment in the canvas workflow.
+- **Measurement** and **Annotation** create page-bound developer marks in Dev mode; they do not create ordinary artwork layers.
 
-Text on Path appears as a tool entry, but its handler is currently a stub. Do not rely on it for production text placement.
+## Text on Path
 
-The toolbar catalog is in `crates/fig_viewer/src/tools.rs`. Selection and transform behavior are in `crates/fanta-tools/src/select/dispatch.rs` and `crates/fanta-tools/src/scale.rs`; snapping is in `crates/fanta-canvas/src/snap.rs`.
+1. Select exactly one visible, unlocked vector path.
+2. Choose **Text on Path**. Fanta converts that vector to a TextPath layer and opens inline text editing.
+3. Replace the placeholder text and use text controls to style it.
+
+The conversion keeps the vector path as the text baseline. It needs a finite path with nonzero length. Flatten rounded corners and remove clipping first. The source vector must have either no paint or exactly one normal solid fill or stroke; gradients, image paints, blends, and multiple paints are rejected. The converted layer is editable and renders on the canvas. Its inspector can change the text start, direction, and side of the path. Some ordinary text layout controls do not apply to path text. See [Vectors, icons, and SVG](/docs/concepts/vectors-icons-svg).
+
+The toolbar catalog is in `crates/fig_viewer/src/tools.rs`. Selection and transform behavior are in `crates/fanta-tools/src/select/dispatch.rs` and `crates/fanta-tools/src/scale.rs`; Text on Path conversion is in `crates/fanta-tools/src/text_path.rs`, and snapping is in `crates/fanta-canvas/src/snap.rs`.

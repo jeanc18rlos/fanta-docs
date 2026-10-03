@@ -14,10 +14,16 @@ The **Assets** section of the file inspector lists media stored with the open pr
 
 PNG, JPEG, and WebP become bitmap layers. A supported SVG is parsed into editable vector content. MP4 becomes a video layer. WAV, MP3, and FLAC become audio layers with a decoded duration. On macOS, selected audio and video layers have playback controls in **Motion** or **Prototype** mode.
 
+## Place a file from your computer
+
+On an editable canvas page, press **Command Shift K** to open **Place image or MP4 video**. Choose one PNG, JPEG, WebP, GIF, BMP, TIFF, or MP4 file. Fanta decodes and places it near the center of the visible canvas as a layer, fits oversized media to the viewport, and stores its bytes with the project. MP4 placement requires the macOS video decoder. The file picker also rejects unsupported or corrupt files and reports the reason on the canvas.
+
+Direct placement has separate limits from **Add to project**: images are capped at 32 MiB, 16,384 px per side, and 32 megapixels; MP4 files are capped at 100 MiB. Finish any active edit before placing media, and stay on the same page while the file is prepared. If preparation exceeds 30 seconds, try a smaller file.
+
 ## Storage and limits
 
 Project media bytes are stored under `assets/`; the library's names and kinds are stored in `doc/asset_library.json`. Commit those files with the page source so another copy of the project can resolve the media. See [Document model](/docs/concepts/document-model).
 
 **Add to project** rejects an empty result, a file over 128 MiB, or an unsupported media format. A raster image over 32 megapixels cannot be placed on the canvas. SVG must parse as supported editable vectors; MP4 and audio must decode to usable media. Missing or unsupported assets remain visible in the inspector with the placement action disabled and a reason. Placing also requires a page and a clean, editable source state.
 
-Masks cannot be added to Assets as standalone media. They remain inputs to supported generation workflows.
+Local placement is implemented in `crates/fig_viewer/src/view_media.rs` and `crates/fig_viewer/src/generation_media.rs`. Masks cannot be added to Assets as standalone media. They remain inputs to supported generation workflows.

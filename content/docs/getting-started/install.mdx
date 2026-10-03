@@ -5,22 +5,24 @@ description: Install the non-Store macOS alpha, build from source, and understan
 
 ## Install the non-Store alpha
 
-The documented alpha DMG targets Apple Silicon. macOS 26.6.2 is the only version recorded in the release rehearsal; Intel and other macOS versions are unverified. Download the alpha DMG from your Fanta release channel, open it, and drag Fanta to Applications. The bundle is ad-hoc signed. If macOS blocks first launch, use **System Settings → Privacy & Security → Open Anyway** after attempting to open it. See the [release notes](https://github.com/jeanc18rlos/fanta-edit/blob/main/docs/alpha/RELEASE_NOTES.md).
+The documented alpha DMG targets Apple Silicon. macOS 26.6.2 is the version recorded in its release rehearsal; Intel and other macOS versions have not been verified for that DMG. Download the alpha DMG from Fanta's release channel, open it, and drag Fanta to Applications. The documented bundle is ad-hoc signed. If macOS blocks first launch, try opening it, then use **System Settings → Privacy & Security → Open Anyway**.
 
-The source also contains a separate Mac App Store feature build. A package version or uploaded review build does not establish a public Store release, so check Fanta's official distribution channel for availability before using Store-specific instructions. This guide's DMG and external-agent steps describe a non-Store build.
+The source also contains a separate Mac App Store feature build. Its packaging checks require macOS 12.0 or later, but a package or review build does not establish a public Store release. Check Fanta's official distribution channel for availability. The DMG and external-agent commands in this guide describe a non-Store build.
 
 ## Build from source
 
 Clone the [fanta-edit repository](https://github.com/jeanc18rlos/fanta-edit), install its Rust and macOS build dependencies, and run from the repository root:
 
-```bash
+~~~bash
 cargo run -p zed
-```
+~~~
 
-The Cargo package is `zed`; its binary is `fanta`. Use `cargo build --release -p zed` for a release binary. The repository uses `./script/clippy` for linting.
+The Cargo package is <code>zed</code>; its binary is <code>fanta</code>. Use <code>cargo build --release -p zed</code> for a release binary. The repository uses <code>./script/clippy</code> for linting.
 
 ## Mac App Store build differences
 
-In a build compiled with `mac_app_store`, Fanta does not automatically initialize Git repositories. It cannot launch command-backed MCP servers, external agent processes, terminal tasks, or external formatters from inside the app, and remote project connections are disabled; remote HTTP MCP servers remain available. The in-app live canvas MCP server is a separate setting, and an external client's bridge to a packaged Store build needs validation. File access follows macOS's user-selected Open and Save permissions. See [Settings and build differences](/docs/editor/settings).
+A build compiled with <code>mac_app_store</code> is sandboxed. It does not ship the CLI helper or bundled Git runtime and does not automatically initialize Git repositories. It cannot launch command-backed MCP servers, external agent processes, terminal tasks, or external formatters from inside the app, and remote project connections are disabled. Remote HTTP MCP servers remain available. Purchase, restore, and offer-code actions use Apple's in-app purchase flow in this build; non-Store builds use web checkout.
 
-Next choose **File → New Design…** or **File → Open…** to import a `.fig` file. See [Your First Project](/docs/getting-started/first-project).
+The in-app live canvas MCP server is a separate setting, but an external client's bridge to a packaged Store build still needs validation. File access follows macOS user-selected Open and Save permissions. See [Settings and build differences](/docs/editor/settings).
+
+Next choose **File → New Design…** or **File → Open…** to import a <code>.fig</code> file. See [Your First Project](/docs/getting-started/first-project).

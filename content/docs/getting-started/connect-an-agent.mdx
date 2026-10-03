@@ -1,28 +1,45 @@
 ---
 title: Connect an Agent
-description: Configure Claude Code or Codex for Fanta’s local MCP bridge.
+description: Connect Claude Code or Codex to the open Fanta canvas through local MCP.
 ---
 
-Keep a **non-Store Fanta build** running with a design focused. The app starts a local MCP server over a private Unix socket by default. `fanta --mcp-stdio` bridges a client’s stdio JSON-RPC to the running app. There is no fixed HTTP port. This command is verified for the non-Store build; connecting an external client to a packaged Mac App Store build needs separate validation.
+Keep Fanta running with the intended design open. The app starts a local MCP server by default over a private Unix socket. The <code>fanta --mcp-stdio</code> command bridges an agent's stdio MCP connection to that running app; it does not open a network port. In settings, <code>fanta_live_mcp.enabled</code> can disable the server.
+
+In a non-Store build, choose **Help → Connect Claude Code / Codex…** to copy instructions for the current executable and user data directory. The welcome page also offers **Copy command** for Claude Code and **Copy Codex config**. The copied values matter if you use a development build, multiple profiles, or a custom data directory: the bridge must find the discovery file written by the same running app.
 
 ## Claude Code
 
-```bash
-claude mcp add -s user fanta -- /Applications/Fanta.app/Contents/MacOS/fanta --mcp-stdio
-```
+Run the copied command from the design project directory. Its shape is:
 
-Use your own binary path if you built from source. The non-Store welcome page has a **Copy command** button.
+~~~bash
+claude mcp add --scope project --transport stdio fanta -- '/Applications/Fanta.app/Contents/MacOS/fanta' --mcp-stdio --user-data-dir '/path/to/the/running/Fanta/data-directory'
+~~~
+
+Replace both paths with the values copied from Fanta. The project scope keeps this registration with the project. Restart Claude Code after adding it.
 
 ## Codex
 
-Add to `~/.codex/config.toml`:
+Put the copied TOML snippet in this project's <code>.codex/config.toml</code>, then restart the agent. Its shape is:
 
-```toml
+~~~toml
 [mcp_servers.fanta]
 command = "/Applications/Fanta.app/Contents/MacOS/fanta"
-args = ["--mcp-stdio"]
-```
+args = ["--mcp-stdio", "--user-data-dir", "/path/to/the/running/Fanta/data-directory"]
+~~~
 
-Restart the client. A successful connection shows an **Agent connected** toast in Fanta. The server lists six tools: `get_editor_state`, `get_guidelines`, `batch_get`, `batch_design`, `get_screenshot`, and `read_fnx_source`. Start with guidelines and editor state, then [follow the build loop](/docs/mcp/build-loop).
+Use the exact executable and data directory shown by Fanta. Do not assume the default profile path if you launched the app with <code>--user-data-dir</code> or <code>FANTA_USER_DATA_DIR</code>.
 
-Fanta's in-app **MCP & Tools** settings are a different connection direction: they configure tools the built-in agent calls. A Mac App Store feature build cannot start local command-backed MCP servers from inside Fanta; it can use remote HTTP servers. [Settings and build differences →](/docs/editor/settings)
+## Verify the connection
+
+Check the client's MCP status and call <code>get_editor_state</code>. A successful connection shows an **Agent connected** notice in Fanta. The current local server offers these 13 tools:
+
+| Work | Tools |
+| --- | --- |
+| Inspect the canvas | <code>get_editor_state</code>, <code>get_guidelines</code>, <code>batch_get</code>, <code>get_screenshot</code> |
+| Edit and inspect source | <code>batch_design</code>, <code>read_fnx_source</code>, <code>validate_fnx_source</code> |
+| Reuse and prepare assets | <code>get_design_system</code>, <code>prepare_design_asset</code>, <code>import_image</code> |
+| Review with agents | <code>list_comments</code>, <code>reply_comment</code>, <code>report_agent_activity</code> |
+
+Start with guidelines and editor state, then [follow the design build loop](/docs/mcp/build-loop). An agent can validate a complete FNX candidate before writing it; validation alone does not modify the project. <code>import_image</code> saves an image to project assets but does not place a layer. <code>prepare_design_asset</code> opens a prefilled image or SVG composer for your review and does not submit generation.
+
+Fanta's in-app **MCP & Tools** settings connect the built-in agent to other tool servers. They are a separate direction from this live canvas bridge. The commands above are verified for non-Store builds. Connecting an external client to a packaged Mac App Store build needs separate validation; that build cannot launch command-backed MCP servers from inside Fanta. See [Settings and build differences](/docs/editor/settings).

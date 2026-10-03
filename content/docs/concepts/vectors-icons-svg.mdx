@@ -5,11 +5,17 @@ description: Draw paths, edit nodes, and export vector artwork.
 
 # Vectors, icons, and SVG
 
-Fanta has native vector tools: Pen, Node Edit, basic shapes, line, polygon, star, and path selection. You can refine paths on the canvas and use layer actions such as outline stroke or flatten when appropriate. A selected layer can be copied as SVG from its context menu, and the inspector can export SVG or PDF.
+Fanta has native vector tools: Pen, Node Edit, basic shapes, line, arrow, polygon, star, and path selection. You can refine paths on the canvas and use layer actions such as outline stroke or flatten when appropriate. A selected layer can be copied as SVG from its context menu, and the inspector can export SVG or PDF.
+
+## Text on a path
+
+Select one visible, unlocked vector and choose **Text on Path**. Fanta replaces the vector with a TextPath layer, carries its path into the text layer, and opens inline editing. The path must be finite and nonzero length. Rounded corners and clipped geometry must be flattened or removed first. The vector may have no paint or one normal solid fill or stroke; gradients, image paints, blend modes, and multiple paints are not accepted by the conversion.
+
+TextPath has its own FNX element and owned path data, so it survives a source round trip. See [Tools](/docs/editor/tools) for the canvas workflow.
 
 ## Work with an icon
 
-1. Draw with Pen or start from a basic shape.
+1. Draw with Pen or start from a basic shape or arrow.
 2. Select **Node Edit** to adjust the path.
 3. Set fills and strokes in the inspector.
 4. Copy the layer as SVG or export it from the inspector.
@@ -17,4 +23,4 @@ Fanta has native vector tools: Pen, Node Edit, basic shapes, line, polygon, star
 
 The live design tool surface can create frames, rectangles, ellipses, text, images, and instances and can change their properties. It does not expose a dedicated `create_svg` or `create_icon` operation. SVG media import has a conversion path that can make supported geometry editable, but it rejects features such as embedded images, text, masks, filters, patterns, and some gradients. For complex SVG artwork, verify the imported result.
 
-Tool definitions are in `crates/fig_viewer/src/tools.rs`, SVG conversion in `crates/fig_viewer/src/generation_media.rs`, and export in `crates/fig_viewer/src/export.rs`.
+Tool definitions are in `crates/fig_viewer/src/tools.rs`, Text on Path conversion in `crates/fanta-tools/src/text_path.rs`, SVG conversion in `crates/fig_viewer/src/generation_media.rs`, and export in `crates/fig_viewer/src/export.rs`.

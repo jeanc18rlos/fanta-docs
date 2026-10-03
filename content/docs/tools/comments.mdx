@@ -1,0 +1,10 @@
+---
+title: Comments and review threads
+description: Read canvas feedback and reply in the original thread.
+---
+
+`list_comments` reads canvas comment threads on the active page. Pass `page` to inspect another page or `include_resolved: true` to include closed threads. The result includes each thread's pin position and replies. Read unresolved feedback before revising a reviewed design.
+
+`reply_comment` takes the exact thread `id` from `list_comments`, a `body`, and optional `page`, `author`, and `resolve`. The default author is “Fanta Agent.” Reply with the change or finding; set `resolve: true` only after the requested work is verified on the canvas. Comments are stored with the project page metadata and are separate from visual exports.
+
+The in-app Agent Panel has a related `design_comments` tool. In Plan mode it may read threads but cannot reply or resolve them. See [review and revision](/docs/agents/review-revision).

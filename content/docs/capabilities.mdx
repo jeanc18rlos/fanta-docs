@@ -1,86 +1,99 @@
 ---
 title: How Fanta works and what it can do
-description: A source-grounded capability map for Fanta's current macOS alpha, including canvas, agents, media, Git, exports, and limitations.
+description: A source-grounded map of Fanta's editor, design system, source files, agents, media, motion, handoff, and current limits.
 ---
 
-Fanta is a design editor whose working document is a project folder. You can create a design on the canvas, inspect and edit its `.fnx` source, ask an agent to change the live document, and review the resulting files in Git. This page maps the capabilities in the [current fanta-edit main source](https://github.com/jeanc18rlos/fanta-edit/tree/ebabb405779ef9772b8b2de6f227ad5a9776bdc6) as of September 29, 2026. It describes implemented client paths; a merged change is not necessarily in a downloadable release.
+Fanta is a design editor whose working document is a project folder. You can create a design on the canvas, inspect and edit its `.fnx` source, ask an agent to work on the open design, and review the saved files in Git. This map follows [fanta-edit main at `182b111c`](https://github.com/jeanc18rlos/fanta-edit/tree/182b111c18415c4170abf31a9660ec11231fd2d2) as of October 3, 2026. It describes implemented source paths; a merged change may not yet be in a downloadable build.
 
 ## The core loop
 
 | Step | What happens | Go deeper |
 | --- | --- | --- |
 | Create or import | **New Design** scaffolds a project. Opening a `.fig` attempts to create an editable native project beside the import; the original `.fig` is not the working copy. | [First project](/docs/getting-started/first-project), [Figma import](/docs/formats/figma-import) |
-| Design | Canvas tools and the inspector change the live scene graph. Pages and layers organize the document. | [Editor](/docs/editor), [Inspector](/docs/editor/inspector) |
-| Save as source | Autosave writes page and component `.fnx`, document metadata, variables, and assets to the project folder. | [Project layout](/docs/concepts/document-model), [.fnx](/docs/formats/fnx) |
-| Edit source | The in-app Code workspace can edit clean `.fnx` source; an external editor can too. Fanta validates and reloads valid changes. Editing source temporarily locks canvas edits to prevent conflicting writes. | [Design as source](/docs/concepts/fnx-design-as-source) |
-| Review | In non-Store builds, Fanta initializes a new project when Git is available; **Review Changes** and **Commit…** expose file changes when a repository is present. Store feature builds skip automatic Git setup. | [Version control](/docs/guides/version-control-designs) |
-| Share output | Export the active page or selected layers from the inspector as PNG, JPEG, SVG, or PDF. | [Export](/docs/formats/export) |
+| Design | Canvas tools, the inspector, Variables, and Motion mode change the live document. Pages and layers organize it. | [Editor](/docs/editor), [Inspector](/docs/editor/inspector) |
+| Save as source | Autosave writes page and component `.fnx`, document metadata, variables, motion, and assets to the project folder. **Save As** can create another native project copy. | [Project layout](/docs/concepts/document-model), [.fnx](/docs/formats/fnx) |
+| Edit source | The Code workspace and external file editors can edit `.fnx`. Fanta validates complete source and reloads valid changes. A dirty source buffer temporarily locks canvas edits. | [Design as source](/docs/concepts/fnx-design-as-source) |
+| Review | In non-Store builds, Fanta initializes Git for a new project when available and when it is not already inside a repository. **Review Changes** and **Commit…** expose file changes when a repository is present. Store feature builds skip automatic Git setup. | [Version control](/docs/guides/version-control-designs) |
+| Share output | Export the active page or selected layers from the inspector as PNG, JPEG, SVG, or PDF. Dev mode supports inspection and page-bound handoff marks. | [Export](/docs/formats/export), [Dev mode](/docs/editor/dev-mode) |
 
 ### What is in a project?
 
-A native project has a `fanta.json` manifest, `pages/<slug>/page.fnx`, reusable component source in `components/<slug>/master.fnx`, document state under `doc/`, and an `assets/` tree. `doc/asset_library.json` records named project media, including results not yet placed on a page. New projects also seed `AGENTS.md` and FNX helper files. `exports/` and previews are output paths, not the source of truth. [Project structure and source rules →](/docs/concepts/document-model)
+A native project has a `fanta.json` manifest, `pages/<slug>/page.fnx`, reusable component source in `components/<slug>/master.fnx`, document state under `doc/`, and an `assets/` tree. `doc/asset_library.json` records named media even before placement; `doc/motion.json` holds authored motion data. New projects seed `AGENTS.md`, a project-local `fanta.md` design specification, and FNX helper files without replacing a customized specification. `exports/` and previews are output paths, not the source of truth. [Project structure and source rules →](/docs/concepts/document-model)
 
 ## Edit by hand
 
 ### Canvas and organization
 
-- Select, marquee, pan, zoom, resize, rotate, nudge, duplicate, group, frame, and ungroup layers. Snapping uses grid and neighboring edges/centers. [Canvas tools →](/docs/editor/tools)
+- Select, marquee, pan, zoom, resize, rotate, nudge, duplicate, group, frame, and ungroup layers. Snapping uses the grid and neighboring edges or centers. Scale selected content proportionally. [Canvas tools →](/docs/editor/tools)
 - Create and manage pages. The layers panel supports selection, renaming, nesting, order changes, visibility, and locking. [Pages and layers →](/docs/concepts/pages-world-space)
-- Draw frames and sections, basic shapes, text, paths, and freehand marks. Some toolbar entries are present but still report that they are unavailable. [Tool status →](/docs/editor/tools)
-- Paste bitmap images onto the canvas. Copy/paste of design layers currently stays within one document. [Media and import →](/docs/formats)
+- Draw frames and sections, shapes, arrows, text, vector paths, and freehand marks. Edit path geometry, and convert a suitable single vector path into **Text on Path**. Some controls still report that they are unavailable. [Canvas tools →](/docs/editor/tools), [Vectors and text paths →](/docs/concepts/vectors-icons-svg)
+- Paste bitmap images, or place local images and MP4 files through the editor. Canvas copy and paste of design layers stays within one document. [Media and import →](/docs/formats)
 - Open **Assets** in the file inspector to reuse stored images, SVG, MP4, or audio across pages. Generated results can be added to the project before placement. [Project Assets →](/docs/editor/assets)
 
 ### Inspect and style
 
 The inspector includes position, size, rotation, corner properties, opacity, blend, fills, strokes, typography, effects, layout, component controls, interactions, and export settings. The exact controls depend on what is selected. [Inspector →](/docs/editor/inspector)
 
-Frames support auto-layout and child sizing/alignment. Components and instances let you reuse a design, while variables store values in project metadata for repeat use. Grid auto-layout and some effect kinds remain incomplete. [Auto-layout →](/docs/concepts/auto-layout) · [Components →](/docs/concepts/components) · [Variables →](/docs/concepts/variables)
+Frames support horizontal and vertical auto-layout, child sizing, alignment, wrapping, and size constraints. Components and instances support reusable masters, variant sets, properties, and instance values. Variable collections support modes, aliases, typed values, and property bindings. These design-system structures are also available through the live agent operation surface. Grid auto-layout and some effect kinds remain incomplete. [Auto-layout →](/docs/concepts/auto-layout) · [Components →](/docs/concepts/components) · [Variables →](/docs/concepts/variables)
 
-### Prototype and discuss
+### Prototype, animate, and discuss
 
-Fanta has prototype interactions and preview surfaces, plus a local comments workflow with pins, replies, mentions, attachments, and resolution. Comments are saved with project page metadata; they are not live multiplayer comments. [Prototyping →](/docs/concepts/prototyping) · [Editor surfaces →](/docs/editor/surfaces)
+Fanta has prototype interactions and preview surfaces. Motion mode supports clips, tracks, keyframes, playback, and guarded auto-keyframe editing; time comments can anchor feedback to a point in an animation. [Prototyping →](/docs/concepts/prototyping) · [Motion →](/docs/editor/motion)
+
+Canvas comments support pins, replies, mentions, attachments, and resolution. Comments and page-bound measurements or developer annotations are saved with project metadata. They are project-local, not live multiplayer comments. [Comments and surfaces →](/docs/editor/surfaces) · [Dev mode →](/docs/editor/dev-mode)
+
+### Dev inspection
+
+Dev mode switches to a read-only inspection session for art and Code source. It offers layer inspection, measurements, annotations, and Saved Code for handoff. Measurements and annotations remain editable page marks. The **Readiness** control is currently unavailable. [Dev mode →](/docs/editor/dev-mode)
 
 ## Work with agents
 
-**External agents.** With a design open, the app runs a local MCP server. The `fanta --mcp-stdio` bridge connects Claude Code or Codex to the focused design. It exposes **six** tools:
+**External agents.** Fanta's local MCP server is enabled by default and can be turned off in Settings. With a design open and the server running, the `fanta --mcp-stdio` bridge connects clients such as Claude Code and Codex to the focused design. The committed server registers **13 tools**:
 
 | Tool | Purpose |
 | --- | --- |
 | `get_editor_state` | Active page, selection, bounds, and placement hints. |
-| `get_guidelines` | Fanta's current design guidance. |
+| `get_guidelines` | Design guidance and the project's `fanta.md` context. |
+| `get_design_system` | Component properties, variants, variable collections, modes, values, and bindings. |
+| `prepare_design_asset` | Open an image or SVG generation draft for user review; it does not submit generation. |
 | `batch_get` | Read nodes and geometry; page large results with `offset` and `limit`. |
-| `batch_design` | Apply creation, styling, layout, grouping, component, and selection operations as one undoable batch. |
-| `get_screenshot` | Inspect the rendered design. |
+| `batch_design` | Apply ordered creation, layout, styling, variable, and component operations as one undoable batch. |
+| `get_screenshot` | Inspect a rendered page or node, optionally at a Motion clip playhead. |
 | `read_fnx_source` | Read a bounded slice of a project's source. |
+| `validate_fnx_source` | Validate a complete FNX candidate without writing it. |
+| `import_image` | Store an image from a path, HTTP(S) URL, or encoded source in Project Assets. |
+| `list_comments` | Read comment threads on a page. |
+| `reply_comment` | Reply to a thread and optionally resolve it. |
+| `report_agent_activity` | Show a named agent's current action and focus as a local canvas cursor. |
 
-[Connection guide →](/docs/getting-started/connect-an-agent) · [Tool reference →](/docs/tools)
+The connection command copied by the running app includes its executable and instance data directory. Cursor reports show presence in that app session; they are not cross-agent locks or networked collaboration. [Connection guide →](/docs/getting-started/connect-an-agent) · [Tool reference →](/docs/tools)
 
-**In-app agent.** The docked agent panel can inspect and edit the canvas through its native design tools. The managed provider reads available chat models and credit estimates from a signed-in catalog; other provider settings can be configured. Its `evaluate_with_jev` tool requests typed decisions from the hosted service when signed in. The generation workspace can hand a draft design request to the agent panel for review before sending. [Agents and AI →](/docs/agents)
+**In-app agent.** The docked Agent Panel can inspect and edit the canvas through native design tools. It has review and planning modes, design comments, project image import, and activity reporting paths. The managed provider reads chat models and credit estimates from a signed-in catalog; other providers can be configured. Its `evaluate_with_jev` tool requests typed decisions from the hosted service when signed in. The generation workspace can hand a draft design request to the panel for review before sending. [Agents and AI →](/docs/agents)
 
 **Generation workspace.** Signed-in users can search the live catalog for image, video, audio, and vector workflows. Recipes and controls depend on the selected model, including video frames, duration, resolution, and audio options where supported. Results can be previewed, saved, reused as source, or added to Project Assets. Placed images become bitmap layers; supported SVG becomes editable vectors; MP4 becomes video; WAV, MP3, and FLAC become audio layers. Credits and sign-in are required for managed generation. [Media generation →](/docs/agents/media-generation)
 
-**Settings.** The Settings window manages appearance, canvas panels, source editing, model providers, hosted tools, MCP connections, account views, billing, and privacy controls. A Mac App Store feature build blocks Fanta from launching local agent, MCP, and terminal processes; remote HTTP MCP connections remain available. [Settings and build differences →](/docs/editor/settings)
+**Settings and account.** Settings manages appearance, canvas panels, source editing, model providers, hosted tools, MCP connections, account, billing, and privacy controls. An account center and eligible App Store trial views exist in source; availability depends on the build and connected service. A Mac App Store feature build blocks Fanta from launching local agent, MCP, and terminal processes; remote HTTP MCP connections remain available. [Settings and build differences →](/docs/editor/settings)
 
 ## Formats and output
 
 | Format or output | Current behavior |
 | --- | --- |
-| Native project folder | Editable, source-backed, and suitable for Git. [Details →](/docs/formats) |
-| `.fnx` | JSX-like page/component source used by the native project. [Syntax and limits →](/docs/formats/fnx) |
+| Native project folder | Editable, source-backed, and suitable for Git; Save As creates another copy. [Details →](/docs/formats) |
+| `.fnx` | JSX-like page/component source. Complete candidates can be validated before writing. [Syntax and limits →](/docs/formats/fnx) |
 | `.fig` | Opens through an importer and attempts a native sibling project; import fidelity and write access vary. [Details →](/docs/formats/figma-import) |
-| Bitmap images | PNG, JPEG, WebP, GIF, BMP, and TIFF paste paths are present; image assets are stored in the project. [Details →](/docs/formats) |
+| Images and local MP4 | Supported image files can be pasted or placed; MP4 can be placed as video and trimmed without changing the source file. [Details →](/docs/editor/assets) |
 | `.fant` | A snapshot/container format supported by the format layer; the live editable project is the folder. [Details →](/docs/formats/fant) |
-| PNG, JPEG, SVG, PDF | Inspector export for a selection or page, including raster scale or custom dimensions. [Details →](/docs/formats/export) |
+| PNG, JPEG, SVG, PDF | Inspector export for a selection or page, with scale, dimensions, and presets where supported. [Details →](/docs/formats/export) |
 
 ## Current limits
 
 - The supported alpha release is **Apple Silicon macOS**. Other platforms have build scaffolding, but are not supported releases. [Install notes →](/docs/getting-started/install)
-- Some visible tools, inspector actions, effects, and layout modes are incomplete. Fanta reports unavailable actions when possible. [Editor status →](/docs/editor/tools)
+- Some visible tools, inspector actions, effects, and layout modes are incomplete. Fanta reports unavailable actions where possible. Grid auto-layout and Dev **Readiness** are examples. [Editor status →](/docs/editor/tools)
 - Large `.fig` imports can be slow and memory intensive. Source reads and node reads have response limits, so agents should page through large documents. [Troubleshooting →](/docs/mcp/troubleshooting)
-- In non-Store builds, Git initialization needs a working `git` on the machine. A design still saves if `git init` fails. Automatic initialization is disabled in the Mac App Store feature build. [Version control →](/docs/guides/version-control-designs)
-- A generated result over 128 MiB cannot be added to Project Assets, and a raster image over 32 megapixels cannot be placed. Audio requires a decodable duration; the direct **Add to design** audio action is not the working placement route. [Project Assets →](/docs/editor/assets)
-- The source synchronization path has conflict handling, but save and external-edit races have known alpha limitations. Keep a Git history for important projects. [Source editing →](/docs/concepts/fnx-design-as-source)
-- Canvas comments are project-local; real-time multi-user editing is not a current Fanta capability.
-- The current local MCP surface is the six tools above. Older references to a `:3846` HTTP server, 127 design tools, `cargo run -p fanta-app`, or `save_document` describe a different implementation and do not apply to this build.
+- In non-Store builds, Fanta prefers its bundled Git and falls back to a system `git` for automatic initialization outside existing repositories. A design still saves if `git init` fails. Automatic initialization is disabled in the Mac App Store feature build. [Version control →](/docs/guides/version-control-designs)
+- A generated result over 128 MiB cannot be added to Project Assets. Placing a bitmap is also limited to 32 MiB, 32 megapixels, and 16,384 px per side; the local MP4 picker has a 100 MiB cap. Audio needs a decodable duration and is placed through **Add to project → Assets → Place**, not the direct **Add to design** action. [Project Assets →](/docs/editor/assets)
+- Source synchronization has conflict handling and save recovery, but external-edit races still warrant review. Keep Git history for important projects. [Source editing →](/docs/concepts/fnx-design-as-source)
+- Canvas comments and agent cursor presence are local to the open app and project. Real-time multi-user editing and cross-agent locks are not part of the current implementation.
+- The current external MCP surface is the 13 registered tools above. Older references to a `:3846` HTTP server, 127 design tools, `cargo run -p fanta-app`, or `save_document` describe a different implementation.
 
-The [alpha issue log in fanta-edit](https://github.com/jeanc18rlos/fanta-edit/blob/ebabb405779ef9772b8b2de6f227ad5a9776bdc6/docs/alpha/KNOWN_ISSUES.md) records deeper implementation and verification caveats. Some entries predate the latest generation and source editing work, so this documentation follows current source when they disagree.
+The [alpha issue log in fanta-edit](https://github.com/jeanc18rlos/fanta-edit/blob/182b111c18415c4170abf31a9660ec11231fd2d2/docs/alpha/KNOWN_ISSUES.md) records earlier implementation and release observations. Several entries predate the committed features described here; use the pinned source and these current pages for their latest behavior.
