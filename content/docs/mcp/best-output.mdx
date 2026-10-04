@@ -5,11 +5,11 @@ description: Practical rules for reliable agent changes.
 
 - Read `get_guidelines` and `get_editor_state` before editing. Work on the focused design and ask for empty space when adding a top-level composition. Read `get_design_system` before making tokens or components and `list_comments` before revising reviewed work.
 - Read a shallow tree first, then exact IDs. Page wide documents with `offset` and `limit`; results over 256 KiB are refused.
-- Batch related operations with a useful label. Each `batch_design` call is one undo step; use returned created IDs in later batches.
+- Batch operations for one visible component or screen section with a useful label. The canvas previews each operation before the call commits as one undo step; a failed operation rolls the batch back. Use returned created IDs in later batches.
 - Use frames for clipping and auto-layout, groups for organization. Set container sizing and child participation explicitly where needed. Horizontal and vertical auto-layout work; grid is not active in this alpha.
 - Screenshot the changed node or page, inspect it visually, and review the autosaved `.fnx` diff.
-- Edit `.fnx` directly for supported source changes outside the MCP operation vocabulary. Read all relevant source first, validate the complete candidate with `validate_fnx_source`, and let it reload before touching the same nodes on canvas.
+- Edit `.fnx` or managed project JSON directly for supported source changes outside the MCP operation vocabulary. Read all relevant source first, preserve node and component identities, validate the complete candidate with `validate_fnx_source`, and let it reload before touching the same nodes on canvas.
 - Import generated image files or URLs with `import_image`, then place the saved asset using an appropriate editor or source workflow. `prepare_design_asset` only opens a generation draft for user review.
-- Use `report_agent_activity` when several agents share the canvas; clear the activity with `active: false` when finished. Reply to comments in their threads and resolve only verified requests.
+- Use `report_agent_activity` for visible milestones, including the actual page, node, coordinates, source path, and workspace. Reuse the same agent ID and name in `batch_design.activity`; clear the activity with `active: false` when finished. Reply to comments in their threads and resolve only verified requests.
 
 See the [tool reference](/docs/tools) and [alpha known issues](https://github.com/jeanc18rlos/fanta-edit/blob/main/docs/alpha/KNOWN_ISSUES.md).

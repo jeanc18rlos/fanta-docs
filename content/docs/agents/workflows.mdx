@@ -1,9 +1,9 @@
 ---
 title: Agent workflows
-description: Connect an external agent to Fanta's local MCP server and make controlled canvas edits.
+description: Connect an external agent to Fanta's local MCP server and make visible, validated design changes.
 ---
 
-In a non-Store build, Fanta exposes a local MCP server from the running desktop app. Its stdio bridge is the Fanta executable with the <code>--mcp-stdio</code> argument. The bridge forwards MCP requests to the app's local Unix socket. Keep Fanta open with a design document loaded while using the tools. This is a local desktop connection, not a public TCP endpoint. A packaged Mac App Store bridge has not been verified.
+In a non-Store build, Fanta exposes a local MCP server from the running desktop app. Its stdio bridge is the Fanta executable with <code>--mcp-stdio</code>. The bridge forwards MCP requests to the app's private Unix socket. Keep Fanta open with a design document loaded. This is a local desktop connection, not a public TCP endpoint. A packaged Mac App Store bridge has not been verified.
 
 ## Connect
 
@@ -11,36 +11,36 @@ Choose **Help → Connect Claude Code / Codex…** in a non-Store Fanta build. I
 
 <pre>fanta --mcp-stdio --user-data-dir &lt;copied Fanta data directory&gt;</pre>
 
-The exact executable path depends on where the app is installed. Put the copied Codex snippet in the project's <code>.codex/config.toml</code>, or run the copied Claude Code command from the project directory. Fanta's local MCP server is enabled in the default settings. If the client cannot connect, check that the installed app is running and a project or imported <code>.fig</code> document is open. See [connection steps](/docs/mcp/connect).
+Put the copied Codex snippet in the project's <code>.codex/config.toml</code>, or run the copied Claude Code command from the project directory. Fanta's local MCP server is enabled in the default settings. If the client cannot connect, check that the installed app is running and a project or imported <code>.fig</code> document is open. See [connection steps](/docs/mcp/connect).
 
 ## Available tools
 
 | Tool | Purpose |
 | --- | --- |
-| <code>get_editor_state</code> | Project, pages, active page, components, selection, viewport, editability, and optional free space for a requested size |
+| <code>get_editor_state</code> | Project, pages, active page, components, selection, viewport, editability, and optional free space |
 | <code>get_design_system</code> | Collections, modes, typed variables, bindings, component properties, and variant sets |
 | <code>prepare_design_asset</code> | Open an image or SVG generation draft for user review; does not submit it |
-| <code>get_guidelines</code> | Current design rules, coordinate conventions, and recommended working method |
+| <code>get_guidelines</code> | Design rules, coordinate conventions, and recommended working method |
 | <code>batch_get</code> | List a page tree or inspect exact node IDs, with depth and pagination controls |
-| <code>batch_design</code> | Apply an ordered set of design operations as one undoable transaction |
+| <code>batch_design</code> | Stream ordered design operations as one undoable batch |
 | <code>get_screenshot</code> | Render a PNG of a page, node, or motion-clip sample |
 | <code>read_fnx_source</code> | List or read project FNX files in slices |
-| <code>validate_fnx_source</code> | Check a complete FNX or managed JSON source candidate without writing |
+| <code>validate_fnx_source</code> | Check a complete FNX or managed JSON candidate without writing |
 | <code>import_image</code> | Save a file, HTTP(S) URL, or base64 image in project Assets without placing a layer |
 | <code>list_comments</code> | Read page review threads, unresolved by default |
 | <code>reply_comment</code> | Reply to a thread and optionally resolve it |
-| <code>report_agent_activity</code> | Show the agent's action and canvas or source-file focus |
+| <code>report_agent_activity</code> | Show the agent's action and canvas, variable, or source-file focus |
 
-The canvas uses world coordinates in pixels, with the origin at the upper left and Y increasing downward. Node IDs must come from the current editor state or a node read. Page listings default to a limited depth and support <code>offset</code> and <code>limit</code>; narrow very large reads rather than trying to fetch an entire imported page at once.
+The canvas uses world coordinates in pixels, with the origin at the upper left and Y increasing downward. Node IDs must come from current editor state or a node read. Page listings use depth and pagination controls; narrow very large reads instead of fetching an entire imported page at once.
 
-## What an edit can do
+## Build in visible milestones
 
-Structured operations cover creating frames, rectangles, ellipses, text, and bitmap images; placing component instances; changing names, geometry, fills, opacity, visibility, locks, text and typography; strokes, shadows, container and child auto layout; z-order, rotation, alignment, and distribution; grouping and framing; duplication, components, variants, exposed instance properties, variable collections, modes, aliases, and bindings; reparenting, deletion, selection, and viewport changes.
+Read the state, guidelines, relevant nodes, design system, open comments, and a baseline screenshot. Build one component or screen section at a time. Give each <code>batch_design</code> call a descriptive label and a small group of related operations. Fanta paints the operations one by one while the batch runs, then commits them as one undo step. If an operation fails or the batch is canceled, the preview rolls back. The response identifies the failing operation and returns created IDs on success.
 
-Send related operations together with a clear label. If any operation fails, none of the batch is applied. The response identifies the failed operation. A batch is undoable from Fanta's editor.
+To make the work followable, call <code>report_agent_activity</code> with a stable <code>agent_id</code> and <code>agent_name</code>, the current action, and the page, node, or world position. Pass that same identity in <code>batch_design.activity</code> so each streamed step stays attributed to the agent. When moving to a source file, include its project-contained <code>source_path</code> and <code>workspace</code> (<code>canvas</code>, <code>variables</code>, or <code>code</code>). A user who chooses **Follow** can track the reported page, component tab, file, and workspace. Clear activity with <code>active: false</code> when finished. These presence indicators report focus; they are not edit locks between agents.
 
-Gradient fills and rich-text runs are outside the structured operation surface. Use <code>read_fnx_source</code> to locate the complete source, <code>validate_fnx_source</code> to check a candidate before writing, and inspect the refreshed canvas. See [FNX source](/docs/formats/fnx).
+Structured operations cover shapes, frames, text, images, components, variables and modes, bindings, layout, order, selection, and viewport changes. Gradients and rich-text runs remain outside parts of the structured vocabulary. For those, inspect the full FNX source, validate a complete candidate, save with file tools, and verify the reloaded canvas. Managed JSON also needs full typed validation before writing. See [FNX source](/docs/formats/fnx).
 
 ## Verify visually
 
-After editing, use <code>get_screenshot</code> and compare the result with the brief or reference. It renders the active page by default; pass a page index or node ID to narrow the view. The default maximum output dimension is 768 pixels, capped at 1568. An existing <code>motion_clip</code> ID plus <code>playhead_ms</code> samples animation. A screenshot is a read tool, not a file export. For deliverables, use the [export controls](/docs/formats/export).
+After each milestone, use <code>get_screenshot</code> and compare the result with the brief or reference. It renders the active page by default; pass a page index or node ID to narrow the view. The default maximum output dimension is 768 pixels, capped at 1568. An existing <code>motion_clip</code> ID plus <code>playhead_ms</code> samples animation. A screenshot is a read tool, not a file export. For deliverables, use the [export controls](/docs/formats/export).

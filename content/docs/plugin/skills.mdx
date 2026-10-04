@@ -7,8 +7,8 @@ The plugin ships three Markdown skills. They guide Claude Code; the Fanta app co
 
 | Skill | Helps with |
 | --- | --- |
-| `fanta-design` | Inspect the canvas and design system, make changes with `batch_design`, and check the result. |
-| `fanta-verify` | Check structure and screenshots, validate `.fnx`, review comments, and inspect Git changes. |
+| `fanta-design` | Inspect the canvas and design system, stream small `batch_design` edits with agent activity, and check each result. |
+| `fanta-verify` | Check structure and screenshots, validate FNX or managed JSON, review comments, and inspect Git changes. |
 | `fanta-components` | Create components, variants, properties, variables, and linked instances through `batch_design`. |
 
 The source is under [`plugin/skills`](https://github.com/jeanc18rlos/fanta-docs/tree/main/plugin/skills). See the [tool reference](/docs/tools) for the actual server contract. The plugin adds guidance and configuration, not new Fanta tools.

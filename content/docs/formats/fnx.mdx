@@ -7,21 +7,25 @@ FNX is Fanta's text source for a page or component master. A project stores a pa
 
 ## Edit safely
 
-FNX is a restricted, static JSX-like grammar, not arbitrary executable React or JavaScript. Preserve an existing element's <code>id</code> when changing that node. Give a copied or newly created node a new ID. Keep its companion <code>.ids.json</code> sidecar with the project; it records identity and ordering information.
+FNX is a restricted, static JSX-like grammar, not arbitrary executable React or JavaScript. Preserve an existing element's explicit <code>id</code> when changing that node. Give a copied or newly created node a new ID. Keep its companion <code>page.ids.json</code> or <code>master.ids.json</code> sidecar with the project; it records identity and sibling order.
 
-The Code workspace can edit FNX while the canvas is clean. Fanta locks canvas edits while the source buffer is dirty; saving validates the project, writes the source and sidecar, and reloads the canvas. You can also use an external editor or an agent's file tools. The local MCP <code>read_fnx_source</code> tool reads bounded source slices. <code>validate_fnx_source</code> checks a complete candidate or saved FNX file and returns diagnostics without writing it. It can also validate a managed design-system JSON candidate.
+Modern FNX with explicit valid IDs on every element can recover from a missing or damaged sidecar. Fanta reconstructs the sidecar from the source and repairs it on a successful save. Older source without explicit IDs still requires the sidecar. Do not remove sidecars as part of a normal edit.
 
-Canvas edits patch affected source while preserving unrelated comments and whitespace where possible. Invalid syntax, misspelled attribute names, or unresolved references leave the previous valid canvas visible and show a diagnostic. Fix the source and inspect the rendered result. Fanta can detect overlapping canvas and external edits and surface a conflict.
+The Code workspace offers **FNX** and its companion **JSON** header for the active page or component master. Both are editable while the canvas is clean. Fanta locks canvas edits while either source buffer is dirty; saving validates the complete project, writes the source, and reloads the canvas. A conflict or simultaneous canvas edit blocks the source save until resolved. You can also use an external editor or an agent's file tools.
+
+The local MCP <code>read_fnx_source</code> tool reads bounded source slices. <code>validate_fnx_source</code> checks a complete FNX or managed JSON candidate and returns diagnostics without writing. For an existing project file, validation materializes the full candidate project, including typed values and references. A new managed file is checked against its source schema until its companion exists.
+
+Canvas edits patch affected source while preserving unrelated comments and whitespace where possible. Invalid syntax or unresolved references leave the previous valid canvas visible and show a diagnostic. Unknown attributes can produce nonfatal warnings; inspect the rendered result. Fanta can also detect overlapping canvas and external edits and surface a conflict.
 
 ## Readable references in layout version 4
 
 In a version 4 project, an instance may refer to a component by name, such as <code>component="Button"</code>. A bare component ID also works and is required when two components share the same name; Fanta prints IDs for ambiguous names. Variable bindings may use collection and variable paths such as <code>$Theme/bg</code>, including in a bindings map. The variables themselves live in <code>doc/variables.json</code>. Colors print through <code>fnxColor("#RRGGBB")</code>, or eight-digit hex for opacity.
 
-A version 3 project remains readable in the current app and upgrades on its next save. Earlier app builds reject a version 4 manifest, so keep collaborators on a current version before sharing an upgraded project. Project-local <code>AGENTS.md</code> gives a more detailed syntax guide, and <code>fnx.d.ts</code> supplies editor declarations.
+A version 3 project remains readable in the current app and upgrades on its next save. Earlier app builds reject a version 4 manifest, so keep collaborators on a current version before sharing an upgraded project. Project-local <code>AGENTS.md</code> gives a detailed syntax guide, and <code>fnx.d.ts</code> supplies editor declarations.
 
 ## When to use it
 
-Structured agent operations cover common shapes, layout, text, images, components, variable collections, modes, values, and bindings. FNX remains useful for source review in Git and for detailed properties such as gradients and rich-text runs. Keep referenced binary media in <code>assets/</code>; FNX refers to an asset by ID rather than embedding raw bytes.
+Structured agent operations cover common shapes, layout, text, images, components, variable collections, modes, values, and bindings. FNX remains useful for source review in Git and detailed properties such as gradients and rich-text runs. Keep referenced binary media in <code>assets/</code>; FNX refers to an asset by ID rather than embedding raw bytes.
 
 <Callout type="info">
 An isolated FNX file is not the full project: it depends on the manifest, sidecars, shared document data, and referenced assets.

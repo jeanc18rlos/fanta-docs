@@ -13,17 +13,19 @@ The connection instructions below are for a non-Store build. Fanta's Settings ca
 | `get_design_system` | Inspect components, variants, variable collections, modes, values, and selected-node bindings. |
 | `prepare_design_asset` | Open a draft image or SVG generation request for the user to review and submit. |
 | `batch_get` | Read exact nodes or a paged page tree. |
-| `batch_design` | Apply typed operations as one undoable transaction. |
+| `batch_design` | Preview typed operations one by one, then commit or roll back one undoable transaction. |
 | `get_screenshot` | Render a page, node, or motion-clip sample as PNG. |
 | `read_fnx_source` | List or read source files in the open project. |
-| `validate_fnx_source` | Check a complete FNX or managed design-system JSON candidate without writing it. |
+| `validate_fnx_source` | Check a complete FNX or managed project JSON candidate without writing it. |
 | `get_guidelines` | Read design, source-editing, and project-specification guidance. |
 | `import_image` | Save an image from a file, URL, or base64 source into project Assets. |
 | `list_comments` | Read canvas comment threads on a page. |
 | `reply_comment` | Reply to a thread and optionally resolve it after verification. |
-| `report_agent_activity` | Show an agent's current canvas or source-file activity. |
+| `report_agent_activity` | Show an agent's canvas, variables, or code activity for Follow. |
 
 The built-in Agent Panel uses the same `design_surface::DesignOp` vocabulary through its own tools. External MCP clients see these thirteen tools, rather than a tool for every design operation. Read the [tool reference](/docs/tools) for the operation list.
+
+In a `batch_design` call, operations appear on the canvas progressively while the call runs. The batch remains one undo step; if an operation fails, the preview rolls back. Keep batches to one visible component or screen section so the user can follow each milestone.
 
 <Cards>
   <Card title="Connect" href="/docs/mcp/connect" />

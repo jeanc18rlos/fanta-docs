@@ -19,6 +19,8 @@ Fanta's Settings window groups everyday preferences and account controls. The av
 
 The **MCP & Tools** page separates Fanta's hosted tools, the live canvas server used by external clients, extension tools, and MCP servers that the in-app agent can call. For the last group, Fanta can save a server globally or for a workspace, add or edit it, enable or disable it, authenticate, retry, remove it, and show connection status. Supported connection types include a local command and a remote HTTP endpoint. [Connect an external agent to Fanta's canvas →](/docs/mcp/connect)
 
+The committed defaults differ by release channel. Preview and Dev point account, model, and hosted MCP requests to Fanta's v2 service and enable a separate remote **fanta-design** MCP connection. Stable keeps the original service endpoint and leaves that connection disabled. Available remote tools and models depend on the connected service; check the active build and account when one is missing.
+
 The Mac App Store feature build cannot launch local command-backed MCP servers, external agent processes, terminal commands, or external formatters from inside Fanta. Remote project connections are also disabled. Its MCP settings direct you to remote HTTP servers instead. This restriction does not remove the live canvas server toggle or prove that an external client cannot connect to the Store build; that inbound path needs build-specific verification. Non-Store builds retain the local command option.
 
 ## Account and privacy

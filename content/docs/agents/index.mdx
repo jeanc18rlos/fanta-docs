@@ -12,7 +12,7 @@ Fanta combines an editable design canvas with an in-app agent, a local MCP conne
 | [Agent Panel](/docs/agents/in-app-ai) | Ask for design changes and inspect the result in the editor | In Fanta |
 | [Local MCP](/docs/agents/workflows) | Let an external agent inspect and edit the open canvas | Through the running desktop app |
 | [Generation Workspaces](/docs/agents/media-generation) | Generate images, video, audio, vectors, and masks | Hosted models, with results reviewed in Fanta |
-| [FNX source](/docs/formats/fnx) | Edit properties beyond the structured design operations and review a source diff | In project files |
+| [FNX and managed JSON source](/docs/formats/fnx) | Edit detailed design properties and review source diffs | In project files |
 
 The local MCP server exposes thirteen tools for canvas state and edits, design-system inspection, source validation, image import, comments, activity, and screenshots. The in-app agent has related design-state, edit, screenshot, design-system, comment, and generation-placement tools. Their names and permissions differ; see the [external tool reference](/docs/tools) and [Agent Panel](/docs/agents/in-app-ai).
 
@@ -23,11 +23,11 @@ The documented external-agent bridge and in-app local agent process workflows ap
 1. Open a Fanta project or an imported Figma document in the desktop app.
 2. Read the editor state and Fanta's design guidelines.
 3. Inspect relevant node IDs, existing variables and components, open comments, and a screenshot.
-4. Apply a small, labeled batch of edits.
+4. Apply one small, labeled batch for a visible component or screen section. Its operations paint in sequence and commit as one undo step.
 5. Capture another screenshot and inspect the result.
 6. Revise as needed, address review comments, then save or export for handoff.
 
-A <code>batch_design</code> call is one undoable transaction. If an operation fails, the batch rolls back. The edit response includes IDs for created nodes. Use exact IDs from the current document, not layer names. The operation vocabulary includes variables, variants, and instance properties. For changes outside that vocabulary, read the full FNX source and validate a complete candidate before writing it.
+A <code>batch_design</code> call streams a visible preview and finishes as one undoable transaction. If an operation fails or the call is canceled, the preview rolls back. The edit response includes IDs for created nodes. Use exact IDs from the current document, not layer names. The operation vocabulary includes variables, variants, and instance properties. For changes outside that vocabulary, read the full FNX or managed JSON source and validate a complete candidate before writing it. Report a stable agent identity and focus to let the user follow work across pages and source tabs.
 
 <Callout type="info">
 The local MCP connection works against the design open in the running desktop app. Hosted generation requires sign-in and may require credits; available models and prices come from Fanta's live catalog.

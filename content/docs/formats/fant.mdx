@@ -25,7 +25,7 @@ Readable slugs are paths; IDs identify pages and nodes. Keep IDs stable when edi
 
 Current projects use **layout version 4**. Their FNX can print readable component names and variable paths. Older version 3 projects can open in the current app and upgrade on save. An older build that supports only version 3 rejects a version 4 manifest; use a current app for an upgraded project. See [FNX source](/docs/formats/fnx) for the reference syntax.
 
-Fanta saves canvas changes back to project files. It watches for external edits and branch changes, uses atomic file replacement and a transaction journal for multi-file updates, and reports invalid source or overlapping edits. The Code workspace can edit FNX when the canvas is clean; an external editor can change it too.
+Fanta saves canvas changes back to project files. It watches for external edits and branch changes, uses atomic file replacement and a transaction journal for multi-file updates, and reports invalid source or overlapping edits. The Code workspace edits the active page or component FNX and its companion JSON header when the canvas is clean. Both source types are validated against the complete project before a save updates the canvas. An external editor can change other managed JSON too. Modern FNX with explicit IDs can recover a missing or damaged identity sidecar; older FNX without explicit IDs still needs it.
 
 ## Save As
 

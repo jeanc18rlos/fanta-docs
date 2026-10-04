@@ -14,7 +14,7 @@ For an empty page, <code>get_editor_state</code> can look for space for a reques
 ## Build and compare
 
 1. Define a frame at the target size and lay out the major regions.
-2. Add text, shape, image, and component layers with ordered design operations.
+2. Add text, shape, image, and component layers in small, visible batches. Finish one component or screen section before starting the next.
 3. Use auto layout where content needs to flow with changes.
 4. Capture a screenshot of the page or target node.
 5. Compare hierarchy, spacing, type, color, and crop with the reference; adjust the mismatches.
@@ -23,6 +23,6 @@ The structured edit surface supports solid colors, typography, strokes, shadows,
 
 ## Keep the result editable
 
-Use native frames, text, and shapes for the layout. Place bitmap images where the reference contains photography or raster detail. Hosted image and vector generation can supply new assets. <code>prepare_design_asset</code> opens a user-reviewed image or SVG prompt without submitting it; <code>import_image</code> saves a returned raster file or URL to project Assets without placing a layer. Generated SVG can become editable vector layers when added to the design. Verify the result in Fanta before exporting.
+Use native frames, text, and shapes for the layout. Place bitmap images where the reference contains photography or raster detail. Hosted image and vector generation can supply new assets. <code>prepare_design_asset</code> opens a user-reviewed image or SVG prompt without submitting it; <code>import_image</code> saves a returned raster file or URL to project Assets without placing a layer. Generated SVG can become editable vector layers when added to the design. In Ultra mode, delegated specialists can receive the lead chat’s reference images when their model supports images; give each specialist a distinct page or component and inspect their visible milestones. Verify the result in Fanta before exporting.
 
 A reference image is guidance, not proof of pixel-for-pixel equivalence. Compare screenshots at the same target dimensions, and inspect text, clipping, and responsive behavior in the live editor.

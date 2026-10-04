@@ -9,11 +9,11 @@ Review an agent edit in the editor before treating the design as finished. Fanta
 
 Ask the agent to capture a screenshot after applying an edit. Check the target frame at its intended size: alignment, text overflow, clipping, spacing, contrast, image crop, and visual hierarchy. Use <code>batch_get</code> to inspect precise properties when a screenshot is ambiguous. Give the next revision as a short list of observable changes.
 
-A <code>batch_design</code> edit is an ordered, atomic undo transaction. If an operation fails, the entire batch rolls back and the result identifies the failing operation. If a completed batch is wrong, undo it in Fanta or request a corrective batch. Work with exact node IDs obtained from the current document.
+A <code>batch_design</code> edit paints each operation as a temporary preview, then commits the batch as one undo transaction. If an operation fails or the batch is canceled, the preview rolls back and the result identifies the failing operation. If a completed batch is wrong, undo it in Fanta or request a corrective batch. Work with exact node IDs obtained from the current document.
 
 ## Review source changes
 
-Pages and component masters can be stored as FNX files inside a project. Read them through <code>read_fnx_source</code> or your normal file tools. The MCP reader slices by 1-based line offset, so follow its <code>next_offset</code> before replacing a file. Check a complete candidate with <code>validate_fnx_source</code> before writing. External edits to an open project's FNX files are picked up by the editor after a short delay. A source parse error leaves the last valid canvas state visible while you fix the file. See [FNX source](/docs/formats/fnx).
+Pages and component masters are stored as FNX files with companion JSON headers. Read FNX through <code>read_fnx_source</code> or normal file tools; inspect managed JSON with file tools. The MCP reader slices by 1-based line offset, so follow its <code>next_offset</code> before replacing a file. Check a complete FNX or managed JSON candidate with <code>validate_fnx_source</code> before writing. Existing files are checked against the full project, including types and references. External edits to an open project are picked up by the editor after a short delay. A source parse error leaves the last valid canvas state visible while you fix the file. See [FNX source](/docs/formats/fnx).
 
 Source files are useful for Git review. Check the actual canvas too: a clean textual diff alone does not establish that the rendered design is correct.
 

@@ -6,9 +6,9 @@ description: Coordinate agents without assuming a Fanta task-lock system.
 The external MCP server acts on the most recently focused design. `batch_design` is atomic and undoable, but it does not lock nodes across agents. Assign one coordinator to review combined work.
 
 1. Map pages and components with `get_editor_state` and `batch_get`.
-2. Give each agent a distinct page, frame, component, or `.fnx` file. Share exact IDs or paths. Each agent should use `report_agent_activity` with a stable ID, its current action, and page/node or source path.
+2. Give each agent a distinct page, frame, component, or source file. Share exact IDs or paths. Each agent should use `report_agent_activity` with a stable ID and name, its current action, page/node or source path, and `workspace` (`canvas`, `variables`, or `code`). Use the same ID and name in `batch_design.activity` so Follow can track its streamed placements.
 3. Have each agent finish canvas edits and let autosave complete before another edits the same source file. Do not mix canvas and source edits on the same nodes simultaneously.
-4. Verify each region with `get_screenshot` and inspect the Git diff for unexpected changes.
+4. Build one component or section per batch so each operation appears on the canvas while the call runs. Verify each region with `get_screenshot` and inspect the Git diff for unexpected changes. A failed or interrupted batch rolls back its preview.
 5. Clear activity with `active: false` when an agent finishes, then commit reviewed changes with ordinary Git.
 
-Fanta's thirteen-tool external MCP surface reports agent activity and can show individual focus on the canvas. It has no `spawn_agent`, `vcs_begin_task`, or cross-agent edit lock. Unrefreshed activity expires after about 30 seconds; parallel task assignment belongs to the client or team workflow.
+Fanta's thirteen-tool external MCP surface reports agent activity and can follow an agent across canvas pages, component views, variables, and code files. It has no `spawn_agent`, `vcs_begin_task`, or cross-agent edit lock. Unrefreshed activity expires after about 30 seconds; parallel task assignment belongs to the client or team workflow.

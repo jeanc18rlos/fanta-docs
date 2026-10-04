@@ -3,6 +3,12 @@ title: Changelog
 description: What this source-aligned Fanta documentation covers.
 ---
 
+## October 4, 2026 source update
+
+The docs now track published `fanta-edit` main at [`af712551`](https://github.com/jeanc18rlos/fanta-edit/tree/af712551269bdd2c7eedc45d0ea1567228fae686). The Code workspace can edit the active page or component's paired JSON alongside FNX, validate the complete candidate against the project, and reload the canvas. Modern FNX with explicit IDs can recover a missing or damaged sidecar. A failed external source reload keeps the last valid canvas and reports a repairable error.
+
+External `batch_design` still exposes 33 operations through the same 13 MCP tools, but now streams each operation visibly while retaining one undoable, rollback-safe batch. An optional `activity` identity and richer `report_agent_activity` fields let Fanta follow an agent across the Canvas, Variables, and Code workspaces. The source also improves property editing, component-master navigation, and the in-app agent workflow. These are implementation claims, not a new packaged release announcement.
+
 ## October 3, 2026 source update
 
 The docs now track `fanta-edit` main at [`182b111c`](https://github.com/jeanc18rlos/fanta-edit/tree/182b111c18415c4170abf31a9660ec11231fd2d2). The external live MCP bridge registers 13 tools. New tools inspect the design system, prepare an image or SVG generation draft for user review, validate FNX without writing, import an image into the project, read and reply to comments, and report an agent's local canvas activity. `batch_design` also has operations for child layout, variables and modes, variant sets, component properties, and instance values.

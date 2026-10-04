@@ -3,7 +3,7 @@ title: Create, insert & arrange
 description: Create and organize nodes through batch_design.
 ---
 
-`create_node` supports `frame`, `rectangle`, `ellipse`, and `text`. Give world-space `x`, `y`, `width`, and `height`; optionally pass `name`, a solid hex `fill`, `text`, `font_size`, or a parent node ID. Without `parent`, a node goes on the active page.
+`create_node` supports `frame`, `rectangle`, `ellipse`, and `text`. Give world-space `x`, `y`, `width`, and `height`; optionally pass `name`, a solid hex `fill`, `text`, `font_size`, or a parent node ID. Without `parent`, a node goes on the page active **when the batch starts**, even if Follow changes the viewed page during a streamed edit.
 
 ```json
 {"label":"Add card","ops":[{"op":"create_node","node_type":"frame","name":"Card","x":100,"y":100,"width":320,"height":180,"fill":"#F7F7F7"}]}
@@ -11,4 +11,4 @@ description: Create and organize nodes through batch_design.
 
 The response returns a `created` ID. Use it in a later call when placing a child; the batch has no named temporary-ID bindings. `create_image` takes encoded PNG/JPEG/WebP/GIF bytes, including a data URI, and saves an image asset. It does not fetch a URL; `import_image` can save an HTTP(S) image to project Assets without creating a layer. `create_instance` places a linked component copy.
 
-`duplicate`, `group`, `frame_selection`, `ungroup`, `reparent`, `set_index`, and `delete` organize existing nodes. A frame clips and can have a background; a group is plain organization. Deleting a container removes its subtree, so inspect exact IDs first. Any failed operation rolls back the entire batch.
+`duplicate`, `group`, `frame_selection`, `ungroup`, `reparent`, `set_index`, and `delete` organize existing nodes. A frame clips and can have a background; a group is plain organization. Deleting a container removes its subtree, so inspect exact IDs first. Each operation previews visibly as the call runs. Any failed operation rolls back the entire batch.

@@ -23,4 +23,4 @@ The documented bridge is for non-Store builds. If you are configuring an MCP ser
 
 ## Source did not reload
 
-Validate a complete candidate with `validate_fnx_source`, save the `.fnx` file in the open project, and allow the reload. Leave generated `*.ids.json` files alone. Fanta logs live at `~/Library/Logs/Fanta/`.
+Validate a complete candidate with `validate_fnx_source`, save the `.fnx` or managed JSON file in the open project, and allow the reload. An identity sidecar such as `page.ids.json` can be edited, but preserve existing node IDs and validate the complete project before saving; a parseable JSON file alone may still be invalid. Fanta logs live at `~/Library/Logs/Fanta/`.

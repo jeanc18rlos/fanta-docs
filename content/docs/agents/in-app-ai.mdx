@@ -1,36 +1,48 @@
 ---
 title: In-app AI
-description: Work with an agent from Fanta's Agent Panel and review changes on the canvas.
+description: Work with an agent from Fanta's Agent Panel and follow changes on the canvas.
 ---
 
-Fanta includes an Agent Panel for design work inside the desktop editor. The panel can read the current design and its design system, make structured edits, inspect comments, capture screenshots, and place generated images. This keeps the request and the editable result in the same workspace.
+Fanta includes an Agent Panel for design work inside the desktop editor. The panel can read the current design and design system, make structured edits, inspect comments, capture screenshots, and place generated images. Source-capable modes can edit saved FNX and managed JSON files.
 
 ## Start with the document
 
-Open a Fanta project or imported Figma file, then describe the specific page, frame, or selection you want changed. Give the agent dimensions, content, style, and constraints where they matter. Ask it to inspect the current design before changing existing work and to show a screenshot after its edit.
+Open a Fanta project or imported Figma file, then describe the page, frame, or selection you want changed. Give the agent dimensions, content, style, reference images, and constraints where they matter. Ask it to inspect the design and show a screenshot after each meaningful change.
 
-The built-in design tools include <code>design_state</code>, <code>design_system</code>, <code>design_edit</code>, <code>design_screenshot</code>, <code>design_comments</code>, <code>prepare_design_asset</code>, and <code>place_generation</code>. The edit tool uses the same ordered design-operation model as the local MCP edit surface. An operation batch is undoable and rolls back if an operation fails. Read <code>design_system</code> before creating variables or components. The placement tool can fetch a generated image URL and put the image into the project.
+The built-in design tools include <code>design_state</code>, <code>design_system</code>, <code>design_edit</code>, <code>design_screenshot</code>, <code>design_comments</code>, <code>prepare_design_asset</code>, and <code>place_generation</code>. Read <code>design_system</code> before creating variables or components. <code>design_edit</code> paints ordered operations on the live canvas one by one, then commits a labeled batch as one undo step. A failed or canceled batch rolls back its preview. Build one visible component or screen section at a time; inspect each milestone before continuing.
 
-Use a project-root `fanta.md` to give the native designer a product brief, visual direction, layout and asset preferences, design-system conventions, and acceptance checks. It reads that file before each model round. Nested specifications refine workspace rules, with a 64 KiB combined limit; direct user instructions and the selected mode's permissions take precedence. See [project context](/docs/mcp/custom-rules).
+Use a project-root <code>fanta.md</code> to give the native designer a product brief, visual direction, layout and asset preferences, design-system conventions, and acceptance checks. It reads that file before each model round. Nested specifications refine workspace rules, with a 64 KiB combined limit; direct user instructions and the selected mode's permissions take precedence. See [project context](/docs/mcp/custom-rules).
 
 ## Choose an agent mode
 
-**Edit Visual** applies undoable canvas operations. **Write** and **Full Access** can edit saved FNX source. **Ultra** coordinates specialists on larger tasks. **Plan** and **Review** preserve the scene; Plan can read comments but cannot reply or resolve them. Available tools and actions depend on the selected mode and model. The Thinking control appears when the selected model reports support for reasoning effort; it changes the request but does not expose private reasoning.
+**Edit Visual** applies undoable canvas operations. **Write** and **Full Access** can edit saved FNX and managed JSON source. **Ultra** coordinates specialists on larger tasks. **Plan** and **Review** preserve the scene while they inspect and advise; Plan can read comments but cannot reply or resolve them. Available tools depend on the selected mode and model.
 
-For an image or SVG icon, the agent can call <code>prepare_design_asset</code> to open a draft in Fanta's generation composer. The user reviews available models and submits it there; preparing a draft does not run generation. The source-writing experience can follow the shared Code workspace buffer; **Pause follow** stops automatic scrolling.
+After a successful completed Plan response, the panel offers **Apply plan** and **Keep planning**. Applying switches that thread to Write mode and sends an implementation request for the plan; keeping it open lets you continue discussing it. The actions appear only after a successful completed Plan response.
+
+The Thinking control appears when the selected model reports support for reasoning effort; it changes the request but does not expose private reasoning. The built-in agent can read source files, and source-capable modes can save small, complete FNX subtrees or typed JSON changes. The Code workspace itself edits the selected page or component FNX and its <code>page.json</code> or <code>def.json</code> companion. For other managed JSON, use file tools and validate the complete candidate before writing. See [FNX source](/docs/formats/fnx).
+
+## Follow visible work
+
+The agent reports its current action and focus. **Follow** can move with it across canvas pages, component tabs, variables, and source files; the Code workspace can reveal the reported FNX or JSON path. Distinct agent names and colors help identify the lead agent and specialists. In Ultra mode, specialists receive the lead chat's reference images when their model supports image input. The lead can give specialists separate components or pages, and their names remain stable during the work.
+
+Use **Pause follow** to stop automatic source scrolling while inspecting a file. Activity indicators expire when an agent stops reporting, and the agent should clear its activity when finished. These indicators show focus; they are not cross-agent edit locks.
+
+For an image or SVG icon, the agent can call <code>prepare_design_asset</code> to open a draft in Fanta's generation composer. You review available models and submit it there; preparing a draft does not run generation. <code>place_generation</code> can fetch a generated image URL and place it in the project.
 
 ## AI provider and account
 
 Fanta's default settings include a managed Fanta AI provider. After sign-in, the provider reads the current chat-model catalog from the service and shows each model's supported tools, images, context size, and credit information when supplied. The app also exposes settings for connecting your own supported provider credentials. Provider availability and model choices can change, so inspect **Settings → AI & Models** for the options available to your account.
 
-The built-in agent also registers `evaluate_with_jev` for typed decisions about supplied text or structured state. It can ask one to eight named boolean, choice, or score questions and returns structured answers instead of a chat reply. The request is limited to 8 KiB, requires Fanta sign-in, and is unavailable in restricted agent mode. The tool describes a minimum charge of one Fanta credit for a successful call; actual availability and billing depend on the connected service. This is an in-app agent tool, not one of the thirteen external canvas MCP tools.
+Preview and dev channel defaults point Fanta's account, model, edit-prediction, and hosted MCP settings at its v2 backend. Their <code>fanta-design</code> hosted tool connection is enabled in the channel defaults; the stable default lists that connection disabled. Service availability and account access still determine what appears in the app.
+
+The built-in agent also registers <code>evaluate_with_jev</code> for typed decisions about supplied text or structured state. It can ask one to eight named boolean, choice, or score questions and returns structured answers instead of a chat reply. The request is limited to 8 KiB, requires Fanta sign-in, and is unavailable in restricted agent mode. The tool describes a minimum charge of one Fanta credit for a successful call; actual availability and billing depend on the connected service. This is an in-app agent tool, not one of the thirteen external canvas MCP tools.
 
 Hosted generation is a separate model catalog and credit workflow. It requires sign-in; some jobs require credits. See [media generation](/docs/agents/media-generation) and [Settings](/docs/editor/settings).
 
 ## Review what changed
 
-Inspect the updated layers and screenshot in the editor. You can continue with manual canvas tools, request another revision, or undo an edit batch. The structured design tool can create variables, bind compatible properties, combine component variants, and set exposed instance properties. For gradients and per-run rich text outside that vocabulary, work through [FNX source](/docs/formats/fnx).
+Inspect updated layers, source diffs, comments, and screenshots in the editor. Continue with manual canvas tools, request a revision, or undo an edit batch. Structured design operations can create variables, bind compatible properties, combine component variants, and set exposed instance properties. For gradients and per-run rich text outside that vocabulary, work through [FNX source](/docs/formats/fnx).
 
 <Callout type="info">
-The local MCP server and Agent Panel both work with the open desktop design, but their tool names and exact capabilities differ. Agent activity and individual canvas cursors show focus; they are not cross-agent edit locks.
+The local MCP server and Agent Panel both work with the open desktop design, but their tool names and permissions differ. Agent presence reflects reported activity in the running app.
 </Callout>

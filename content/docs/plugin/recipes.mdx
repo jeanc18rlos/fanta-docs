@@ -8,7 +8,7 @@ These examples assume Fanta is running with a project open and the plugin or [di
 ## Build a card
 
 ```text
-/design On the active page, create a 320×180 frame called Welcome card. Add a heading and a primary button inside it. Use auto-layout if needed. Show a screenshot and summarize the .fnx change.
+/design On the active page, create a 320×180 frame called Welcome card. Add a heading and a primary button inside it. Build one visible section at a time with auto-layout where needed. Show a screenshot and summarize the .fnx change.
 ```
 
 ## Revise a selection
@@ -41,4 +41,4 @@ Inspect the current component properties, variant sets, variable collections, an
 List unresolved comments on the active page. Address the comment on the selected card, capture a screenshot, then reply to that exact thread with what changed.
 ```
 
-The agent can use `get_design_system`, `batch_get`, `get_screenshot`, and `list_comments` for verification. `prepare_design_asset` only opens a reviewed generation draft. Export and commit remain app or filesystem workflows, rather than additional local MCP tools.
+The agent can use `get_design_system`, `batch_get`, `get_screenshot`, and `list_comments` for verification. With `report_agent_activity` and the same identity in `batch_design.activity`, Fanta can follow its streamed canvas edits and file changes. `prepare_design_asset` only opens a reviewed generation draft. Export and commit remain app or filesystem workflows, rather than additional local MCP tools.

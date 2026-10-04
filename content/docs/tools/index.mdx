@@ -12,23 +12,23 @@ Fanta's external MCP server acts on the focused design. Use **Help → Connect C
 | `prepare_design_asset` | Open a user-reviewed image or SVG generation draft without submitting it. |
 | `get_guidelines` | Read current design and source-editing rules. |
 | `batch_get` | Read exact nodes or a paged page tree. |
-| `batch_design` | Apply typed design ops as one undoable transaction. |
+| `batch_design` | Preview typed ops in order, then commit or roll back one undoable transaction. |
 | `get_screenshot` | Render a page, node, or motion-clip sample as PNG. |
 | `read_fnx_source` | List or read source files in slices. |
-| `validate_fnx_source` | Validate a complete FNX or managed design-system JSON candidate without writing. |
+| `validate_fnx_source` | Validate a complete FNX or managed project JSON candidate without writing. |
 | `import_image` | Import a local file, HTTP(S) URL, or base64 image into project Assets. |
 | `list_comments` | Read unresolved or resolved canvas comment threads. |
 | `reply_comment` | Reply to a thread and optionally mark it resolved. |
-| `report_agent_activity` | Report an agent's canvas or source-file focus to Fanta. |
+| `report_agent_activity` | Report an agent's canvas, variables, or code focus to Fanta. |
 
-`batch_design` takes `ops: [{"op":"…",…}]` and an optional `label`. Its current 33 operations are:
+`batch_design` takes `ops: [{"op":"…",…}]`, an optional `label`, and optional `activity` containing a stable `agent_id`, `agent_name`, and `action`. Reuse the identity from `report_agent_activity` to keep Follow on the same agent during streamed placements. Its current 33 operations are:
 
 - **Create and arrange:** `create_node`, `create_image`, `create_instance`, `set_props`, `set_index`, `rotate`, `align`, `distribute`, `group`, `frame_selection`, `ungroup`, `duplicate`, `reparent`, `delete`, `select`, `set_viewport`.
 - **Style and layout:** `set_stroke`, `set_shadow`, `set_text_style`, `set_auto_layout`, `set_layout_child`.
 - **Variables:** `create_variable_collection`, `add_variable_mode`, `create_variable`, `set_variable_value`, `set_variable_mode`, `bind_variable`, `unbind_variable`.
 - **Components:** `create_component`, `combine_variants`, `create_component_property`, `bind_component_property`, `set_instance_property`.
 
-Ask your MCP client for the live schema to see every field and enum value. A failed operation rolls back the whole batch.
+Ask your MCP client for the live schema to see every field and enum value. Operations are shown one by one while the call runs. The completed batch is one undo step; a failed operation rolls back its preview.
 
 <Cards>
   <Card title="Create" href="/docs/tools/create" />

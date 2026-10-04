@@ -7,7 +7,7 @@ description: Use the canvas, Layers panel, Variables workspace, Code workspace, 
 
 ## Canvas and Layers
 
-The canvas shows the active page and its selectable layers. The Layers panel lets you select and range-select layers, expand groups, rename nodes, toggle visibility and locking, and drag layers above, below, or inside other nodes. Its context menu includes duplicate and delete, copy as SVG or PNG, copy properties, move to page, group and ungroup, frame or section conversion, flatten, outline stroke, mask, media replacement and cropping, layout, and component actions. The available actions depend on the layer.
+The canvas shows the active page and its selectable layers. The Layers panel lets you select and range-select layers, expand groups, rename nodes, toggle visibility and locking, and drag layers above, below, or inside other nodes. When you open a component master, its root appears as an editable row in Layers; expand it to see the master's children. Its context menu includes duplicate and delete, copy as SVG or PNG, copy properties, move to page, group and ungroup, frame or section conversion, flatten, outline stroke, mask, media replacement and cropping, layout, and component actions. The available actions depend on the layer.
 
 The Pages area of Layers creates, selects, renames, duplicates, reorders, and deletes pages. It also includes a page link action and name/text search and replace.
 
@@ -21,7 +21,11 @@ The Variables workspace manages collections, modes, values, aliases, and binding
 
 ## Code
 
-The Code workspace displays source files from the local project. FNX source is editable. When you begin editing, Fanta locks canvas edits until you save or leave the dirty source state. Saving validates the project, writes the source and sidecar, then reloads the canvas. Errors appear in the editor. The JSON view is a read-only preview. When an in-app agent is writing the selected FNX file, Code shows the agent name and follows its live source location. Choose **Pause follow** to navigate independently, and **Follow** to resume.
+The Code workspace opens the active page's `page.fnx` and `page.json`, or a component master's `master.fnx` and `def.json`. Select **FNX** or **JSON** to edit that source file. Save the design once before opening source. Save or discard canvas changes before editing source; while either source buffer has unsaved changes, canvas editing is locked.
+
+Save source to validate the edited file against the project, write it, and reload the canvas. FNX saves also maintain its ID sidecar. Invalid JSON stays in the editor with an error and does not replace the saved file or the last good canvas. If both FNX and JSON have changes, Fanta saves and validates them in sequence. Resolve any on-disk file conflict before retrying. When an in-app agent is writing the selected FNX file, Code shows its name and can follow its live source location. Choose **Pause follow** to navigate independently, and **Follow** to resume.
+
+The canvas can also show an **Agents** control for active design agents. Select an agent to follow its current page or component and its Canvas, Variables, or Code workspace. Select the agent again to stop following. Source activity can open the relevant source tab.
 
 ## Dev mode
 

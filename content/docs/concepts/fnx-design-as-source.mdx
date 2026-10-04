@@ -1,23 +1,29 @@
 ---
 title: FNX design as source
-description: Read and edit the source representation of Fanta designs.
+description: Edit Fanta's page, component, and managed JSON source with live canvas validation.
 ---
 
 # FNX design as source
 
-Fanta stores page and component layer trees in FNX files: `pages/<slug>/page.fnx` and `components/<slug>/master.fnx`. FNX is a readable, JSX-like representation of design nodes and properties. It includes explicit node IDs in printed source. Sidecar files still carry supporting identity and ordering information.
+Fanta stores page and component layer trees in <code>pages/&lt;slug&gt;/page.fnx</code> and <code>components/&lt;slug&gt;/master.fnx</code>. FNX is a readable, static JSX-like representation of design nodes and properties. It prints explicit node IDs. Companion <code>page.ids.json</code> and <code>master.ids.json</code> sidecars carry supporting identity and sibling order information.
 
-A source file may express placement through parent-relative transforms, including X and Y translation, and width and height shorthand. It has conveniences for common shapes such as Rect and Ellipse and color values through `fnxColor`. A TextPath element stores its own path geometry and text. The canvas presents the resolved result.
+Other project data is managed JSON: page and component headers, variables and modes, motion, prototypes, metadata, asset indexes, and more. The project also seeds <code>fanta.md</code> for design intent and <code>AGENTS.md</code> for agent guidance. Page and component artwork remains in FNX; JSON holds shared data and metadata.
 
-The project also seeds `fanta.md` for design intent and `AGENTS.md` for project-local agent guidance. These are supporting files; page and component artwork remains in FNX. Fanta preserves a customized `fanta.md` when scaffolding editor support.
+A source file may express placement through parent-relative transforms, including X and Y translation, and width and height shorthand. It has conveniences for Rect and Ellipse shapes and colors through <code>fnxColor</code>. A TextPath element stores its own path geometry and text. The canvas presents the resolved result.
 
 ## Edit source in Fanta
 
-1. Open the **Code** workspace and select an FNX file.
-2. Make the desired change. Once source is dirty, canvas edits are locked to avoid competing changes.
-3. Save. Fanta validates the whole project, writes the source and sidecar atomically, and reloads the canvas.
-4. If validation fails, read the error, fix the source, and save again.
+1. Open the **Code** workspace. Select **FNX** for the active page or component master, or **JSON** for that source's <code>page.json</code> or <code>def.json</code> companion.
+2. Make a small, complete change. Once either buffer is dirty, canvas edits are locked to avoid competing changes.
+3. Save. Fanta validates the edited source against the complete project before writing, then reloads the canvas. It checks JSON types and references, so valid JSON syntax alone is insufficient.
+4. If validation fails, read the error, repair the source, and save again. An invalid edit leaves the last valid canvas and saved file intact.
 
-The Code workspace also has a JSON preview for inspection. That view is read-only. Unknown FNX attributes can produce diagnostics without making the source unsaveable; review warnings and check the rendered result.
+The Code workspace protects against a file changing on disk during a save. It can discard dirty FNX or JSON buffers, and it blocks a source save while canvas changes or file conflicts still need resolution. Unknown FNX attributes may produce nonfatal diagnostics; inspect warnings and the rendered result.
 
-FNX printing and syntax are in `crates/fanta-fnx/src/source.rs`, `crates/fanta-fnx/src/sugar.rs`, and `crates/fanta-fnx/src/print.rs`; TextPath declarations are in `crates/fanta-format/src/project/fnx.d.ts`. The Code workspace save path is in `crates/fig_viewer/src/code_workspace.rs` and `crates/fanta-format/src/project/source_edit.rs`.
+## Edit with an external editor or agent
+
+External file edits are reconciled into the open project. Before writing an FNX or managed JSON candidate, an external agent can call <code>validate_fnx_source</code> with the complete candidate and project path. The tool validates without writing. For an existing managed file, it checks the candidate in the context of the full project; a new managed file receives a typed or syntax check until its companion source exists. Then save with normal file tools and inspect the canvas.
+
+Keep existing IDs and references. Modern FNX with explicit IDs can recover a missing or damaged identity sidecar; Fanta reconstructs identity and order from the source and repairs the sidecar on a successful save. Older FNX without explicit IDs still needs its sidecar. Commit source, sidecars, headers, and assets together.
+
+The implementation lives in <code>crates/fanta-fnx/src/</code>, <code>crates/fanta-format/src/project/</code>, and <code>crates/fig_viewer/src/code_workspace.rs</code>. See [FNX source](/docs/formats/fnx) and [Fanta project layout](/docs/formats/fant).

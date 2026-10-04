@@ -3,7 +3,7 @@ title: Sessions, input & checkpoints
 description: Use undo batches, autosave, and Git milestones.
 ---
 
-`batch_design` groups its ordered operations into one named undo step. If an operation fails, the batch rolls back and identifies the failing operation. Use a descriptive `label` for history.
+`batch_design` previews its ordered operations one by one while the call runs, then commits them as one named undo step. If an operation fails or the call is interrupted, the preview rolls back. The result identifies a failing operation. Use a descriptive `label` for a single component or coherent section; a whole screen in one batch is harder to follow and review.
 
 Canvas edits autosave to `.fnx` after editing stops. Review the source diff and use Git commits for durable milestones. When directly editing source files, finish one lane before returning to canvas edits on the same nodes.
 
