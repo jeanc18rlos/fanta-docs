@@ -20,7 +20,7 @@ Inspect the current selection. Change its fill to #4F46E5 and its corner radius 
 ## Reuse a component
 
 ```text
-Inspect the selected card, make it a component, and add two linked instances. Verify their names and positions in the document tree.
+Inspect the selected card and similar copies. If their layer structures match, componentize them so the first is the master and the others become instances with their different text and fills preserved. Verify the result on canvas.
 ```
 
 ## Review before committing
@@ -42,3 +42,9 @@ List unresolved comments on the active page. Address the comment on the selected
 ```
 
 The agent can use `get_design_system`, `batch_get`, `get_screenshot`, and `list_comments` for verification. With `report_agent_activity` and the same identity in `batch_design.activity`, Fanta can follow its streamed canvas edits and file changes. `prepare_design_asset` only opens a reviewed generation draft. Export and commit remain app or filesystem workflows, rather than additional local MCP tools.
+
+## Lay out a grid
+
+```text
+Build three card columns in one grid frame. Use 1fr tracks with 16 px gaps, pin the featured card across two columns, and show a screenshot at the intended size.
+```

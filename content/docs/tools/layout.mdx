@@ -3,7 +3,7 @@ title: Auto-layout, transform & viewport
 description: Use Fanta’s current layout and transform operations.
 ---
 
-`set_auto_layout` takes an `id`, `direction` (`horizontal`, `vertical`, or `none`), and optional `gap`, `padding`, `align_items`, and `justify`. Padding accepts one, two, or four numbers. It also accepts `primary_sizing` and `counter_sizing` (`fixed` or `hug`), `min_size` and `max_size` as `[width,height]`, `wrap`, and `counter_gap` for wrapped rows. Use `null` in either size-limit slot to clear that axis's limit. Once a container is in auto-layout, change layout rules or sibling order instead of setting child `x` and `y`.
+`set_auto_layout` takes an `id`, `direction` (`horizontal`, `vertical`, `grid`, or `none`), and optional `gap`, `padding`, `align_items`, and `justify`. Padding accepts one, two, or four numbers. It also accepts `primary_sizing` and `counter_sizing` (`fixed` or `hug`), `min_size` and `max_size` as `[width,height]`, `wrap`, `counter_gap`, and `align_content` (`auto` or `space_between`) for wrapped lines. Use `null` in either size-limit slot to clear that axis's limit. Once a container is in auto-layout, change layout rules or sibling order instead of setting child `x` and `y`.
 
 ```json
 {"label":"Lay out card","ops":[{"op":"set_auto_layout","id":"<frame-id>","direction":"vertical","gap":12,"padding":[20]}]}
@@ -11,4 +11,16 @@ description: Use Fanta’s current layout and transform operations.
 
 Use `set_layout_child` on a child to set its positive `grow` value, cross-axis `align_self`, or `absolute` participation. A text node's `set_text_style.sizing` can be `fixed`, `auto_height` (wrap at its width), or `auto_width` (hug unwrapped text). For a minimum-size button, use horizontal layout, `hug` sizing, `[128,48]` minimum size, and an `auto_width` label. For a card, a fixed counter-axis width with `auto_height` body text gives predictable wrapping.
 
-`align` aligns two or more nodes to a shared edge or center line, or one node to its parent. `distribute` spaces three or more nodes along an axis. `rotate` sets an absolute angle; `set_index` changes sibling z-order; `reparent` moves a node while preserving its world position. `set_viewport` stores canvas center or zoom. The alpha’s grid auto-layout control is not backed by the layout engine; use horizontal or vertical.
+## Grid layout
+
+On a frame that was not already a grid, `set_auto_layout` with `direction: "grid"` starts with roughly square equal columns for existing children. Use `set_grid_layout` for exact tracks: a non-negative number is fixed pixels, `"1fr"` and `"2fr"` share leftover width, and `"auto"` hugs content. Set at least one column; `rows` is optional and extra rows are added as children need them. `gap` sets column and row gaps, and `row_gap` can override the latter.
+
+```json
+{"label":"Set card grid","ops":[{"op":"set_grid_layout","id":"<frame-id>","columns":["1fr","1fr","1fr"],"gap":16}]}
+```
+
+Unpinned children fill cells row by row. `set_layout_child` can pin a child with zero-based `column` and `row`, `column_span` and `row_span`, and `cell_horizontal` / `cell_vertical` (`start`, `center`, `end`). `auto_place: true` removes a pin; send it without cell fields. `grow: 1` fills the cell width and `align_self: "stretch"` fills its height. Explicit cell fields only apply to children of a grid container.
+
+`set_constraints` controls how a node moves or resizes when its parent frame changes size outside auto layout: horizontal `left`, `right`, `left_right`, `center`, or `scale`; vertical `top`, `bottom`, `top_bottom`, `center`, or `scale`. Omitted axes keep their current values.
+
+`align` aligns two or more nodes to a shared edge or center line, or one node to its parent. `distribute` spaces three or more nodes along an axis. `rotate` sets an absolute angle; `set_index` changes sibling z-order; `reparent` moves a node while preserving its world position. `set_viewport` stores canvas center or zoom.

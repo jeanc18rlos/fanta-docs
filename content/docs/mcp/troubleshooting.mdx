@@ -15,7 +15,7 @@ The documented bridge is for non-Store builds. If you are configuring an MCP ser
 
 ## A tree query is refused
 
-`batch_get` caps responses at 256 KiB. Use smaller `limit`, `offset`, lower `depth`, or fewer exact IDs. A wide imported `.fig` page can have thousands of siblings.
+`batch_get` caps responses at 256 KiB. Use smaller `limit`, `offset`, lower `depth`, fewer exact IDs, or `detail: "summary"` instead of `"style"`. A wide imported `.fig` page can have thousands of siblings.
 
 ## Source looks incomplete
 
@@ -24,3 +24,5 @@ The documented bridge is for non-Store builds. If you are configuring an MCP ser
 ## Source did not reload
 
 Validate a complete candidate with `validate_fnx_source`, save the `.fnx` or managed JSON file in the open project, and allow the reload. An identity sidecar such as `page.ids.json` can be edited, but preserve existing node IDs and validate the complete project before saving; a parseable JSON file alone may still be invalid. Fanta logs live at `~/Library/Logs/Fanta/`.
+
+Finish an active canvas preview or unsaved Code draft before trying to reload the same source. Fanta keeps the last valid canvas if an external source edit cannot be parsed and reports a conflict; repair the file and let the watcher reload it. If you are using the Code workspace, **Discard draft** reloads only the selected FNX or JSON buffer from disk. Saving source can also fail when canvas changes are unsaved, the file changed on disk, or another source save or discard is in progress; resolve that state and retry.

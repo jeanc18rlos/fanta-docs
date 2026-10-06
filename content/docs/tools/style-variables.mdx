@@ -5,16 +5,24 @@ description: Apply styles and create reusable variables with modes and bindings.
 
 | `batch_design` operation | Change |
 | --- | --- |
-| `set_props` | Name, position, size, opacity, first solid fill, corner radius, text, hidden, locked. |
-| `set_stroke` | Single outline color, width and alignment; width 0 removes it. |
+| `set_props` | Name, position, size, opacity, first paint replaced by a solid fill, corner radius, text, hidden, locked. |
+| `set_fill` | Replace all fills with solid, linear or radial gradients, or image paints; `[]` clears them. |
+| `set_stroke` | First outline color, width, alignment, per-side widths, dash pattern, cap, and join; width 0 removes it. |
 | `set_shadow` | First drop shadow or all drop shadows with `remove: true`. |
+| `set_effects` | Replace the complete stack of drop and inner shadows, layer blur, and background blur; `[]` clears it. |
 | `set_text_style` | Font family, weight, size, line height, letter spacing, alignment, glyph color, and text-box sizing for the whole text node. |
 
-Colors use `#RRGGBB` or `#RRGGBBAA`; omitted fields are unchanged. For example:
+Colors use `#RRGGBB` or `#RRGGBBAA`. Omitted fields in `set_props`, `set_stroke`, and `set_text_style` are unchanged; `set_fill` and `set_effects` replace whole stacks. Read the node with `batch_get` using `detail: "style"` before replacing one. For example:
 
 ```json
 {"label":"Style title","ops":[{"op":"set_text_style","id":"<text-id>","font_weight":700,"font_size":24,"color":"#202020"}]}
 ```
+
+```json
+{"label":"Style card","ops":[{"op":"set_fill","id":"<frame-id>","paints":[{"kind":"linear","stops":[{"position":0,"color":"#FFFFFF"},{"position":1,"color":"#E7EEFF"}]}]},{"op":"set_effects","id":"<frame-id>","effects":[{"kind":"drop_shadow","color":"#0000001A","y":8,"blur":24}]}]}
+```
+
+A gradient needs at least two stops between 0 and 1. Linear gradient `from` and `to` and radial gradient `center` use coordinates in the node's 0–1 box; a radial `radius` is a fraction of its size. An image paint needs encoded PNG/JPEG/WebP/GIF bytes in `source`, not a URL or an existing asset ID. Per-side stroke widths on a frame or rectangle use `[top,right,bottom,left]`; for example `[0,0,1,0]` makes a bottom border. `dash` alternates on/off lengths; an empty array makes it solid. Use `set_text_style` for glyph color rather than `set_fill` on a text node.
 
 ## Reusable variables
 
@@ -32,4 +40,4 @@ After reading the returned IDs, set the second mode and bind a node:
 {"label":"Apply theme color","ops":[{"op":"set_variable_value","variable":"surface/accent","mode":"Dark","value":"#88AAFF"},{"op":"bind_variable","id":"<node-id>","property":{"prop":"fill_color"},"variable":"surface/accent"}]}
 ```
 
-Binding targets include indexed fill and stroke color or stroke width, corner radius, opacity, visibility, text content, text style, and clip width or height. Use the live schema to check type compatibility. For gradients and per-run rich text beyond these ops, read the complete `.fnx` section and validate a complete candidate with `validate_fnx_source` before saving.
+Binding targets include indexed fill and stroke color or stroke width, corner radius, opacity, visibility, text content, text style, and clip width or height. Use the live schema to check type compatibility. For per-run rich text or paint kinds not supported by `set_fill`, read the complete `.fnx` section and validate a complete candidate with `validate_fnx_source` before saving.

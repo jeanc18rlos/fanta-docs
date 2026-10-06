@@ -31,7 +31,7 @@ Put the copied Codex snippet in the project's <code>.codex/config.toml</code>, o
 | <code>reply_comment</code> | Reply to a thread and optionally resolve it |
 | <code>report_agent_activity</code> | Show the agent's action and canvas, variable, or source-file focus |
 
-The canvas uses world coordinates in pixels, with the origin at the upper left and Y increasing downward. Node IDs must come from current editor state or a node read. Page listings use depth and pagination controls; narrow very large reads instead of fetching an entire imported page at once.
+The canvas uses world coordinates in pixels, with the origin at the upper left and Y increasing downward. Node IDs must come from current editor state or a node read. Page listings use depth and pagination controls; narrow very large reads instead of fetching an entire imported page at once. <code>get_editor_state</code> advertises the operation capabilities supported by the running editor. <code>batch_get</code> accepts <code>detail</code>: an ID lookup defaults to editable <code>style</code>, while a page listing defaults to <code>summary</code>. Choose <code>style</code> for a detailed listing or <code>raw</code> with IDs for internal records. Inspect styles before writing them back.
 
 ## Build in visible milestones
 
@@ -39,7 +39,9 @@ Read the state, guidelines, relevant nodes, design system, open comments, and a 
 
 To make the work followable, call <code>report_agent_activity</code> with a stable <code>agent_id</code> and <code>agent_name</code>, the current action, and the page, node, or world position. Pass that same identity in <code>batch_design.activity</code> so each streamed step stays attributed to the agent. When moving to a source file, include its project-contained <code>source_path</code> and <code>workspace</code> (<code>canvas</code>, <code>variables</code>, or <code>code</code>). A user who chooses **Follow** can track the reported page, component tab, file, and workspace. Clear activity with <code>active: false</code> when finished. These presence indicators report focus; they are not edit locks between agents.
 
-Structured operations cover shapes, frames, text, images, components, variables and modes, bindings, layout, order, selection, and viewport changes. Gradients and rich-text runs remain outside parts of the structured vocabulary. For those, inspect the full FNX source, validate a complete candidate, save with file tools, and verify the reloaded canvas. Managed JSON also needs full typed validation before writing. See [FNX source](/docs/formats/fnx).
+Structured operations cover frames, text, images, variables, bindings, ordering, selection, and viewport changes. The expanded vocabulary also includes <code>create_shape</code> for lines, polygons, stars, and paths; <code>set_fill</code> for solid, linear, radial, and image paints; <code>set_effects</code> for shadow and blur stacks; <code>set_constraints</code>; and stroke sides, dash, cap, and join. <code>set_grid_layout</code> defines fixed, fractional, or content-sized columns, and <code>set_layout_child</code> can place and span a grid cell. Component operations can turn matching layers into a master and instances, combine or extend variants, remove or arrange a variant, and rename a component.
+
+Use <code>batch_get</code> with <code>detail: "style"</code> to inspect values in the operation vocabulary before changing an existing node. For individual rich-text runs and other properties without a structured operation, inspect the full FNX source, validate a complete candidate, save with file tools, and verify the reloaded canvas. Managed JSON also needs full typed validation before writing. See [FNX source](/docs/formats/fnx).
 
 ## Verify visually
 

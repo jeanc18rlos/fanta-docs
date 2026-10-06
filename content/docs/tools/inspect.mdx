@@ -3,11 +3,13 @@ title: Read, query & debug
 description: Inspect the open project and page tree without mutating them.
 ---
 
-`get_editor_state` reports the project root, pages, active page, selection, viewport, components, editability, and hints. Pass `empty_space: [width,height]` to find a free top-left for a new top-level frame.
+`get_editor_state` reports the project root, pages, active page, selection, viewport, components, editability, hints, and capability flags for newer design operations. Pass `empty_space: [width,height]` to find a free top-left for a new top-level frame.
 
 `get_design_system` reports collections, modes, paginated typed variables, component properties and variant sets. Pass `collection`, `offset`, and `limit` to narrow large libraries; `include_bindings: true` reads variable bindings on selected nodes. `list_comments` reads unresolved review threads by default.
 
-`batch_get` without `ids` lists a page. It defaults to active page, depth 2, and 200 direct children. The result reports `child_count`, `children_offset`, `children_limit`, and `more_children`; continue with `offset` and `limit` until done. Pass exact `ids` for detailed nodes and `include_geometry: true` for world bounds. A result over 256 KiB is refused rather than truncated; narrow depth, child count, IDs, or geometry.
+`batch_get` without `ids` lists a page. It defaults to active page, depth 2, 200 direct children, and `detail: "summary"`. The result reports `child_count`, `children_offset`, `children_limit`, and `more_children`; continue with `offset` and `limit` until done. With exact `ids`, the default `detail: "style"` reports editable world bounds, fills, strokes, effects, layout, constraints, text, and bindings in the design-operation vocabulary. Use `detail: "style"` on a page listing to merge these properties into each listed node; `detail: "raw"` returns internal node records only with exact IDs. Pass `include_geometry: true` for world bounds on a summary. A result over 256 KiB is refused rather than truncated; narrow depth, child count, IDs, geometry, or detail.
+
+Read `style` before replacing a node's entire paint or effect stack. A reported image fill references an existing asset, while `set_fill` requires encoded image bytes in `source`; internal or read-only paint kinds are not all writable through that operation.
 
 `read_fnx_source` without `path` lists source files. With a project-relative path, it returns source text with `truncated`, `next_offset`, and a notice. `offset` is a 1-based **line** number; `limit` counts lines. The default text budget is 64 KiB per call, with `max_bytes` capped at 1 MiB. Follow `next_offset` before making whole-file edits. Imported `.fig` pages may be much wider than one result.
 

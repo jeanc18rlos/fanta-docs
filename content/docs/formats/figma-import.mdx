@@ -3,7 +3,7 @@ title: Import from Figma
 description: Open a .fig file and continue editing it as a native Fanta project.
 ---
 
-Fanta can open a local <code>.fig</code> file and convert it into an editable project. The import path handles Figma document data such as pages, layers, components, instances, auto layout, vectors, effects, and variables where supported by Fanta's document model.
+Fanta can open a local <code>.fig</code> file and convert it into an editable project. The import path handles Figma document data such as pages, layers, components, instances, auto layout, vectors, effects, variables, and supported Boolean operations where Fanta's document model can represent them.
 
 ## Open a .fig file
 
@@ -13,7 +13,11 @@ If you open the same <code>.fig</code> again after a sibling project was created
 
 ## Check the result
 
-Large imported documents can contain thousands of nodes. Inspect the page tree and key components in the editor, then compare visual output against the source. Some source features may not have an exact editable counterpart, and conversion should be verified for the pages you intend to use.
+Large imported documents can contain thousands of nodes. Inspect the page tree and key components in the editor, then compare visual output against the source.
+
+Supported Union, Subtract, Intersect, and Exclude Boolean operations retain their operands as editable layers. Fanta keeps the imported vector appearance while the operands and operation are unchanged, then recomputes geometry when you edit them. Undo can restore the imported appearance. If an operation is unsupported or operands cannot be used, Fanta falls back to a vector; those operands are not separately editable.
+
+On first import, Fanta shows a canvas notice when it detects known structure loss: flattened Boolean operations, omitted unsupported or malformed layers, or layers with unsupported parent relationships. The notice gives counts and Boolean fallback reasons. It does not prove that all rendering and component overrides match Figma, and absence of a notice does not establish full fidelity. Compare important pages visually and inspect the layers you plan to edit.
 
 For agent inspection, <code>batch_get</code> supports depth limits and pagination. Read smaller portions of a large imported page and request detailed nodes by ID. Capture a screenshot of the page or relevant node to review rendering.
 

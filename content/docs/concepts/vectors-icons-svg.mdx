@@ -7,6 +7,12 @@ description: Draw paths, edit nodes, and export vector artwork.
 
 Fanta has native vector tools: Pen, Node Edit, basic shapes, line, arrow, polygon, star, and path selection. You can refine paths on the canvas and use layer actions such as outline stroke or flatten when appropriate. A selected layer can be copied as SVG from its context menu, and the inspector can export SVG or PDF.
 
+Right-click a selected vector on the canvas and choose **Edit vector** to enter Node Edit. **Flatten** checks whether it can preserve the artwork's appearance and behavior. It can refuse variable bindings, nested component masters, animated children, masks, unsupported child effects or blends, clipped content, and pattern sources referenced by another layer. Simplify or detach that content first. A supported flatten remains undoable.
+
+## Boolean shapes
+
+A Boolean layer keeps its operand shapes and an operation: **Union**, **Subtract**, **Intersect**, or **Exclude**. Select it to change the operation and edit applicable fills and strokes in the inspector. A supported Figma Boolean import keeps editable operands and the imported baked vector appearance. Changing its operation or operands makes Fanta recompute the result. If an imported operation or operand cannot be represented, Fanta may keep a flattened vector instead and report an import warning; inspect the layer before relying on further Boolean edits.
+
 ## Text on a path
 
 Select one visible, unlocked vector and choose **Text on Path**. Fanta replaces the vector with a TextPath layer, carries its path into the text layer, and opens inline editing. The path must be finite and nonzero length. Rounded corners and clipped geometry must be flattened or removed first. The vector may have no paint or one normal solid fill or stroke; gradients, image paints, blend modes, and multiple paints are not accepted by the conversion.

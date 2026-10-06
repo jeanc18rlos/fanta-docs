@@ -17,4 +17,6 @@ Available triggers include click, drag, hover, while pressing, after a delay, an
 4. Set the destination and transition.
 5. Choose **Present** and test the interaction.
 
+In an interaction's detail view, **X** closes the details and keeps the interaction. Use **Remove interaction** on its row to delete it. Closing the details applies a valid pending parameter edit; if a value is invalid, Fanta keeps the details open and shows the error. When you copy a layer tree within the document, references to destinations inside that copied tree are remapped to the new nodes. References outside it continue to point to their original targets.
+
 The prototype data model is in `crates/fanta-doc/src/node/prototype.rs`; controls and presentation are in `crates/fig_viewer/src/prototype_panel.rs` and `crates/fig_viewer/src/view.rs`. Imported prototype features can be broader than the controls currently exposed, so test the flow in Present mode.

@@ -13,4 +13,4 @@ description: Create and verify a small vertical composition.
 {"label":"Lay out card","ops":[{"op":"set_auto_layout","id":"<frame-id>","direction":"vertical","gap":12,"padding":[20],"primary_sizing":"hug","counter_sizing":"fixed"}]}
 ```
 
-Horizontal and vertical auto-layout work; grid is not active in this alpha.
+For a gallery of cards, create a containing frame and call `set_grid_layout` with columns such as `["1fr","1fr","1fr"]` and a gap. Its children fill cells row by row; pin a featured card with `set_layout_child` column, row, and span fields. See [grid layout](/docs/tools/layout).

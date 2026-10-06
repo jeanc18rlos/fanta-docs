@@ -11,9 +11,15 @@ The inspector toolbar has zoom out and in, a percentage menu with 25%, 50%, 100%
 
 Common sections include geometry and rotation, corners and smoothing, appearance and opacity, blend mode, fills and strokes, typography, image fitting, layout and child layout, effects, prototype interactions, variable bindings, components and instances, and export. Use the inspector when exact dimensions or values matter; canvas handles are faster for rough adjustments.
 
+For a selection, the arrange controls align layers by left, center, right, top, middle, or bottom edge. With three or more selected layers, distribute them horizontally or vertically; **Tidy up** works with two or more. Transform actions rotate the selection clockwise by 90° or flip it horizontally or vertically. Controls that cannot apply to the current selection are unavailable. The default inspector does not expose editable constraints.
+
+For a grid frame, Layout exposes column and row tracks, gaps, automatic or manual item positioning, and each selected child's cell, span, and alignment. [Grid layout →](/docs/concepts/auto-layout) An instance's variant choices appear before its other component properties; picking a value swaps to the matching variant when that combination exists. [Components →](/docs/concepts/components)
+
 ## Paints and effects
 
 The paint list supports adding and removing fills or strokes, toggling individual paint visibility, changing a paint kind, and editing gradient stops in a popover. A gradient edit previews on the canvas and commits as an undoable change. The effects list supports drop and inner shadows. Available controls depend on the selected node and paint.
+
+A Boolean layer exposes its Union, Subtract, Intersect, or Exclude operation, plus applicable fills and strokes. Color paints bound to a variable show the value resolved for the active mode and the variable name. Detach the color variable to edit that paint's color, opacity, or visibility independently; detach keeps the currently resolved color. Specialized layer kinds can expose common wrapper properties such as position, layer appearance, effects, and export even when their internal content is not editable here.
 
 ## Text on Path
 
@@ -29,6 +35,6 @@ A selected TextPath layer exposes typography plus controls for where text starts
 
 Raster export is limited to 8192 px per side and 16 million total pixels. If a requested size exceeds a limit, reduce the scale or dimensions. Exporting the active page scopes output to that page. Multiple selected layers can be exported as targets.
 
-Fills include solid colors, gradients, patterns, images, and shaders. Video paint is available on macOS. The renderer maps the supported blend modes to Skia. Some imported or visible controls may have incomplete editing paths and show a notice. Drop shadows and inner shadows render as effects. For any imported design or unusual paint combination, inspect the exported result.
+Fills include solid colors, gradients, patterns, images, and shaders. Video paint is available on macOS. The renderer uses Skia's standard blend modes, additive blending for Linear Dodge, and a separate blender for Linear Burn. Some imported or visible controls may have incomplete editing paths and show a notice. Drop shadows and inner shadows render as effects. For any imported design or unusual paint combination, inspect the exported result.
 
 Inspector UI and snapshots are in `crates/fig_viewer/src/properties_panel.rs` and `crates/fig_viewer/src/properties_snapshot.rs`; export limits and formats are in `crates/fig_viewer/src/export.rs`. Paint handling is in `crates/fanta-render/src/paint.rs`.

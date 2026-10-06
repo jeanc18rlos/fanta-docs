@@ -7,7 +7,7 @@ description: Navigate Fanta's canvas, workspaces, modes, and panels.
 
 Fanta's editor has three main workspaces: **Canvas**, **Variables**, and **Code**. Canvas is where you select and draw layers. Variables manages reusable values and modes. Code opens the active page or component's FNX and JSON source files. Saving a source edit validates the project before the canvas reloads it.
 
-Within the canvas, modes include **Design**, **Motion**, **Draw**, **Dev**, **Code**, **Prototype**, and **Comments**. The available panels and controls follow the selected mode and layer. The Layers panel organizes pages and nodes; the file inspector's **Assets** section places stored media; the design inspector edits the current selection. A toolbar gives you selection, shape, drawing, text, and view tools.
+Within the canvas, modes include **Design**, **Motion**, **Draw**, **Dev**, **Code**, **Prototype**, **Comments**, and **Build**. The available panels and controls follow the selected mode and layer. The Layers panel organizes pages and nodes; the file inspector's **Assets** section places stored media; the design inspector edits the current selection. A toolbar gives you selection, shape, drawing, text, and view tools.
 
 ## A typical session
 
@@ -18,6 +18,6 @@ Within the canvas, modes include **Design**, **Motion**, **Draw**, **Dev**, **Co
 5. Use **Variables** for shared values, **Code** for the active page or component's FNX and JSON source, and **Present** for prototype testing.
 6. Export a selection or page through the inspector when you need a deliverable.
 
-Fanta saves its local project after a short idle period. The project is a folder, so keep its metadata, pages, components, and assets together. Read [Document model](/docs/concepts/document-model) for the file structure.
+Fanta saves its local project after a short idle period. If saving fails, it shows a notice until a later save succeeds; the design remains unsaved in the meantime. The project is a folder, so keep its metadata, pages, components, and assets together. Read [Document model](/docs/concepts/document-model) for the file structure.
 
 Learn the [tools](/docs/editor/tools), [inspector](/docs/editor/inspector), [Project Assets](/docs/editor/assets), [surfaces](/docs/editor/surfaces), [Motion](/docs/editor/motion), [Dev mode](/docs/editor/dev-mode), [Comments](/docs/editor/comments), [Settings](/docs/editor/settings), and [shortcuts](/docs/editor/shortcuts). Editor modes and workspaces are defined in `crates/fig_viewer/src/editor_session.rs`.

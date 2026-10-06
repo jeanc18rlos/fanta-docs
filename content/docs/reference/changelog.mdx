@@ -3,6 +3,18 @@ title: Changelog
 description: What this source-aligned Fanta documentation covers.
 ---
 
+## October 6, 2026 source update
+
+The docs now track published `fanta-edit` main at [`8fe28c69`](https://github.com/jeanc18rlos/fanta-edit/tree/8fe28c69bda2dca80bd01c70f93a6912148e7668). Figma import now preserves supported Boolean operands and warns about known flattened or omitted structures. Canvas and keyboard duplication preserve copied component definitions, complete variant sets, and supported internal prototype links; same-document Paste retains existing definitions, while cross-document canvas Paste reports that it is unsupported. The inspector adds or repairs controls for mixed selections, bound paint, Boolean nodes, rotation, flipping, alignment, distribution, and Tidy up.
+
+The Code workspace gains embedded Find, selected-buffer **Discard draft**, and source Save/Undo preservation. The editor also improves project/source reload ownership and layout preservation. The prototype detail's **X** closes the detail without deleting its interaction; **Remove** is the deletion action. Current time in Motion accepts a typed seek. The [source release coverage report](https://github.com/jeanc18rlos/fanta-edit/blob/8fe28c69bda2dca80bd01c70f93a6912148e7668/docs/alpha/CAPABILITY_COVERAGE.md) records bounded native checks alongside open large-project Save, draft recovery, final artifact, and distribution gates. These implementation changes do not establish a new packaged release.
+
+## October 5, 2026 source update
+
+The docs now track published `fanta-edit` main at [`23b1ff95`](https://github.com/jeanc18rlos/fanta-edit/tree/23b1ff95766052a83351e6584171b58a21f7f570). The editor implements grid auto-layout, node-aware double-click and canvas context-menu actions, and a separate **Build** mode for task-based agent design with review controls. Grid still has documented Figma behavior gaps. Variant sets gain a visible frame and operations to grow, shrink, arrange, and rename them; project layout v5 stores a set and its member components in one folder, migrating v4 on save.
+
+The external server still exposes 13 MCP tools, with 43 `batch_design` operations. New operations cover fills and effects, constraints, shape creation, grid layout, and component/variant-set work. `batch_get` can return a summary, editable style projection, or raw node data. These pages describe merged implementation; packaged release and hosted-service availability require separate verification.
+
 ## October 4, 2026 source update
 
 The docs now track published `fanta-edit` main at [`af712551`](https://github.com/jeanc18rlos/fanta-edit/tree/af712551269bdd2c7eedc45d0ea1567228fae686). The Code workspace can edit the active page or component's paired JSON alongside FNX, validate the complete candidate against the project, and reload the canvas. Modern FNX with explicit IDs can recover a missing or damaged sidecar. A failed external source reload keeps the last valid canvas and reports a repairable error.
@@ -27,4 +39,4 @@ This edition introduced the Zed-derived Fanta app and its `.fnx` project workflo
 
 The docs cover project creation, Git review, Figma import, the agent build loop, source editing, and the supported alpha editor paths. The [source](https://github.com/jeanc18rlos/fanta-edit) and its [known issues](https://github.com/jeanc18rlos/fanta-edit/blob/main/docs/alpha/KNOWN_ISSUES.md) remain the record of implementation and validation status.
 
-At that revision, several visible controls were not connected. Grid auto-layout and some blend/effect modes remain incomplete in the October source. The older known-issues log separates observed release behavior from source-only or unit-tested paths, but it predates several newer editor features.
+At that revision, several visible controls were not connected. The dated entries above supersede those observations where implementation changed. The issue log and release coverage report separate current source behavior from native-app and distribution validation.

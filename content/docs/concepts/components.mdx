@@ -10,15 +10,21 @@ A component is a reusable master layer tree. An instance refers to that master a
 ## Create and use a component
 
 1. Put the layers you want to reuse in a frame or group, then select that container.
-2. Use the component action in the layer context menu or inspector.
-3. Add an instance from the available component controls.
-4. Select the instance to change supported local properties.
-5. Use the instance controls to reset overrides or detach the instance when you need an independent layer tree.
+2. Choose **Create component** from the layer or canvas context menu, or the inspector's selection controls. The new master stays in place.
+3. Right-click the master and choose **Create instance**. The new instance appears beside the master and is selected. A component set's frame can create a set instance that initially shows its default variant.
+4. Select an instance to change supported local properties or a variant choice.
+5. Use **Go to main component** to find the rendered master. Use the instance controls to reset overrides or detach the instance when you need an independent layer tree.
 
 Open a component master to edit it in its own canvas. The master root appears as a row in Layers; expand it to inspect and select its descendants. Selecting a descendant reveals its ancestor chain in the panel.
 
-Components can have variants and exposed text, boolean, number, color, instance-swap, and variant properties. Variant and instance controls appear in the inspector when relevant. If an instance differs unexpectedly from its master, inspect its overrides before resetting it; reset intentionally discards those local changes.
+## Variant sets and properties
 
-An external agent can promote a frame or group with `create_component`, combine two or more standalone master node IDs with `combine_variants`, expose a property with `create_component_property`, bind it to a compatible descendant field with `bind_component_property`, and change an instance with `set_instance_property`. Read `get_design_system` between structural steps for exact set IDs, axes, properties, and allowed values. Invalid property types roll back the batch. See [components and variants](/docs/tools/components-instances).
+Components can have variants and exposed text, boolean, number, color, instance-swap, and variant properties. Create a set from at least two standalone masters; Fanta groups them inside a set frame and arranges them by their variant values. Names such as `Variant=Primary, State=Hover` define axes and values; plain names become values on a single **Variant** axis. The first selected master becomes the default. Duplicate combinations are rejected.
 
-Component and instance operations are implemented in `crates/fig_viewer/src/properties_ops.rs` and the layer context actions. Storage is defined in `crates/fanta-format/src/project/layout.rs`.
+An instance's variant choices appear before its other component properties in the inspector. Changing one axis keeps the others and swaps to the exact matching master. A sparse set has no result for a combination that has not been authored, so that choice leaves the instance as it was. **Go to main component** opens the variant currently rendered. The available instance controls can also detach it or reset its overrides. Reset intentionally discards local changes.
+
+When you duplicate a component master or a complete variant set, Fanta clones its component definitions and remaps the duplicate to those new definitions. Duplicating an ordinary instance keeps its reference to the existing master. Page duplication also clones component definitions belonging to the duplicated page.
+
+An external agent can promote a frame or group with `create_component`, combine two or more standalone master node IDs with `combine_variants`, expose a property with `create_component_property`, bind it to a compatible descendant field with `bind_component_property`, and change an instance with `set_instance_property`. The `componentize` operation can take a master and structurally matching copies, replace the copies with instances, and preserve their visual differences as overrides. It refuses copies with different kinds or child structures. Read `get_design_system` between structural steps for exact set IDs, axes, properties, and allowed values. Invalid property types roll back the batch. See [components and variants](/docs/tools/components-instances).
+
+Component and instance operations are implemented in `crates/fig_viewer/src/properties_ops.rs`, `component_actions.rs`, `componentize.rs`, and `variant_sets.rs`. Storage is defined in `crates/fanta-format/src/project/layout.rs`.

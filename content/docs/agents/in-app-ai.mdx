@@ -19,6 +19,16 @@ Use a project-root <code>fanta.md</code> to give the native designer a product b
 
 After a successful completed Plan response, the panel offers **Apply plan** and **Keep planning**. Applying switches that thread to Write mode and sends an implementation request for the plan; keeping it open lets you continue discussing it. The actions appear only after a successful completed Plan response.
 
+## Plan & build in Build mode
+
+The editor's **Build** mode opens a separate **Plan & build** inspector sidebar. Enter a design brief and choose **Plan & build**. Fanta sends the current page scene, supported design operations, and the project's <code>fanta.md</code> context to its v2 agent service. The service plans tasks and returns canvas operations for the current task. Fanta applies those operations as one undoable preview for you to review.
+
+Choose **Accept** to send the resulting scene back for a lint and critique check; Fanta then moves to the next task or offers revised operations when a check fails. **Retry** can include notes and requests new operations after undoing the latest preview. **Skip** removes that preview and moves on. **Stop** ends the session and keeps work already applied. If you turn on **Accept each task automatically** before starting, the panel accepts previews as they arrive; this switch is off by default. The panel shows task status, reported issues, and credits used.
+
+Build mode requires Fanta sign-in, available credits when charged, and a configured server that offers <code>/v2/agent/sessions</code>. Preview and dev channel defaults target the v2 service; the stable channel default still points to the older API, so Build may report that the v2 API is unavailable. A failed operation batch rolls back; choose **Accept** to send its errors back to the agent. If you edit the canvas after a preview, Retry or Skip will leave it in place rather than undoing your later edits; use Undo manually if you want to remove it.
+
+Build mode's task-by-task session is separate from the Agent Panel's **Plan** mode and **Apply plan** action above.
+
 The Thinking control appears when the selected model reports support for reasoning effort; it changes the request but does not expose private reasoning. The built-in agent can read source files, and source-capable modes can save small, complete FNX subtrees or typed JSON changes. The Code workspace itself edits the selected page or component FNX and its <code>page.json</code> or <code>def.json</code> companion. For other managed JSON, use file tools and validate the complete candidate before writing. See [FNX source](/docs/formats/fnx).
 
 ## Follow visible work
@@ -41,7 +51,7 @@ Hosted generation is a separate model catalog and credit workflow. It requires s
 
 ## Review what changed
 
-Inspect updated layers, source diffs, comments, and screenshots in the editor. Continue with manual canvas tools, request a revision, or undo an edit batch. Structured design operations can create variables, bind compatible properties, combine component variants, and set exposed instance properties. For gradients and per-run rich text outside that vocabulary, work through [FNX source](/docs/formats/fnx).
+Inspect updated layers, source diffs, comments, and screenshots in the editor. Continue with manual canvas tools, request a revision, or undo an edit batch. Structured design operations can create variables, bind compatible properties, combine and edit component variants, set gradient fills, arrange grid layouts, and set exposed instance properties. For individual rich-text runs or another property outside the operation vocabulary, work through [FNX source](/docs/formats/fnx).
 
 <Callout type="info">
 The local MCP server and Agent Panel both work with the open desktop design, but their tool names and permissions differ. Agent presence reflects reported activity in the running app.

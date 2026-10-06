@@ -18,4 +18,6 @@ Canvas coordinates use pixels with X increasing to the right and Y increasing do
 
 A page root scopes rendering and export. When exporting the active page, unrelated pages do not appear just because they reuse the same coordinate values. You can also export selected layers.
 
+Duplicating a page copies its layer tree and component definitions belonging to that page. Prototype links whose targets are inside the copied tree point to the copies; links to targets outside it keep their original destinations. Clean canvas tabs restore their project, page, or component scope when the workspace reopens.
+
 The page operations are implemented in `crates/fig_viewer/src/design_panel.rs` and `crates/fig_viewer/src/gpui_adapters/pages.rs`. Export targeting is in `crates/fig_viewer/src/export.rs`.

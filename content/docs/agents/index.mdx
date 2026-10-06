@@ -9,7 +9,8 @@ Fanta combines an editable design canvas with an in-app agent, a local MCP conne
 
 | Workflow | Use it for | Where it runs |
 | --- | --- | --- |
-| [Agent Panel](/docs/agents/in-app-ai) | Ask for design changes and inspect the result in the editor | In Fanta |
+| [Agent Panel](/docs/agents/in-app-ai) | Ask for design changes, or plan and apply a plan in a chat thread | In Fanta |
+| [Build mode](/docs/agents/in-app-ai) | Give a brief, then review and accept, retry, or skip each agent-built task | In Fanta, with the v2 service |
 | [Local MCP](/docs/agents/workflows) | Let an external agent inspect and edit the open canvas | Through the running desktop app |
 | [Generation Workspaces](/docs/agents/media-generation) | Generate images, video, audio, vectors, and masks | Hosted models, with results reviewed in Fanta |
 | [FNX and managed JSON source](/docs/formats/fnx) | Edit detailed design properties and review source diffs | In project files |
@@ -27,7 +28,7 @@ The documented external-agent bridge and in-app local agent process workflows ap
 5. Capture another screenshot and inspect the result.
 6. Revise as needed, address review comments, then save or export for handoff.
 
-A <code>batch_design</code> call streams a visible preview and finishes as one undoable transaction. If an operation fails or the call is canceled, the preview rolls back. The edit response includes IDs for created nodes. Use exact IDs from the current document, not layer names. The operation vocabulary includes variables, variants, and instance properties. For changes outside that vocabulary, read the full FNX or managed JSON source and validate a complete candidate before writing it. Report a stable agent identity and focus to let the user follow work across pages and source tabs.
+A <code>batch_design</code> call streams a visible preview and finishes as one undoable transaction. If an operation fails or the call is canceled, the preview rolls back. The edit response includes IDs for created nodes. Use exact IDs from the current document, not layer names. The operation vocabulary includes gradient paints, effects, grid layout, component variants, variables, and instance properties. For changes outside that vocabulary, read the full FNX or managed JSON source and validate a complete candidate before writing it. Report a stable agent identity and focus to let the user follow work across pages and source tabs.
 
 <Callout type="info">
 The local MCP connection works against the design open in the running desktop app. Hosted generation requires sign-in and may require credits; available models and prices come from Fanta's live catalog.

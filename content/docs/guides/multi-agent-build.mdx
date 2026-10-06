@@ -7,7 +7,7 @@ The external MCP server acts on the most recently focused design. `batch_design`
 
 1. Map pages and components with `get_editor_state` and `batch_get`.
 2. Give each agent a distinct page, frame, component, or source file. Share exact IDs or paths. Each agent should use `report_agent_activity` with a stable ID and name, its current action, page/node or source path, and `workspace` (`canvas`, `variables`, or `code`). Use the same ID and name in `batch_design.activity` so Follow can track its streamed placements.
-3. Have each agent finish canvas edits and let autosave complete before another edits the same source file. Do not mix canvas and source edits on the same nodes simultaneously.
+3. Have each agent finish canvas edits and let autosave complete before another edits the same source file. Do not mix canvas and source edits on the same nodes simultaneously. A dirty Code workspace draft locks canvas edits; save or discard it before handing the design to a canvas agent.
 4. Build one component or section per batch so each operation appears on the canvas while the call runs. Verify each region with `get_screenshot` and inspect the Git diff for unexpected changes. A failed or interrupted batch rolls back its preview.
 5. Clear activity with `active: false` when an agent finishes, then commit reviewed changes with ordinary Git.
 

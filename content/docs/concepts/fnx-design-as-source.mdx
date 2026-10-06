@@ -5,25 +5,29 @@ description: Edit Fanta's page, component, and managed JSON source with live can
 
 # FNX design as source
 
-Fanta stores page and component layer trees in <code>pages/&lt;slug&gt;/page.fnx</code> and <code>components/&lt;slug&gt;/master.fnx</code>. FNX is a readable, static JSX-like representation of design nodes and properties. It prints explicit node IDs. Companion <code>page.ids.json</code> and <code>master.ids.json</code> sidecars carry supporting identity and sibling order information.
+Fanta stores page layer trees in <code>pages/&lt;page&gt;/page.fnx</code>. A standalone component master is <code>components/&lt;component&gt;/master.fnx</code>. With layout version 5, a variant set lives under <code>components/&lt;set&gt;/</code> with <code>set.json</code> and one <code>&lt;variant&gt;/master.fnx</code> per member. FNX is a readable, static JSX-like representation of nodes and properties. It prints explicit node IDs. Companion <code>page.ids.json</code> and <code>master.ids.json</code> sidecars carry supporting identity and sibling order information.
 
-Other project data is managed JSON: page and component headers, variables and modes, motion, prototypes, metadata, asset indexes, and more. The project also seeds <code>fanta.md</code> for design intent and <code>AGENTS.md</code> for agent guidance. Page and component artwork remains in FNX; JSON holds shared data and metadata.
+Other project data is managed JSON: page and component headers, variant sets, variables and modes, motion, prototypes, metadata, asset indexes, and more. The project also seeds <code>fanta.md</code> for design intent and <code>AGENTS.md</code> for agent guidance. Page and component artwork remains in FNX; JSON holds shared data and metadata.
 
-A source file may express placement through parent-relative transforms, including X and Y translation, and width and height shorthand. It has conveniences for Rect and Ellipse shapes and colors through <code>fnxColor</code>. A TextPath element stores its own path geometry and text. The canvas presents the resolved result.
+A source file may express placement through parent-relative transforms, including X and Y translation, and width and height shorthand. It has conveniences for Rect and Ellipse shapes and colors through <code>fnxColor</code>. A TextPath element stores its own path geometry and text. A frame can express horizontal, vertical, or grid auto layout with fixed, fractional, or content-sized tracks. The canvas presents the resolved result.
 
 ## Edit source in Fanta
 
-1. Open the **Code** workspace. Select **FNX** for the active page or component master, or **JSON** for that source's <code>page.json</code> or <code>def.json</code> companion.
+1. Open the **Code** workspace. Select **FNX** for the active page or component master, or **JSON** for that source's <code>page.json</code> or <code>def.json</code> companion. A variant opens its own source under the set folder.
 2. Make a small, complete change. Once either buffer is dirty, canvas edits are locked to avoid competing changes.
 3. Save. Fanta validates the edited source against the complete project before writing, then reloads the canvas. It checks JSON types and references, so valid JSON syntax alone is insufficient.
 4. If validation fails, read the error, repair the source, and save again. An invalid edit leaves the last valid canvas and saved file intact.
 
-The Code workspace protects against a file changing on disk during a save. It can discard dirty FNX or JSON buffers, and it blocks a source save while canvas changes or file conflicts still need resolution. Unknown FNX attributes may produce nonfatal diagnostics; inspect warnings and the rendered result.
+The Code workspace has **Find** for the active FNX or JSON editor. **Discard draft** discards unsaved changes in only the selected buffer; another dirty source buffer keeps the canvas edit lock until it is saved or discarded too. A source Save handles the selected dirty buffer first, then the other if necessary. Successful Save retains the authored text edit in Undo history and saves geometry recomputed from that source change with it.
+
+The workspace protects against a file changing on disk during a save. It blocks source saving while canvas changes or file conflicts still need resolution. Invalid source leaves the last valid file and canvas intact, so repair the draft or discard it. Unknown FNX attributes may produce nonfatal diagnostics; inspect warnings and the rendered result.
 
 ## Edit with an external editor or agent
 
 External file edits are reconciled into the open project. Before writing an FNX or managed JSON candidate, an external agent can call <code>validate_fnx_source</code> with the complete candidate and project path. The tool validates without writing. For an existing managed file, it checks the candidate in the context of the full project; a new managed file receives a typed or syntax check until its companion source exists. Then save with normal file tools and inspect the canvas.
 
 Keep existing IDs and references. Modern FNX with explicit IDs can recover a missing or damaged identity sidecar; Fanta reconstructs identity and order from the source and repairs the sidecar on a successful save. Older FNX without explicit IDs still needs its sidecar. Commit source, sidecars, headers, and assets together.
+
+Do not rename a component by editing only its <code>def.json</code> name. An FNX instance may reference that name, and the project can fail to load if its references are left behind. Use the canvas or <code>rename_component</code>; use the variant operations to maintain <code>set.json</code> and member folders. The Code workspace edits only the selected page or component FNX and companion header, while external file tools can reach other managed files.
 
 The implementation lives in <code>crates/fanta-fnx/src/</code>, <code>crates/fanta-format/src/project/</code>, and <code>crates/fig_viewer/src/code_workspace.rs</code>. See [FNX source](/docs/formats/fnx) and [Fanta project layout](/docs/formats/fant).

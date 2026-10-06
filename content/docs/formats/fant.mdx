@@ -1,31 +1,32 @@
 ---
 title: Fanta projects and .fant snapshots
-description: Understand the editable project directory and single-file snapshot format.
+description: Understand the editable project directory, variant-set layout, and single-file snapshot format.
 ---
 
-The working Fanta document is a directory containing <code>fanta.json</code>. It holds the design as source files and assets, so page and component changes are inspectable in Git.
+The working Fanta document is a directory containing <code>fanta.json</code>. Pages, component masters, shared data, and assets are separate files that can be reviewed in Git.
 
 ## Project layout
 
 | Path | Contains |
 | --- | --- |
-| <code>fanta.json</code> | Project identity and format version |
-| <code>pages/&lt;slug&gt;/page.json</code> | Page identity, name, and order |
-| <code>pages/&lt;slug&gt;/page.fnx</code> | Page node tree |
-| <code>components/&lt;slug&gt;/master.fnx</code> | Component master node tree |
+| <code>fanta.json</code> | Project identity and layout version |
+| <code>pages/&lt;page&gt;/page.json</code>, <code>page.fnx</code>, <code>page.ids.json</code> | Page header, editable tree, and identity sidecar |
+| <code>components/&lt;component&gt;/def.json</code>, <code>master.fnx</code>, <code>master.ids.json</code> | A standalone component's definition, editable master, and sidecar |
+| <code>components/&lt;set&gt;/set.json</code> | One variant set's axes, values, and default variant |
+| <code>components/&lt;set&gt;/&lt;variant&gt;/def.json</code>, <code>master.fnx</code>, <code>master.ids.json</code> | Each variant's definition, editable master, and sidecar |
 | <code>doc/variables.json</code> and related files | Tokens, modes, metadata, motion, and prototype state |
 | <code>doc/asset_library.json</code> | Names and kinds of reusable project media, including unplaced assets |
 | <code>assets/</code> | Source binary assets with an integrity index |
-| <code>AGENTS.md</code> | Project-local guide to editing FNX and using an agent |
-| <code>fanta.md</code> | Project design brief: audience, direction, foundations, reusable system, and acceptance checks |
-| <code>fnx.d.ts</code> and editor configuration | Local FNX declarations and formatting support |
-| <code>exports/</code> | Derived files from visual export |
+| <code>AGENTS.md</code>, <code>fanta.md</code>, <code>fnx.d.ts</code> | Project editing guide, design brief, and FNX editor declarations |
+| <code>exports/</code> | Derived visual exports, ignored by Git |
 
-Readable slugs are paths; IDs identify pages and nodes. Keep IDs stable when editing existing content. Commit the manifest, source, sidecars, design brief, asset library, and referenced media together. Fanta seeds <code>fanta.md</code> only when absent and preserves customized <code>AGENTS.md</code>. [Project Assets](/docs/editor/assets) explains how stored media becomes a page layer.
+**Current projects use layout version 5.** A component with variants is one set folder; its variant folders are named from axis values, such as <code>components/button/primary-hover/</code>. A component without variants remains directly under <code>components/</code>. Folder slugs can change when names or variant values change; IDs in headers and FNX identify the designs. Commit the manifest, source, sidecars, design brief, shared data, and referenced media together.
 
-Current projects use **layout version 4**. Their FNX can print readable component names and variable paths. Older version 3 projects can open in the current app and upgrade on save. An older build that supports only version 3 rejects a version 4 manifest; use a current app for an upgraded project. See [FNX source](/docs/formats/fnx) for the reference syntax.
+The current app reads version 4 projects, where variants were separate top-level component folders and sets were collected in <code>components/sets.json</code>. The next save moves the variants into their set folder, writes <code>set.json</code>, removes the old registry, and changes the manifest to version 5. Earlier layout versions also remain readable. An older app that supports only version 4 or earlier rejects a version 5 manifest, so collaborators should update before an upgraded project is shared.
 
-Fanta saves canvas changes back to project files. It watches for external edits and branch changes, uses atomic file replacement and a transaction journal for multi-file updates, and reports invalid source or overlapping edits. The Code workspace edits the active page or component FNX and its companion JSON header when the canvas is clean. Both source types are validated against the complete project before a save updates the canvas. An external editor can change other managed JSON too. Modern FNX with explicit IDs can recover a missing or damaged identity sidecar; older FNX without explicit IDs still needs it.
+Use the canvas or structured operations to create and change variant sets. <code>combine_variants</code>, <code>add_variants</code>, <code>remove_variant</code>, <code>arrange_variants</code>, and <code>rename_component</code> keep set metadata and component references together. Do not rename a component by changing only <code>def.json</code>: FNX instances can refer to components by name, and a partial rename can prevent the project from loading.
+
+Fanta saves canvas changes back to project files. It watches for external edits and branch changes, uses atomic file replacement and a transaction journal for multi-file updates, and reports invalid source or overlapping edits. The Code workspace edits the active page or component FNX and its companion JSON header when the canvas is clean. Both source types are validated against the complete project before a save updates the canvas. Modern FNX with explicit IDs can recover a missing or damaged identity sidecar; older FNX without explicit IDs still needs it.
 
 ## Save As
 
@@ -39,4 +40,4 @@ A <code>.fant</code> file is a single-file design snapshot. The format handler c
 The format library supports writing <code>.fant</code> snapshots, but the editor controls confirmed in the current app expose PNG, JPG, SVG, and PDF visual exports. For routine handoff, share the editable project directory or a visual export according to the recipient's needs.
 </Callout>
 
-See [visual export](/docs/formats/export) for rendered deliverables.
+See [FNX source](/docs/formats/fnx) and [visual export](/docs/formats/export).

@@ -15,12 +15,24 @@ The master stays on canvas and the result returns a component ID. Place a copy w
 {"label":"Place button","ops":[{"op":"create_instance","component":"<component-id>","x":400,"y":120}]}
 ```
 
-An instance inherits its master’s size and follows later master edits. The project stores component source under `components/`; `get_editor_state` lists component paths and `get_design_system` reports component properties and variant sets.
+An instance inherits its master’s size and follows later master edits. `get_editor_state` lists component source paths and `get_design_system` reports component properties and variant sets. A standalone component uses `components/<slug>/master.fnx`. A variant set uses one `components/<set>/` folder with `set.json` and a subfolder with `master.fnx` for each variant. Older flat variant folders are read and moved into the set folder on the next save.
 
-To make variants, first promote two or more standalone master nodes with `create_component`, then pass their **master node IDs** to `combine_variants`. The result creates a set; use the returned set ID (or its unique name) in `create_instance`. `create_component_property` can expose a `variant` axis or a `text`, `boolean`, `number`, `color`, or `instance_swap` property on a component. For a field on a descendant, use `bind_component_property` with its node ID, a compatible `target` such as `{"prop":"text_content"}`, and the exposed property ID or unique name. `set_instance_property` changes an instance's exposed property; the value must match its kind.
+## Componentize existing copies
+
+`componentize` takes two or more similar, side-by-side layer IDs. The first becomes the master; every other copy is replaced in place by an instance, preserving supported differences such as text, fills, hidden layers, and opacity as overrides. The copies must have the same structure: matching layer kinds in the same order. The operation reports `component` and new `instances` IDs; a mismatch fails without replacing the copies.
+
+```json
+{"label":"Reuse cards","ops":[{"op":"componentize","ids":["<master-card-id>","<similar-card-id>"]}]}
+```
+
+To make variants, first promote two or more standalone master nodes with `create_component`, then pass their **master node IDs** to `combine_variants`. Name masters after their axis values, for example `Variant=Primary, State=Default` and `Variant=Primary, State=Hover`, to create separate axes. Plain names become values of one `Variant` axis. The operation creates one set frame, arranges its variants in a grid, and reports `component_set` and `frame`; use the set ID (or unique name) in `create_instance`.
 
 ```json
 {"label":"Add button variants","ops":[{"op":"combine_variants","ids":["<default-master-node-id>","<hover-master-node-id>"],"name":"Button"}]}
 ```
+
+`add_variants` adds standalone masters named `Axis=Value` to an existing set. New axes give older variants a `Default` value. `remove_variant` accepts a variant master node ID or component ID and leaves that variant as a standalone component beside the set frame. `arrange_variants` restores the set frame and grid order. `rename_component` changes a component or set name along with its master or frame layer; names must remain unique. Use these operations for structural changes rather than manually renaming a `def.json`, `set.json`, or component folder, since pages refer to component names.
+
+`create_component_property` can expose a `variant` axis or a `text`, `boolean`, `number`, `color`, or `instance_swap` property on a component. For a field on a descendant, use `bind_component_property` with its node ID, a compatible `target` such as `{"prop":"text_content"}`, and the exposed property ID or unique name. `set_instance_property` changes an instance's exposed property; the value must match its kind.
 
 Read `get_design_system` after each structural step to obtain exact set, property, and axis values. An invalid target or property value fails the batch and rolls it back.

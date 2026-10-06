@@ -7,6 +7,8 @@ The `batch_design` operation `create_image` accepts a `data:image/...;base64,...
 
 `create_image` does not fetch `http(s)` URLs. Use `import_image` with exactly one of `path` (absolute or project relative), HTTP(S) `url`, or base64 `source` to save an image into the project's Assets panel. It returns an asset ID and saved path but does **not** create a canvas layer. A URL import has a download timeout and image-size limit. Use a separate placement workflow or valid FNX source edit when the design needs that asset on canvas.
 
+`set_fill` can replace a frame or shape's paint stack with an image paint. Its `source` is encoded PNG/JPEG/WebP/GIF bytes, and `fit` can be `fill`, `fit`, `stretch`, or `tile`. It ingests the bytes as an asset in the same undoable batch. A style read may show an existing image's asset ID; that ID is not the `source` argument for `set_fill`.
+
 `prepare_design_asset` accepts `kind: "image"` or `"svg"`, a prompt, and optional `preferred_model`. It opens the existing generation composer for the user to review; it does not submit a request or spend credits. The external MCP surface has no direct `generate_image` or `generate_media` tool. Some toolbar AI commands also open drafts that require the user to send them.
 
 Inspect imported or placed media on canvas and with `get_screenshot`. See the [known issues](https://github.com/jeanc18rlos/fanta-edit/blob/main/docs/alpha/KNOWN_ISSUES.md) for alpha limitations.

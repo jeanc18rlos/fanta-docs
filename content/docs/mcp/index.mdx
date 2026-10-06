@@ -27,6 +27,8 @@ The built-in Agent Panel uses the same `design_surface::DesignOp` vocabulary thr
 
 In a `batch_design` call, operations appear on the canvas progressively while the call runs. The batch remains one undo step; if an operation fails, the preview rolls back. Keep batches to one visible component or screen section so the user can follow each milestone.
 
+The current `batch_design` schema includes 43 operations, covering grid layout, shape creation, gradients and image fills, effect stacks, constraints, componentizing similar layers, and variant-set maintenance. Call `get_editor_state` to inspect capability flags for the running build, then read nodes with `batch_get` before making a change.
+
 <Cards>
   <Card title="Connect" href="/docs/mcp/connect" />
   <Card title="Build loop" href="/docs/mcp/build-loop" />
