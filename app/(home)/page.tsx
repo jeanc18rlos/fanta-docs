@@ -4,8 +4,8 @@ import { ArrowRight, Bot, Code2, Download, GitBranch, Image, Layers, LayoutTempl
 const features = [
   { icon: MousePointer2, title: 'Canvas and layers', detail: 'Draw, select, resize, rotate, snap, group, and arrange in a native editor.', href: '/docs/editor' },
   { icon: LayoutTemplate, title: 'Layout and reuse', detail: 'Build horizontal, vertical, or grid layouts with components, instances, and variables.', href: '/docs/concepts' },
-  { icon: Paintbrush, title: 'Detailed inspector', detail: 'Edit fills, strokes, type, corners, effects, and interactions.', href: '/docs/editor/inspector' },
-  { icon: Code2, title: 'Design as source', detail: 'Find and edit .fnx and supported project JSON behind the canvas.', href: '/docs/concepts/fnx-design-as-source' },
+  { icon: Paintbrush, title: 'Detailed inspector', detail: 'Inspect resolved variables and edit fills, strokes, type, corners, and effects.', href: '/docs/editor/inspector' },
+  { icon: Code2, title: 'Design as source', detail: 'Find and edit .fnx and JSON while preserving supported authored source fields.', href: '/docs/concepts/fnx-design-as-source' },
   { icon: GitBranch, title: 'Reviewable changes', detail: 'Keep a Git history and review design diffs from the app.', href: '/docs/guides/version-control-designs' },
   { icon: Bot, title: 'Agents on the canvas', detail: 'Connect Claude Code or Codex through 13 tools, or review tasks in Build mode.', href: '/docs/mcp' },
   { icon: Sparkles, title: 'Generation workspace', detail: 'Use the current signed-in catalog for image, video, audio, and vector work.', href: '/docs/agents/media-generation' },

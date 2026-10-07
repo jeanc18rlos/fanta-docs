@@ -17,6 +17,8 @@ Pages and component masters are stored as FNX files with companion JSON headers.
 
 Source files are useful for Git review. Check the actual canvas too: a clean textual diff alone does not establish that the rendered design is correct.
 
+Check the reverse as well: a visible canvas edit does not prove the source saved. Fanta retains authored FNX comments and extra attributes during structural saves when it can. If deletion or a node-type change would lose a source-only attribute that Undo cannot restore, it reports a preservation error. Undo the canvas edit or make an intentional source edit and validate it, then verify both canvas and diff again.
+
 ## Comments and handoff
 
 Fanta's canvas comments can attach pins to design positions and hold replies, mentions, attachments, and resolved state. They are stored as project page metadata. External agents can call <code>list_comments</code> for unresolved threads on the active page, or include resolved threads and choose a page. Use <code>reply_comment</code> with the exact thread ID to answer, and set <code>resolve: true</code> only after the request has been verified. The in-app agent's related tool is <code>design_comments</code>. Comments do not appear in PNG, JPG, SVG, or PDF exports.

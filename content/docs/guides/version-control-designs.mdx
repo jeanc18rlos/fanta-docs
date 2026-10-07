@@ -10,4 +10,6 @@ Fanta writes canvas edits to the design project after a short autosave delay. In
 3. In a non-Store build, choose **File → Review Changes** or run `git diff` in the project. Confirm the source diff matches the intended visual result.
 4. Commit through **File → Commit…** or your Git client, including any new assets the design uses. A separate Git client is the dependable path for a Mac App Store build.
 
+Structural canvas edits retain authored FNX attributes and child comments on surviving nodes. Check the diff after moving or adding layers, especially in source you have customized by hand. A delete or type change that would remove source-only information may be refused; remove that information deliberately in FNX first if that is your intent. A refused save protects the files on disk, while the visible canvas edit may need Undo before you continue.
+
 The external MCP server edits the design but does not commit it. The old `vcs_*` tool names are absent. If no `.git` was created in a non-Store build, check the bundled or system Git and initialize the repository with a Git client. Mac App Store feature builds intentionally skip automatic `git init`.

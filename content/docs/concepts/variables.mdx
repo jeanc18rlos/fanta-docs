@@ -21,6 +21,8 @@ Aliases point one variable at another. Check alias and mode resolution when a bo
 
 For a color paint bound to a variable, the inspector shows its resolved color in the active mode and the variable name. The paint's opacity and visibility are read-only while the color binding is in place. Use **Detach** on the color variable to keep the resolved color as an ordinary paint, then edit the paint independently.
 
+The Design inspector also resolves single-layer opacity, visibility, and uniform vector radius bindings through aliases and inherited mode pins. If an explicit four-corner radius is present, it takes precedence over the uniform radius binding. An unresolved binding shows the layer's fallback value with a label and can still be detached. A direct text-content binding on component text prevents local text edits in both the canvas and the instance Content row; edit the variable or remove the binding to change that text.
+
 ## Work through an agent
 
 Call `get_design_system` (or in-app `design_system`) first to read collection IDs, modes, typed values, and selected-node bindings. The external `batch_design` operations can create collections and variables, add a mode, set values or aliases per mode, set an active mode for the document or a frame, and bind or unbind compatible properties. Binding targets include fill or stroke color, stroke width, corner radius, opacity, visibility, text content or style, and clip size. Use exact IDs from the response for follow-up edits; names work only when unique.

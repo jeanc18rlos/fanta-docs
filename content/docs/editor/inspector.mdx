@@ -13,7 +13,11 @@ Common sections include geometry and rotation, corners and smoothing, appearance
 
 For a selection, the arrange controls align layers by left, center, right, top, middle, or bottom edge. With three or more selected layers, distribute them horizontally or vertically; **Tidy up** works with two or more. Transform actions rotate the selection clockwise by 90° or flip it horizontally or vertically. Controls that cannot apply to the current selection are unavailable. The default inspector does not expose editable constraints.
 
+The opacity, visibility, and uniform vector radius fields show resolved values when bound to variables, including aliases and active or inherited mode pins. Explicit independent corner values take precedence over a bound uniform radius; unresolved bindings show the layer's fallback value and remain detachable. Four authored corners remain independent even when all four numbers match. For a mixed selection, opacity shows a mixed state and applies one value to the selected layers when the edit commits. Drag a numeric value to scrub it; Escape cancels a draft, and a completed edit is undoable. Mixed-selection opacity does not preview directly on the canvas during the scrub.
+
 For a grid frame, Layout exposes column and row tracks, gaps, automatic or manual item positioning, and each selected child's cell, span, and alignment. [Grid layout →](/docs/concepts/auto-layout) An instance's variant choices appear before its other component properties; picking a value swaps to the matching variant when that combination exists. [Components →](/docs/concepts/components)
+
+An instance's component section also lists Content rows for its visible text layers. Edit a Content row to create a local text override, or reset it to use the master value. A direct text-content variable binding makes that row read-only; edit the variable or remove its binding first. Nested instance text is not recursively listed as a Content row.
 
 ## Paints and effects
 

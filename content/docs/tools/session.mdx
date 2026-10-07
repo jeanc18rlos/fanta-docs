@@ -7,4 +7,6 @@ description: Use undo batches, autosave, and Git milestones.
 
 Canvas edits autosave to `.fnx` after editing stops. Review the source diff and use Git commits for durable milestones. A dirty Code workspace FNX or JSON buffer locks canvas editing until its draft is saved or discarded. Source Save validates and reloads the project; **Discard draft** reloads the selected buffer from disk. Finish a source edit and its reload before returning to canvas edits on the same nodes.
 
+An undoable canvas batch and a persisted source change are separate checkpoints. When a structural edit would discard an authored FNX attribute or comment, the source writer can refuse the save even after the change appeared on canvas. Read the save error and diff; Undo the canvas edit or make an intentional, validated FNX change before retrying.
+
 The external MCP server does not expose pointer-event replay, checkpoints, or `try_edit` tools. Use the editor for manual interaction and the MCP tools for state, node queries, transactional edits, screenshots, source reading, comments, and agent activity.

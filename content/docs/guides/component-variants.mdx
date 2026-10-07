@@ -16,3 +16,7 @@ description: Create masters, combine variants, and customize an instance.
 ```
 
 Master, variant-set, and exposed instance-property operations are in the external MCP schema. Read `get_design_system` after structural changes; invalid values fail and roll back the batch. Use `rename_component` rather than editing component metadata or folder names by hand.
+
+In the editor, **Go to main component** on a variant-set instance opens the member the instance currently displays, including a member selected through a variable mode. **Reset all overrides** restores the resolved default member and its size. Save or discard a Code workspace draft before navigating to another component. A directly bound text-content variable controls its instance text; edit the variable or remove that binding before editing the text in place. Text reached through an exposed component-property alias remains editable.
+
+The editor's Copy/Paste can carry a complete component or variant set with its captured definitions. If the original has been removed, Paste restores an independent usable copy. Cutting only part of a variant set is refused; select the whole set when it needs to move together. Review the saved FNX diff after structural changes.

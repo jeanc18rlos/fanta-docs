@@ -22,6 +22,12 @@ The Code workspace has **Find** for the active FNX or JSON editor. **Discard dra
 
 The workspace protects against a file changing on disk during a save. It blocks source saving while canvas changes or file conflicts still need resolution. Invalid source leaves the last valid file and canvas intact, so repair the draft or discard it. Unknown FNX attributes may produce nonfatal diagnostics; inspect warnings and the rendered result.
 
+## Canvas edits and authored source
+
+The editor patches the affected FNX when a canvas property changes. For a structural canvas edit, it rebuilds the changed tree while retaining authored attributes on surviving nodes, such as a page root's source-only dimensions or a future field, and keeps JSX child comments with their nodes on reparent. Explicitly removing a field in source is respected on later saves.
+
+If deleting a node or changing its kind would lose source-only attributes or child comments that canvas Undo cannot reconstruct, Fanta reports a preservation error instead of silently rewriting the file. Edit FNX directly to remove that content intentionally, then retry the canvas change. Persisted files remain protected after a refused save; use canvas Undo if the attempted operation is still visible.
+
 ## Edit with an external editor or agent
 
 External file edits are reconciled into the open project. Before writing an FNX or managed JSON candidate, an external agent can call <code>validate_fnx_source</code> with the complete candidate and project path. The tool validates without writing. For an existing managed file, it checks the candidate in the context of the full project; a new managed file receives a typed or syntax check until its companion source exists. Then save with normal file tools and inspect the canvas.

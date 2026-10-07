@@ -11,6 +11,8 @@ The canvas shows the active page and its selectable layers. The Layers panel let
 
 The Pages area of Layers creates, selects, renames, duplicates, reorders, and deletes pages. It also includes a page link action and name/text search and replace. Right-click on the canvas for a shorter menu tailored to what you clicked, including direct text, vector, image, media, and component actions. [Canvas tools →](/docs/editor/tools)
 
+Drag the edge of the Layers or Properties sidebar to resize it. The panel contents respond as the width changes.
+
 ## Files and Project Assets
 
 The file inspector shows project files and an **Assets** section for stored images, SVG, video, and audio. Generated results can be added to this library without creating a page layer. Choose a target page under **Place in** and use the asset row's **+** button when you want a layer. Missing files or unsupported formats show a disabled placement action with a reason. [Project Assets →](/docs/editor/assets)
@@ -22,6 +24,8 @@ The Variables workspace manages collections, modes, values, aliases, and binding
 ## Code
 
 The Code workspace opens the active page's `page.fnx` and `page.json`, or a component master's `master.fnx` and `def.json`. Select **FNX** or **JSON** to edit that source file. **Find** searches the selected source buffer. Save the design once before opening source. Save or discard canvas changes before editing source; while either source buffer has unsaved changes, canvas content editing is locked, but pan and selection remain available.
+
+While a source draft is unsaved, select one canvas layer to read its last accepted properties in the Design inspector, including position, size, and layout gap. These rows cannot be edited until the draft is saved or discarded. With no selection or a mixed selection, the inspector asks you to select one layer. A source draft also blocks **Go to main component** when that action would switch page or component scope; save or discard the draft first.
 
 Save source to validate the edited file against the project, write it, and reload the canvas. FNX saves also maintain its ID sidecar. Invalid JSON stays in the editor with an error and does not replace the saved file or the last good canvas. If both FNX and JSON have changes, Fanta saves and validates them in sequence. **Discard draft** discards unsaved edits in the selected source file only; switch between FNX and JSON to check each buffer. Resolve any on-disk file conflict before retrying. When an in-app agent is writing the selected FNX file, Code shows its name and can follow its live source location. Choose **Pause follow** to navigate independently, and **Follow** to resume.
 

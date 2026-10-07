@@ -7,11 +7,13 @@ description: Draw paths, edit nodes, and export vector artwork.
 
 Fanta has native vector tools: Pen, Node Edit, basic shapes, line, arrow, polygon, star, and path selection. You can refine paths on the canvas and use layer actions such as outline stroke or flatten when appropriate. A selected layer can be copied as SVG from its context menu, and the inspector can export SVG or PDF.
 
-Right-click a selected vector on the canvas and choose **Edit vector** to enter Node Edit. **Flatten** checks whether it can preserve the artwork's appearance and behavior. It can refuse variable bindings, nested component masters, animated children, masks, unsupported child effects or blends, clipped content, and pattern sources referenced by another layer. Simplify or detach that content first. A supported flatten remains undoable.
+Right-click a selected vector on the canvas and choose **Edit vector** to enter Node Edit. Its path anchors appear as soon as editing opens. **Flatten** checks whether it can preserve the artwork's appearance and behavior. It can refuse variable bindings, nested component masters, animated children, masks, unsupported child effects or blends, clipped content, and pattern sources referenced by another layer. Simplify or detach that content first. A supported flatten remains undoable.
 
 ## Boolean shapes
 
 A Boolean layer keeps its operand shapes and an operation: **Union**, **Subtract**, **Intersect**, or **Exclude**. Select it to change the operation and edit applicable fills and strokes in the inspector. A supported Figma Boolean import keeps editable operands and the imported baked vector appearance. Changing its operation or operands makes Fanta recompute the result. If an imported operation or operand cannot be represented, Fanta may keep a flattened vector instead and report an import warning; inspect the layer before relying on further Boolean edits.
+
+To reshape an authored Boolean, enter one of its vector operands with **Edit vector**, drag a path anchor, and leave Node Edit. The Boolean result updates from the operands. Check the result and save the design; imported baked Boolean geometry may behave differently when recomputed.
 
 ## Text on a path
 

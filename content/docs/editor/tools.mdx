@@ -13,6 +13,8 @@ The toolbar includes selection tools, shapes, frames, drawing tools, text, comme
 
 With **Move** active in Design mode, double-click an already selected text layer to edit text, a vector to edit nodes, or an image to crop it. Double-clicking an instance opens text editing if the pointer is over editable instance text; otherwise it shows Properties. Video, audio, and other supported non-shape layers also reveal Properties. The first double-click into a frame or group selects a child; a later double-click can edit that child. The editor checks the visible hit target, so a covered or locked layer does not open through another layer.
 
+Entering **Edit vector** or **Edit Path** shows the selected path's anchors immediately. To edit a Boolean operand, enter its selected vector child and use those anchors. During ordinary text editing, Escape commits the text and exits. If a text-content variable binding begins controlling the text while a draft is open, Fanta keeps the draft and asks you to copy it if needed; Escape then cancels that blocked draft.
+
 **Inspect** selects artwork for inspection in Dev mode without editing it. **Path Selection** targets paths. Rectangle Selection, Ellipse Selection, Lasso, Polygonal Lasso, and Magic Wand provide area selection. **Crop** edits an image's visible area. **Hand** pans the view; hold Space to pan temporarily.
 
 Moving layers can snap to the 8 px grid and to other layers' edges or centers. Watch the canvas guides when positioning objects.
@@ -20,6 +22,8 @@ Moving layers can snap to the 8 px grid and to other layers' edges or centers. W
 Right-click a layer on the canvas to select it and open a context menu. A click within the current selection keeps that selection; a click on an unselected nested layer selects its top-level layer for the page. The menu offers copy, cut, paste, duplicate, delete, grouping, and front/back ordering where editable. Depending on the target, it also offers **Edit text**, **Edit vector**, **Crop image**, media or layer Properties, component actions, auto layout, outline stroke, flatten, or mask actions. Specialized layers expose their own Properties entry, including Boolean, node graph, 3D, AI artifact, and embed layers. Escape closes the menu without clearing the selection. Right-click empty canvas to clear the selection and access Paste. The canvas menu is unavailable while presenting a prototype or using Draw mode.
 
 Copy and paste work within one design document, including between its pages. Canvas paste into a different document is unavailable. Duplicating a component master or a complete variant set also duplicates its component definitions, so the copy can be edited independently.
+
+Keyboard Cut, Delete, and Duplicate respect a selected layer's own lock and locks inherited from its ancestors. When Cut or Delete cannot preserve component content, Fanta refuses the operation with an explanation; a failed Cut leaves the existing clipboard unchanged. See [Components and instances](/docs/concepts/components) for the supported copy and removal cases.
 
 ## Create and draw
 

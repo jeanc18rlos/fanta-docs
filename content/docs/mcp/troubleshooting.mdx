@@ -26,3 +26,7 @@ The documented bridge is for non-Store builds. If you are configuring an MCP ser
 Validate a complete candidate with `validate_fnx_source`, save the `.fnx` or managed JSON file in the open project, and allow the reload. An identity sidecar such as `page.ids.json` can be edited, but preserve existing node IDs and validate the complete project before saving; a parseable JSON file alone may still be invalid. Fanta logs live at `~/Library/Logs/Fanta/`.
 
 Finish an active canvas preview or unsaved Code draft before trying to reload the same source. Fanta keeps the last valid canvas if an external source edit cannot be parsed and reports a conflict; repair the file and let the watcher reload it. If you are using the Code workspace, **Discard draft** reloads only the selected FNX or JSON buffer from disk. Saving source can also fail when canvas changes are unsaved, the file changed on disk, or another source save or discard is in progress; resolve that state and retry.
+
+## A canvas change appears, but the source did not save
+
+Check the editor's save error and the project diff. A delete or node-type change can be refused at persistence time when an authored FNX attribute would be lost and canvas Undo could not restore it. Undo that canvas change, or edit the FNX source to remove the attribute intentionally, validate it, and retry. Structural saves also refuse a rewrite that cannot retain authored FNX comments. Do not treat a successful `batch_design` response as proof that autosave reached disk.

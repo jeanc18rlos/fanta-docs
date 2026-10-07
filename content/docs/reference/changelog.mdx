@@ -3,6 +3,14 @@ title: Changelog
 description: What this source-aligned Fanta documentation covers.
 ---
 
+## October 7, 2026 source update
+
+The docs now track published `fanta-edit` main at [`a022ddb4`](https://github.com/jeanc18rlos/fanta-edit/tree/a022ddb4eb0828dea734584aea8e63e6cb503c05). Structural canvas saves preserve authored FNX attributes and comments on surviving nodes; Save reports a preservation error if a destructive edit would lose source-only data. During an unsaved source draft, the accepted properties of one selected layer remain readable while canvas writing stays locked.
+
+Canvas Cut, Delete, and Duplicate now respect layer locks more consistently. Paste checks component dependencies and can restore a captured component or complete variant set after its original definition was removed. The inspector shows more resolved variable values and independent corner fields; variant navigation and instance text editing follow the visible member and binding rules. Edit Path shows anchors on entry, and Escape can finish active canvas text editing. The external MCP roster remains 13 tools with 43 design operations.
+
+The retained Metal translation renderer is opt-in and its native performance target remains unverified. The selected distribution is a direct-download Mac app, with mounted-DMG verification added to packaging; signed download and clean-Mac installation still require validation. The [release coverage report](https://github.com/jeanc18rlos/fanta-edit/blob/a022ddb4eb0828dea734584aea8e63e6cb503c05/docs/alpha/CAPABILITY_COVERAGE.md) distinguishes bounded checks from release readiness.
+
 ## October 6, 2026 source update
 
 The docs now track published `fanta-edit` main at [`8fe28c69`](https://github.com/jeanc18rlos/fanta-edit/tree/8fe28c69bda2dca80bd01c70f93a6912148e7668). Figma import now preserves supported Boolean operands and warns about known flattened or omitted structures. Canvas and keyboard duplication preserve copied component definitions, complete variant sets, and supported internal prototype links; same-document Paste retains existing definitions, while cross-document canvas Paste reports that it is unsupported. The inspector adds or repairs controls for mixed selections, bound paint, Boolean nodes, rotation, flipping, alignment, distribution, and Tidy up.

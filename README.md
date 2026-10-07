@@ -17,7 +17,7 @@ The site is a standard Next.js app. Fumadocs supplies local search, per-page Mar
 
 ## Keep the docs accurate
 
-The capability map was checked against `fanta-edit` remote `main` commit `8fe28c69bda2dca80bd01c70f93a6912148e7668` on October 6, 2026. When `fanta-edit` changes, compare the new source with these pages before updating claims. In particular, verify the live MCP tool list, platform support, user-visible controls, generated media flows, format handlers, and alpha limitations. A merged source change is not proof of a public release. Build and typecheck before publishing.
+The capability map was checked against `fanta-edit` remote `main` commit `a022ddb4eb0828dea734584aea8e63e6cb503c05` on October 7, 2026. When `fanta-edit` changes, compare the new source with these pages before updating claims. In particular, verify the live MCP tool list, platform support, user-visible controls, generated media flows, format handlers, and alpha limitations. A merged source change is not proof of a public release. Build and typecheck before publishing.
 
 The repository also contains a Claude Code plugin in `plugin/`. Its local MCP configuration should stay aligned with Fanta's current stdio bridge. Draft platform/API files in a working checkout should be verified against the live backend before publication.
 
