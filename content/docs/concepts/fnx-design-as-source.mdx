@@ -11,6 +11,8 @@ Other project data is managed JSON: page and component headers, variant sets, va
 
 A source file may express placement through parent-relative transforms, including X and Y translation, and width and height shorthand. It has conveniences for Rect and Ellipse shapes and colors through <code>fnxColor</code>. A TextPath element stores its own path geometry and text. A frame can express horizontal, vertical, or grid auto layout with fixed, fractional, or content-sized tracks. The canvas presents the resolved result.
 
+When Fanta prints FNX, finite numbers keep their exact numeric value across a source round trip. Tiny floating-point values are not rounded to zero; those with many leading zeros may use exponent notation. This protects fine geometry and source-only data, though it can also make small arithmetic residue visible in Git diffs.
+
 ## Edit source in Fanta
 
 1. Open the **Code** workspace. Select **FNX** for the active page or component master, or **JSON** for that source's <code>page.json</code> or <code>def.json</code> companion. A variant opens its own source under the set folder.

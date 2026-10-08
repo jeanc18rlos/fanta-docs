@@ -24,6 +24,6 @@ Direct placement has separate limits from **Add to project**: images are capped 
 
 Project media bytes are stored under `assets/`; the library's names and kinds are stored in `doc/asset_library.json`. Commit those files with the page source so another copy of the project can resolve the media. See [Document model](/docs/concepts/document-model).
 
-**Add to project** rejects an empty result, a file over 128 MiB, or an unsupported media format. A raster image over 32 megapixels cannot be placed on the canvas. SVG must parse as supported editable vectors; MP4 and audio must decode to usable media. Missing or unsupported assets remain visible in the inspector with the placement action disabled and a reason. Placing also requires a page and a clean, editable source state.
+**Add to project** rejects an empty result, a file over 128 MiB, or an unsupported media format. A raster image over 32 megapixels cannot be placed on the canvas. SVG must parse as supported editable vectors; MP4 and audio must decode to usable media. Missing or unsupported assets remain visible in the file inspector's Assets section with the placement action disabled and a reason. The Design inspector's image and video paint source chooser lists only compatible project assets. Placing also requires a page and a clean, editable source state.
 
 Local placement is implemented in `crates/fig_viewer/src/view_media.rs` and `crates/fig_viewer/src/generation_media.rs`. Masks cannot be added to Assets as standalone media. They remain inputs to supported generation workflows.

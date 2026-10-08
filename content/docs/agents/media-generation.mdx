@@ -49,6 +49,8 @@ The canvas toolbar's media placement command opens a **Place image or MP4 video*
 
 Local image placement is limited to 32 MiB, 32 megapixels, and 16,384 pixels per side. Local MP4 placement is limited to 100 MiB and requires the macOS decoder; video preview also has a 32 megapixel resolution limit. Generated-result downloads and Add to project have a separate 128 MiB media cap, although generated bitmap assets still have a 32 MiB image preparation limit. Fanta reports an error if decoding or preparation fails. Finish a pending source edit or canvas preview before placing local media.
 
+MP4 describes a container, not a guarantee that every video inside it will play. Fanta checks for movie metadata, a video track, valid dimensions and duration, and a supported track transform; playback and placement also depend on macOS decoding that file. If a clip fails preparation, save or convert it to a playable MP4 and try again.
+
 <Callout type="info">
 Adding or placing an asset requires an editable project. Save or discard unfinished FNX source edits first. Model availability, credits, and prices are live service conditions; this page describes the app workflow rather than a fixed catalog or guaranteed price.
 </Callout>

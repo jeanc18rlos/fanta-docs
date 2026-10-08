@@ -19,6 +19,8 @@ The local MCP <code>read_fnx_source</code> tool reads bounded source slices. <co
 
 Canvas edits patch affected source while preserving unrelated comments and whitespace where possible. Structural edits such as inserting or reparenting a node now keep authored attributes on surviving nodes, including source-only page dimensions, and carry a child comment with its node. An explicit source edit remains authoritative: if you remove an attribute in FNX, a later canvas rebuild does not recreate it.
 
+FNX printing preserves the exact value of finite JSON numbers, including very small coordinates, sizes, gradient stops, and authored extension data. It no longer rounds magnitudes below <code>1e-9</code> to zero. Extremely small floating-point values may print in exponent notation to keep the file readable, so a source diff can show arithmetic residue that earlier versions hid. Integer values retain their integer form.
+
 A delete or node-type change can be refused when it would erase an authored FNX attribute or child comment that canvas Undo could not restore. The editor reports a preservation error; make the intended removal in FNX first, then retry the canvas operation. A failed save leaves the persisted files intact, but a preceding live canvas change may need Undo. Invalid syntax or unresolved references leave the previous valid canvas visible and show a diagnostic. Unknown attributes can produce nonfatal warnings; inspect the rendered result. Fanta can also detect overlapping canvas and external edits and surface a conflict.
 
 ## Readable references and version 5 layout

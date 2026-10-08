@@ -9,7 +9,7 @@ const features = [
   { icon: GitBranch, title: 'Reviewable changes', detail: 'Keep a Git history and review design diffs from the app.', href: '/docs/guides/version-control-designs' },
   { icon: Bot, title: 'Agents on the canvas', detail: 'Connect Claude Code or Codex through 13 tools, or review tasks in Build mode.', href: '/docs/mcp' },
   { icon: Sparkles, title: 'Generation workspace', detail: 'Use the current signed-in catalog for image, video, audio, and vector work.', href: '/docs/agents/media-generation' },
-  { icon: Image, title: 'Figma and media', detail: 'Import .fig, review any structure warnings, and place generated media.', href: '/docs/formats' },
+  { icon: Image, title: 'Figma and media', detail: 'Import .fig; place raster or MP4 locally, and SVG or audio from Assets.', href: '/docs/formats' },
   { icon: Download, title: 'Export', detail: 'Export a selection or page as PNG, JPEG, SVG, or PDF.', href: '/docs/formats/export' },
   { icon: Play, title: 'Prototype', detail: 'Add interactions and preview flows in the editor.', href: '/docs/concepts/prototyping' },
   { icon: MessageCircle, title: 'Local feedback', detail: 'Pin comments, reply, and resolve project-local threads.', href: '/docs/editor/surfaces' },

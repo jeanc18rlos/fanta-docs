@@ -3,6 +3,12 @@ title: Changelog
 description: What this source-aligned Fanta documentation covers.
 ---
 
+## October 8, 2026 source update
+
+The docs now track published `fanta-edit` main at [`d386b9f4`](https://github.com/jeanc18rlos/fanta-edit/tree/d386b9f48557c35302ae8b28c195db453f490141). FNX printing now preserves finite numeric values exactly, including very small values that previously printed as zero. The media guides clarify placement routes: the local picker handles supported raster images and MP4 video; editable SVG can come from Project Assets or generation results, while audio placement uses Project Assets. Video preview and trim have bounded development checks, while arbitrary codecs and installed-release media behavior remain unverified.
+
+The Mac packaging workflow now aligns both bundle version fields with the source version and retries the specific transient busy-disk-image error without replacing a prior finished DMG. These checks improve packaging reliability; the signed download and clean-Mac installation remain separate release gates. The external MCP interface remains at 13 tools and 43 design operations.
+
 ## October 7, 2026 source update
 
 The docs now track published `fanta-edit` main at [`a022ddb4`](https://github.com/jeanc18rlos/fanta-edit/tree/a022ddb4eb0828dea734584aea8e63e6cb503c05). Structural canvas saves preserve authored FNX attributes and comments on surviving nodes; Save reports a preservation error if a destructive edit would lose source-only data. During an unsaved source draft, the accepted properties of one selected layer remain readable while canvas writing stays locked.
