@@ -9,7 +9,7 @@ Fanta's visual export controls support PNG, JPG, SVG, and PDF. Add export settin
 
 If layers are selected, each selected layer is exported separately using its visual bounds. With no selection, Fanta exports the active page. Output names are made safe for filenames, and duplicate selected-layer names receive distinct names.
 
-PNG and JPG are raster images. SVG and PDF are visual outputs, not editable Fanta project files. To keep working with design layers, retain the [native project](/docs/formats/fant). Canvas comments and editor measurement annotations are review aids; they are excluded from rendered output.
+PNG and JPG are raster images. JPG is encoded as opaque RGB at a fixed quality setting of 95; transparent areas are composited over white. JPG compression can change pixel colors, particularly near sharp transitions. Use PNG when you need transparency or pixel-level comparison, and inspect important JPG exports. SVG and PDF are visual outputs, not editable Fanta project files. To keep working with design layers, retain the [native project](/docs/formats/fant). Canvas comments and editor measurement annotations are review aids; they are excluded from rendered output.
 
 ## Size limits
 

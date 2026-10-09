@@ -9,6 +9,12 @@ Open Fanta and focus a design before starting the stdio bridge. Use **Help → C
 
 The documented bridge is for non-Store builds. If you are configuring an MCP server **inside** Fanta, check **Settings → MCP & Tools** for its status, scope, and connection type. A Mac App Store feature build cannot launch a local command-backed server; use a remote HTTP server there. External-client bridging to a packaged Store build has not been verified.
 
+## An in-app HTTP MCP server cannot authenticate
+
+The configured Fanta-hosted `fanta` (`/mcp`) and `fanta-design` (`/v2/mcp`) connections use your signed-in Fanta account when their endpoints match the configured account backend and no explicit `Authorization` or `x-api-key` header overrides it. If one returns 401, sign out and sign in to Fanta again. An ordinary startup timeout does not clear a separate cached OAuth session for that endpoint; check the server status and network before changing credentials.
+
+Other HTTP MCP servers can use their own OAuth flow. If such a server fails to start without an authentication challenge while a cached OAuth session exists, Fanta can clear that server's stale session and rediscover authorization. A server configured with an explicit authentication header uses that header instead; check its value after a 401. These rules concern servers used **by** Fanta's in-app agent, not the local `fanta --mcp-stdio` bridge used by external agents. The managed-server failure paths have isolated tests; production service recovery remains unverified.
+
 ## The wrong design is active
 
 `get_editor_state` reports the active page and selection. Focus the intended design and read state again. The server acts on the most recently focused canvas.

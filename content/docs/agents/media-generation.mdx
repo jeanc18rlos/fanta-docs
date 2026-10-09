@@ -30,6 +30,10 @@ Select an output to preview it. On macOS, the result view can play generated vid
 
 Recent experiments use a descriptive creation title when the service can provide one, with a local prompt-based label as fallback. An output in generation history is separate from the current design until you add it. You can reuse supported raster results as a source for another run. A mask is used in a supported masking workflow and cannot be added to project Assets as a standalone canvas asset. Design mode prepares a prompt for the Agent Panel; it asks the agent to inspect FNX source, prefer source edits where practical, and verify the result with screenshots. It is not a direct generative canvas render.
 
+## Recover an uncertain request
+
+If a submission's outcome is uncertain, use **Retry submission** or its saved **Recover…** entry to check and resume that request. Fanta blocks another generation until the saved request is resolved. Recovery checks the current account and whether the saved model is still available. This behavior has local tests; recovery against a live provider still needs verification.
+
 ## Add a result to a project
 
 With a project canvas open, choose **Add to project** for a supported result. Fanta copies it into the project's asset storage and records its name and kind in the persistent asset library. Open **Assets** in the file inspector, choose the target under **Place in**, and use the **+** button on the asset row. You can place the same stored asset again without repeating generation.
@@ -41,7 +45,7 @@ With a project canvas open, choose **Add to project** for a supported result. Fa
 | MP4 | Video layer |
 | WAV, MP3, or FLAC | Audio layer |
 
-The placed media is centered in the visible viewport and scaled to fit. On macOS, select an audio or video layer in **Motion** or **Prototype** mode to use its playback controls. Video preparation uses the playable timeline duration, including clips with MP4 edit lists, for placement and trimming. See [Project Assets](/docs/editor/assets) for the full workflow and limits. Some generation views also offer **Add to design** directly for image, SVG, or video results. Even if that direct button appears beside audio, use the project Assets route: the direct path does not decode audio for placement.
+The placed media is centered in the visible viewport and scaled to fit. On macOS, select an audio or video layer in **Motion** or **Prototype** mode to use its playback controls. A bounded MP3 placement and cold storage check passed, but the placed Audio preview was absent after reopening the checked project; WAV preview was not verified. This is separate from previewing an unplaced generation result. Video preparation uses the playable timeline duration, including clips with MP4 edit lists, for placement and trimming. See [Project Assets](/docs/editor/assets) for the full workflow and limits. Some generation views also offer **Add to design** directly for image, SVG, or video results. Even if that direct button appears beside audio, use the project Assets route: the direct path does not decode audio for placement.
 
 ## Place local media without generation
 

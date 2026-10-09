@@ -11,6 +11,8 @@ The inspector toolbar has zoom out and in, a percentage menu with 25%, 50%, 100%
 
 Common sections include geometry and rotation, corners and smoothing, appearance and opacity, blend mode, fills and strokes, typography, image fitting, layout and child layout, effects, prototype interactions, variable bindings, components and instances, and export. Use the inspector when exact dimensions or values matter; canvas handles are faster for rough adjustments.
 
+With one layer selected, the selection header offers **Select matching layers** when another layer of the same kind exists on the active page. It selects matching descendants on that page without changing artwork or adding an Undo step. Sections match other Sections, even when their paints or inspector presets differ; they do not match ordinary Frames or Groups. Component masters keep their component identity. Converting a layer to a Frame or Section changes which layers match it.
+
 For a selection, the arrange controls align layers by left, center, right, top, middle, or bottom edge. With three or more selected layers, distribute them horizontally or vertically; **Tidy up** works with two or more. Transform actions rotate the selection clockwise by 90° or flip it horizontally or vertically. Controls that cannot apply to the current selection are unavailable. The default inspector does not expose editable constraints.
 
 The opacity, visibility, and uniform vector radius fields show resolved values when bound to variables, including aliases and active or inherited mode pins. Explicit independent corner values take precedence over a bound uniform radius; unresolved bindings show the layer's fallback value and remain detachable. Four authored corners remain independent even when all four numbers match. For a mixed selection, opacity shows a mixed state and applies one value to the selected layers when the edit commits. Drag a numeric value to scrub it; Escape cancels a draft, and a completed edit is undoable. Mixed-selection opacity does not preview directly on the canvas during the scrub.
@@ -21,7 +23,7 @@ An instance's component section also lists Content rows for its visible text lay
 
 ## Paints and effects
 
-The paint list supports adding and removing fills or strokes, toggling individual paint visibility, changing a paint kind, and editing gradient stops in a popover. A gradient edit previews on the canvas and commits as an undoable change. The effects list supports drop and inner shadows. Available controls depend on the selected node and paint.
+The paint list supports adding and removing fills or strokes, toggling individual paint visibility, changing a paint kind, and editing gradient stops in a popover. A gradient edit previews on the canvas and commits as an undoable change. The effects list supports drop and inner shadows. Available controls depend on the selected node and paint. During stable pans, Fanta can reuse rendered effect layers; moving or editing artwork refreshes affected effects while unrelated layers may remain cached. This does not change the saved design.
 
 For an image or video paint, the source chooser lists placeable project assets. It shows a project's asset-library name when available, otherwise a layer name or a generic name; video sources are available on macOS. The list follows asset and layer changes, Undo/Redo, and project reloads. [Project Assets →](/docs/editor/assets)
 
@@ -29,7 +31,7 @@ A Boolean layer exposes its Union, Subtract, Intersect, or Exclude operation, pl
 
 ## Text on Path
 
-A selected TextPath layer exposes typography plus controls for where text starts on the path, direction (forward or reverse), and which side of the path carries the text. Start can be edited as a segment and position or as an offset along the current contour. This layer has a focused property set: paragraph spacing and indentation, list controls, vertical alignment, text resize and truncation, and some decoration and case controls are read-only because they do not exist on text paths. The text fill is limited to color and opacity.
+A selected TextPath layer exposes typography plus controls for where text starts on the path, direction (forward or reverse), and which side of the path carries the text. Start can be edited as a segment and position or as an offset along the current contour. With one editable TextPath layer selected, choose **Edit object** in the inspector header to open inline text editing with all text selected. This action is unavailable for multiple selections, locked layers or ancestors, read-only states, and virtual TextPath content inside an instance. The editor checks the current selection again before acting, so an outdated inspector command does not edit a different layer. This layer has a focused property set: paragraph spacing and indentation, list controls, vertical alignment, text resize and truncation, and some decoration and case controls are read-only because they do not exist on text paths. The text fill is limited to color and opacity.
 
 ## Export
 
