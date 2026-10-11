@@ -7,7 +7,7 @@ description: Install the non-Store macOS alpha, build from source, and understan
 
 The documented alpha DMG targets Apple Silicon. macOS 26.6.2 is the version recorded in its release rehearsal; Intel and other macOS versions have not been verified for that DMG. If an alpha DMG is available from Fanta's official release channel, open it and drag Fanta to Applications. The documented rehearsal bundle is ad-hoc signed. If macOS blocks first launch, try opening it, then use **System Settings → Privacy & Security → Open Anyway**.
 
-The current non-Store release workflow targets a direct-download DMG. Before signing, the bundler sets both macOS bundle version fields to the explicit version in `crates/zed/Cargo.toml`. DMG creation retries the exact transient `Resource busy` failure up to three times, retaining diagnostics and leaving a previous final image untouched if creation fails. Before upload, the workflow verifies the mounted app against the staged bundle, its document and URL registrations, bundled Git, and code signature; when notarization is required, it also checks the Developer ID identity, staple, and Gatekeeper assessment. An internal arm64 optimized DMG passed bounded mounted-app verification on October 8, but it was ad-hoc signed. A Developer ID-signed, notarized public download and clean-Mac installation remain unverified.
+The current non-Store release workflow targets a direct-download DMG. Before signing, the bundler sets both macOS bundle version fields to the explicit version in `crates/zed/Cargo.toml`. DMG creation retries the exact transient `Resource busy` failure up to three times, retaining diagnostics and leaving a previous final image untouched if creation fails. Before upload, the workflow verifies the mounted app against the staged bundle, its document and URL registrations, bundled Git, and code signature; when notarization is required, it also checks the Developer ID identity, staple, and Gatekeeper assessment. An internal arm64 optimized DMG from the October 9 source passed bounded mounted-app verification, but it was ad-hoc signed and its public release job was skipped. A Developer ID-signed, notarized public download and clean-Mac installation remain unverified.
 
 Automatic updates are disabled by default. If you use an available alpha build, check Fanta's official release channel for a newer version and follow its installation instructions.
 
@@ -21,7 +21,9 @@ Clone the [fanta-edit repository](https://github.com/jeanc18rlos/fanta-edit), in
 cargo run -p zed
 ~~~
 
-The Cargo package is <code>zed</code>; its binary is <code>fanta</code>. Use <code>cargo build --release -p zed</code> for a release binary. The repository uses <code>./script/clippy</code> for linting.
+The Cargo package is <code>zed</code>; its binary is <code>fanta</code>. Use <code>cargo build --release -p zed</code> for a release binary. The repository uses <code>./script/clippy</code> for linting. The release verifier's `--stage lint` checks twelve editor and engine crates with all features, then separately checks `fanta-format`, `fig_viewer`, and `fs` with default features.
+
+Maintainers can enable **build diagnostics** on a manual macOS release workflow run. This opt-in setting records bounded CPU, memory, disk, and swap progress during the Cargo build and retains Cargo timing reports when produced. It is disabled by default and requires GitHub Actions CI. Diagnostic output helps investigate a build; it does not establish signing, notarization, installation, or release readiness.
 
 ## Mac App Store build differences
 

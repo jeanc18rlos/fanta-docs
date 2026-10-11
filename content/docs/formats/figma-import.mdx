@@ -9,6 +9,8 @@ Fanta can open a local <code>.fig</code> file and convert it into an editable pr
 
 Open the file in the desktop app. On first open, Fanta parses it and attempts to materialize a sibling Fanta project directory. You can edit the imported design from that first session. The original <code>.fig</code> remains an import source; the saved Fanta project becomes the working copy. If writing beside the import fails, Fanta shows the parsed design in memory and retries project creation on save. Choose a writable location if macOS limits access to the sibling folder.
 
+In the direct-download Mac build, a fresh sibling project is prepared in a temporary directory and published only after its files have been written and flushed. The final publication step refuses to replace a destination that another process created. If publication fails, the imported design remains open in memory and the first save can retry creating the project.
+
 If you open the same <code>.fig</code> again after a sibling project was created, Fanta redirects to that project. This preserves newer edits instead of reimporting the original file over them.
 
 ## Check the result

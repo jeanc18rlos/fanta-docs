@@ -9,6 +9,8 @@ A project can contain multiple pages. Use the Pages section of the Layers panel 
 
 Canvas coordinates use pixels with X increasing to the right and Y increasing downward. Canvas and live design tool coordinates are in world space. A node's visible position combines its parent transforms. In FNX, placement is represented relative to its parent, so a child may have different local and canvas coordinates.
 
+When drawing, moving, or resizing, edge and center snap targets come from the active page or the component subtree opened for editing. Another page cannot supply a layer snap target, even if its layers overlap in world coordinates. Grid snapping remains available within the current canvas scope.
+
 ## Place and inspect a layer
 
 1. Select the intended page.
