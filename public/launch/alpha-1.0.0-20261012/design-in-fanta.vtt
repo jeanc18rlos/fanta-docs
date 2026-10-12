@@ -1,0 +1,33 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:10.000
+This owned .fig is open as native, editable layers.
+
+00:00:10.000 --> 00:00:18.000
+Select CTA Button in the layer list.
+
+00:00:18.000 --> 00:00:28.000
+Change its fill in the native inspector.
+
+00:00:28.000 --> 00:00:36.000
+The new color appears on the canvas.
+
+00:00:36.000 --> 00:00:39.000
+Undo the color change.
+
+00:00:39.000 --> 00:00:45.000
+The original orange returns.
+
+00:00:45.000 --> 00:00:50.000
+Redo brings the new color back.
+
+00:00:50.000 --> 00:00:54.000
+Save the project.
+
+00:00:54.000 --> 00:01:00.000
+The saved project reopens with the edit intact.
+File navigation omitted.
+
+00:01:00.000 --> 00:01:08.000
+Later: inspect the actual PNG exported from this saved design.
+

@@ -3,6 +3,11 @@ title: Connect an Agent
 description: Connect Claude Code or Codex to the open Fanta canvas through local MCP.
 ---
 
+For the Public Alpha, use the installed app's copied instructions and verify the exact open project before editing. The [agent recording and sample task](/docs/demos#agent-extension) show the first bounded workflow.
+
+The recorded example uses an external Opus 5.5 agent through Fanta MCP, then
+inspects the native result, saved FNX and Undo/Redo in the accepted signed app.
+
 Keep Fanta running with the intended design open. The app starts a local MCP server by default over a private Unix socket. The <code>fanta --mcp-stdio</code> command bridges an agent's stdio MCP connection to that running app; it does not open a network port. In settings, <code>fanta_live_mcp.enabled</code> can disable the server.
 
 In a non-Store build, choose **Help → Connect Claude Code / Codex…** to copy instructions for the current executable and user data directory. The welcome page also offers **Copy command** for Claude Code and **Copy Codex config**. The copied values matter if you use a development build, multiple profiles, or a custom data directory: the bridge must find the discovery file written by the same running app.
@@ -43,3 +48,18 @@ Check the client's MCP status and call <code>get_editor_state</code>. A successf
 Start with guidelines and editor state, then [follow the design build loop](/docs/mcp/build-loop). <code>batch_design</code> now paints each operation while it runs and commits the batch as one undo step; a failed or canceled batch rolls back. Use a stable <code>agent_id</code> and <code>agent_name</code> in <code>report_agent_activity</code> and <code>batch_design.activity</code> so **Follow** can track the work. Report a project-contained <code>source_path</code> and <code>workspace</code> when moving to code or variables. An agent can validate a complete FNX or managed JSON candidate before writing it; validation alone does not modify the project. <code>import_image</code> saves an image to project assets but does not place a layer. <code>prepare_design_asset</code> opens a prefilled image or SVG composer for your review and does not submit generation.
 
 Fanta's in-app **MCP & Tools** settings connect the built-in agent to other tool servers. They are a separate direction from this live canvas bridge. The commands above are verified for non-Store builds. Connecting an external client to a packaged Mac App Store build needs separate validation; that build cannot launch command-backed MCP servers from inside Fanta. See [Settings and build differences](/docs/editor/settings).
+
+## One bounded first task
+
+After `get_editor_state` identifies the intended saved sample, request:
+
+> Change only the existing button label to “Explore Fanta”. Keep its geometry,
+> styles, IDs and all other layers unchanged. Inspect the result and stop.
+> Do not generate media or call paid services.
+
+Check the canvas and corresponding FNX, then use Undo and Redo. For source work,
+read the complete relevant file, preserve IDs and validate the complete candidate
+with `validate_fnx_source` before using the agent's normal file tools. There is
+no local `edit_fnx_source` tool. Read-source results can be truncated, so inspect
+the continuation information. The local bridge is separate from the metered
+hosted API and does not configure credentials or establish spending limits.

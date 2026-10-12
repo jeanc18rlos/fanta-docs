@@ -1,0 +1,42 @@
+WEBVTT
+
+NOTE Reviewed 90-second normal-speed trim. Original takes remain private. External agent route and later recovery are identified in captions.
+
+00:00:00.000 --> 00:00:04.000
+Start with an existing editable design.
+
+00:00:04.000 --> 00:00:10.000
+External Opus 5.5 agent through Fanta MCP:
+one bounded CTA change.
+
+00:00:10.000 --> 00:00:18.000
+Wider gold CTA, Explore Fanta,
+and a new native helper label.
+
+00:00:18.000 --> 00:00:28.000
+Inspect the native CTA:
+228 by 56, fill #FFC857.
+
+00:00:28.000 --> 00:00:35.000
+Undo restores the original CTA.
+
+00:00:35.000 --> 00:00:44.000
+Redo restores the entire bounded edit.
+
+00:00:44.000 --> 00:00:54.000
+Native layers remain editable.
+
+00:00:54.000 --> 00:01:06.000
+Later: the saved project is reopened
+after a transient source refresh warning.
+
+00:01:06.000 --> 00:01:15.000
+Clean saved FNX contains the gold fill
+and actual 228 by 56 CTA dimensions.
+
+00:01:15.000 --> 00:01:25.000
+Explore Fanta and CTA Helper
+are native editable source.
+
+00:01:25.000 --> 00:01:30.000
+Inspect the result. Keep control with Undo and Redo.
