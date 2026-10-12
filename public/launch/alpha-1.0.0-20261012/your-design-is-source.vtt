@@ -1,0 +1,31 @@
+WEBVTT
+
+00:00.000 --> 00:04.000
+Widen CTA Button from 184 to 220 pixels.
+
+00:04.000 --> 00:09.000
+The wider button appears on the canvas.
+
+00:09.000 --> 00:16.000
+Switch to Code and inspect the same FNX document.
+
+00:16.000 --> 00:24.000
+Geometry and stable layer IDs are stored in the source.
+
+00:24.000 --> 00:34.000
+Select the brand label’s content.
+
+00:34.000 --> 00:40.000
+Change FANTA / STUDIO to FANTA / PUBLIC ALPHA.
+
+00:40.000 --> 00:46.000
+Save valid FNX, then return to the canvas.
+
+00:46.000 --> 00:54.000
+The canvas now shows your source edit.
+
+00:54.000 --> 01:00.000
+Later review of the same saved FNX.
+
+01:00.000 --> 01:09.933
+Git shows the brand-text and 184-to-220 width changes.

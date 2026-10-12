@@ -2,6 +2,7 @@
   "pages": [
     "index",
     "capabilities",
+    "demos",
     "getting-started",
     "concepts",
     "editor",
