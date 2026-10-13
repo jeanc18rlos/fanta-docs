@@ -45,8 +45,10 @@ balance. One credit represents $0.01 in the AI pricing meter; subscriptions
 and packs determine what you pay for the credit allowance. The current
 in-app quote is authoritative for a new request.
 
-**Failed or safety-blocked generation attempts bill 0 credits.** Successful
-prior metered agent calls retain their spend.
+**Requests blocked before provider dispatch and generation failures confirmed
+during reconciliation bill 0 credits.** Interrupted requests can consume
+credits, and uncertain provider results can keep credits reserved until
+reconciliation. Prior successful metered agent calls retain their spend.
 
 ## Cancellation and partial refunds
 
