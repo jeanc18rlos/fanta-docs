@@ -28,6 +28,8 @@ An agent can also use <code>import_image</code> to register an image made elsewh
 
 Select an output to preview it. On macOS, the result view can play generated video and audio. The audio player shows the decoded duration before playback and supports seeking, ten-second jumps, speed, mute, and volume controls. **Save result** writes the chosen output to a file you select; Fanta can use media already loaded for preview. In a Mac App Store build, the Save dialog grants access to the selected destination.
 
+When generated audio reaches its end, the position readout and seek bar remain at the known duration. Active image outputs in the gallery inherit their creation timestamp from generation history when the service supplies it.
+
 Recent experiments use a descriptive creation title when the service can provide one, with a local prompt-based label as fallback. An output in generation history is separate from the current design until you add it. You can reuse supported raster results as a source for another run. A mask is used in a supported masking workflow and cannot be added to project Assets as a standalone canvas asset. Design mode prepares a prompt for the Agent Panel; it asks the agent to inspect FNX source, prefer source edits where practical, and verify the result with screenshots. It is not a direct generative canvas render.
 
 ## Recover an uncertain request

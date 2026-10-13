@@ -9,6 +9,8 @@ Fanta has native vector tools: Pen, Node Edit, basic shapes, line, arrow, polygo
 
 Right-click a selected vector on the canvas and choose **Edit vector** to enter Node Edit. Its path anchors appear as soon as editing opens. **Flatten** checks whether it can preserve the artwork's appearance and behavior. It can refuse variable bindings, nested component masters, animated children, masks, unsupported child effects or blends, clipped content, and pattern sources referenced by another layer. Simplify or detach that content first. A supported flatten remains undoable.
 
+For authoring hits, rounded ancestor clips exclude invisible portions of Text, Vector, and Bitmap children. Node Edit can reach a visible vector underneath a clipped child; selected-node controls and parent-frame bounds keep their normal behavior. Source tests cover this repair, while matching installed-app acceptance remains pending.
+
 ## Boolean shapes
 
 A Boolean layer keeps its operand shapes and an operation: **Union**, **Subtract**, **Intersect**, or **Exclude**. Select it to change the operation and edit applicable fills and strokes in the inspector. A supported Figma Boolean import keeps editable operands and the imported baked vector appearance. Changing its operation or operands makes Fanta recompute the result. If an imported operation or operand cannot be represented, Fanta may keep a flattened vector instead and report an import warning; inspect the layer before relying on further Boolean edits.

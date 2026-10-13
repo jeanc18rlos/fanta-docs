@@ -27,6 +27,8 @@ For a selection, the arrange controls align layers by left, center, right, top, 
 
 The opacity, visibility, and uniform vector radius fields show resolved values when bound to variables, including aliases and active or inherited mode pins. Explicit independent corner values take precedence over a bound uniform radius; unresolved bindings show the layer's fallback value and remain detachable. Four authored corners remain independent even when all four numbers match. For a mixed selection, opacity shows a mixed state and applies one value to the selected layers when the edit commits. Drag a numeric value to scrub it; Escape cancels a draft, and a completed edit is undoable. Mixed-selection opacity does not preview directly on the canvas during the scrub.
 
+A valid numeric property draft still in focus is committed before Save, Save All, or a close action with Save. Invalid input blocks that save and remains available for correction or cancellation. Merely focusing an X/Y field whose display is rounded does not replace its underlying fractional value; a typed fractional X/Y edit is preserved.
+
 For a grid frame, Layout exposes column and row tracks, gaps, automatic or manual item positioning, and each selected child's cell, span, and alignment. [Grid layout →](/docs/concepts/auto-layout) An instance's variant choices appear before its other component properties; picking a value swaps to the matching variant when that combination exists. [Components →](/docs/concepts/components)
 
 An instance's component section also lists Content rows for its visible text layers. Edit a Content row to create a local text override, or reset it to use the master value. A direct text-content variable binding makes that row read-only; edit the variable or remove its binding first. Nested instance text is not recursively listed as a Content row.
@@ -44,6 +46,8 @@ A Boolean layer exposes its Union, Subtract, Intersect, or Exclude operation, pl
 ## Text on Path
 
 A selected TextPath layer exposes typography plus controls for where text starts on the path, direction (forward or reverse), and which side of the path carries the text. Start can be edited as a segment and position or as an offset along the current contour. With one editable TextPath layer selected, choose **Edit object** in the inspector header to open inline text editing with all text selected. This action is unavailable for multiple selections, locked layers or ancestors, read-only states, and virtual TextPath content inside an instance. The editor checks the current selection again before acting, so an outdated inspector command does not edit a different layer. This layer has a focused property set: paragraph spacing and indentation, list controls, vertical alignment, text resize and truncation, and some decoration and case controls are read-only because they do not exist on text paths. The text fill is limited to color and opacity.
+
+TextPath X and Y fields use its painted bounds. Editing one coordinate moves the visible path text to that displayed position, including under a transformed parent, without changing the path shape or other coordinate.
 
 ## Export
 

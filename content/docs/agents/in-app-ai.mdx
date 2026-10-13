@@ -13,6 +13,8 @@ The built-in design tools include <code>design_state</code>, <code>design_system
 
 Use a project-root <code>fanta.md</code> to give the native designer a product brief, visual direction, layout and asset preferences, design-system conventions, and acceptance checks. It reads that file before each model round. Nested specifications refine workspace rules, with a 64 KiB combined limit; direct user instructions and the selected mode's permissions take precedence. See [project context](/docs/mcp/custom-rules).
 
+In current source, a native Agent turn is limited to 64 model requests across tool continuations, agent-managed retries, model fallback, and automatic compaction. Provider-internal retries are outside this count. At the limit, the turn stops with a visible message and keeps completed work. Send a new message to start a fresh turn. This is a request limit, not a credit or spending cap; the release recordings do not establish native acceptance of this limit.
+
 ## Choose an agent mode
 
 **Edit Visual** applies undoable canvas operations. **Write** and **Full Access** can edit saved FNX and managed JSON source. **Ultra** coordinates specialists on larger tasks. **Plan** and **Review** preserve the scene while they inspect and advise; Plan can read comments but cannot reply or resolve them. Available tools depend on the selected mode and model.

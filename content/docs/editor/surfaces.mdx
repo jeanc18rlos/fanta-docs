@@ -49,6 +49,8 @@ Save source to validate the edited file against the project, write it, and reloa
 
 The canvas can also show an **Agents** control for active design agents. Select an agent to follow its current page or component and its Canvas, Variables, or Code workspace. Select the agent again to stop following. Source activity can open the relevant source tab. A clean canvas tab restores its project, page, or component location when the workspace reopens.
 
+Current source saves an intentionally empty design tab layout, so restarting does not reopen a tab that you closed. Explicitly opening that project again opens one tab; repeating Open reuses it after a project manifest replacement. These paths have bounded source tests; installed-app behavior beyond the recorded workflows remains unverified.
+
 ## Dev mode
 
 Dev mode is a read-only artwork inspection session with page-bound measurements and annotations. It starts on a loaded canvas, activates Inspect, and offers **Inspect**, **Hand**, **Measurement**, **Annotation**, and **Saved Code**. The Code workspace is read-only while Dev mode is active; Variables is unavailable. A **Readiness unavailable** control is disabled in the current build. See [Dev mode](/docs/editor/dev-mode) for the workflow.

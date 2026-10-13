@@ -29,6 +29,8 @@ Keyboard Cut, Delete, and Duplicate respect a selected layer's own lock and lock
 
 In Design mode on an editable canvas, select an image and double-click it, or choose **Crop image** from its canvas context menu. The Crop tool shows **Ratio**, **Cancel**, and **Apply crop** controls above the toolbar. Choose a ratio, such as **1:1**, then drag a crop rectangle on the image. The ratio constrains the preview before the document changes.
 
+Build45 source keeps those controls inset when the canvas is narrow. This exact layout is not part of its recorded installed-app checks.
+
 Choose **Apply crop** to commit the pending rectangle as one undoable change. Applying without a pending rectangle leaves the document unchanged. **Cancel** first discards a pending rectangle while keeping Crop active; choose **Cancel** again to leave Crop. The controls are available while Crop is active in editable Design mode.
 
 ## Create and draw
