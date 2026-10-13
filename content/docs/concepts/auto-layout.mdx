@@ -3,9 +3,19 @@ title: Auto layout
 description: Arrange children with frame layout controls.
 ---
 
+import { ProductScreenshot } from '@/components/product-screenshot';
+
 # Auto layout
 
 Auto layout arranges a container's children using direction, spacing, padding, alignment, and sizing rules. Use it for repeated items, buttons, cards, and sections that need to respond when their contents change. Fanta supports horizontal and vertical stacks and a grid. The inspector separates a container's layout settings from each selected child's sizing and alignment settings.
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/auto-layout-inspector.jpg"
+  alt="The selected CTA Button's Layout inspector with horizontal direction, centered alignment, an 8 pixel fixed gap, and padding of 12 pixels vertically and 16 pixels horizontally."
+  region={{ sourceWidth: 3456, sourceHeight: 2168, x: 2816, y: 204, width: 640, height: 1140 }}
+  maxWidth={420}
+  caption="Our launch-card button uses a horizontal layout, center alignment, an 8 px gap, and 12 px vertical / 16 px horizontal padding. Captured in Public Alpha 1.0.0 on October 13, 2026."
+/>
 
 ## Set up a layout
 

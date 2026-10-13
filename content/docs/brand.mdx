@@ -1,0 +1,64 @@
+---
+title: Brand and assets
+description: Fanta's F mark, app icon, typography, and the visual identity used in these docs.
+---
+
+import { ProductScreenshot } from '@/components/product-screenshot';
+
+Fanta's identity starts with its flowing **F mark**, a dark canvas, and readable type. The product name is **Fanta**. The line **Your design is source.** connects the visual editor to the files behind it.
+
+## Logo
+
+These are the existing Fanta mark and native app icon used by the product and website.
+
+<div className="not-prose my-6 grid gap-4 sm:grid-cols-3">
+  <div className="flex min-h-48 flex-col items-center justify-center gap-5 rounded-xl border border-fd-border bg-[#05070b] p-6 text-[#ededed]">
+    <img src="/brand/fanta-mark-light.svg" width="64" height="76" alt="Fanta's white F mark on a dark background." />
+    <a href="/brand/fanta-mark-light.svg" download className="text-sm underline underline-offset-4">Download light SVG</a>
+  </div>
+  <div className="flex min-h-48 flex-col items-center justify-center gap-5 rounded-xl border border-fd-border bg-[#fafaf7] p-6 text-[#05070b]">
+    <img src="/brand/fanta-mark-dark.svg" width="64" height="76" alt="Fanta's dark F mark on an ivory background." />
+    <a href="/brand/fanta-mark-dark.svg" download className="text-sm underline underline-offset-4">Download dark SVG</a>
+  </div>
+  <div className="flex min-h-48 flex-col items-center justify-center gap-5 rounded-xl border border-fd-border bg-fd-card p-6">
+    <img src="/brand/fanta-app-icon.png" width="80" height="80" alt="Fanta's native app icon with the F mark on a textured dark square." />
+    <a href="/brand/fanta-app-icon.png" download className="text-sm underline underline-offset-4">Download app icon</a>
+  </div>
+</div>
+
+Keep the mark's proportions and use a version that contrasts with its background. Leave space around it, and keep small navigation placements simple. The light and dark SVGs share the same geometry.
+
+## Color and typography
+
+The docs carry the dark foundation and periwinkle/lime accents from Fanta's existing presentation identity. Light mode uses an ivory reading surface.
+
+| Color | Value | Use in the docs |
+| --- | --- | --- |
+| Ink | `#05070b` | Dark reading surface and the dark mark |
+| Ivory | `#ededed` | Main text on dark surfaces |
+| Periwinkle | `#8191ff` | Accent family; lighter or darker shades maintain readable contrast |
+| Lime | `#d8ff78` | Primary action in dark mode |
+
+**Geist** is the interface and reading typeface. **Geist Mono** is used for FNX, paths, and small labels. Both match the existing Fanta website typography. The layout keeps screenshots large enough to inspect and makes documentation links easy to find.
+
+## Product screenshots
+
+The [visual tour](/docs/screenshots) contains screenshots captured directly from the installed **Fanta 1.0.0 Public Alpha** app on **October 13, 2026**. They show Layers, Variables, layout, components, FNX, Motion, and Prototype controls in owned sample projects. Each figure links to its original full app capture.
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/auto-layout-inspector.jpg"
+  alt="Fanta's native canvas with the launch card, expanded layer hierarchy, and selected button's Design inspector."
+  width={3456}
+  height={2168}
+  caption="The native app's Layers, canvas, and Design inspector."
+/>
+
+[Layers panel](/docs/editor/surfaces#canvas-and-layers) · [Variables workspace](/docs/concepts/variables) · [Motion](/docs/editor/motion) · [Prototype](/docs/concepts/prototyping) · [FNX source](/docs/concepts/fnx-design-as-source)
+
+The [recorded demos](/docs/demos) from October 12 cover the canvas → FNX → Git workflow and an agent edit.
+
+The agent capture shows the **result** of an external agent's MCP edit. Its caption should describe that result; the image does not show an agent conversation.
+
+## Writing about Fanta
+
+Describe the workflow concretely: draw on the canvas, save readable source, review a change. Call FNX **design source** and explain that it is a static format. State which capabilities are available in a build and which are [planned](/docs/roadmap). Comparisons with other tools should describe the [differences in workflow](/docs/fanta-vs-figma) and supported behavior.

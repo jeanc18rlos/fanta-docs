@@ -105,7 +105,9 @@ Maintainers can enable **build diagnostics** on a manual macOS release workflow 
 
 ## Mac App Store build differences
 
-A build compiled with <code>mac_app_store</code> is sandboxed. It does not ship the CLI helper or bundled Git runtime and does not automatically initialize Git repositories. It cannot launch command-backed MCP servers, external agent processes, terminal tasks, or external formatters from inside the app, and remote project connections are disabled. Remote HTTP MCP servers remain available. Purchase, restore, and offer-code actions use Apple's in-app purchase flow in this build; non-Store builds use web checkout.
+A build compiled with <code>mac_app_store</code> is sandboxed. It does not ship the CLI helper or bundled Git runtime and does not automatically initialize Git repositories. It cannot launch command-backed MCP servers, external agent processes, terminal tasks, or external formatters from inside the app, and remote project connections are disabled. Remote HTTP MCP servers remain available.
+
+All new AI credit and subscription purchases use [web Billing](https://app.fantaisa.net/billing). The current public non-Store DMG supports web checkout. Native Store web-billing controls are a source change for the next app release; the backend already prevents the retired Apple purchase, restore, offer-code, and trial paths from granting AI credits. Public accounts receive no signup, referral, or trial credits. Existing founder exceptions are restricted on the backend. Previously purchased Apple subscriptions must still be canceled in the Apple Account.
 
 The in-app live canvas MCP server is a separate setting, but an external client's bridge to a packaged Store build still needs validation. File access follows macOS user-selected Open and Save permissions. See [Settings and build differences](/docs/editor/settings).
 

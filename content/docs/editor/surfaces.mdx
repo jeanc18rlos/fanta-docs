@@ -3,6 +3,8 @@ title: Editor surfaces
 description: Use the canvas, Layers panel, Variables workspace, Code workspace, and presentation view.
 ---
 
+import { ProductScreenshot } from '@/components/product-screenshot';
+
 # Editor surfaces
 
 ## Canvas and Layers
@@ -12,6 +14,14 @@ The canvas shows the active page and its selectable layers. The Layers panel let
 The Pages area of Layers creates, selects, renames, duplicates, reorders, and deletes pages. It also includes a page link action and name/text search and replace. Right-click on the canvas for a shorter menu tailored to what you clicked, including direct text, vector, image, media, and component actions. [Canvas tools →](/docs/editor/tools)
 
 Drag the edge of the Layers or Properties sidebar to resize it. The panel contents respond as the width changes.
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/layers-and-inspector.jpg"
+  alt="The Layers panel with the Fanta Studio page, expanded Launch Card frame, CTA Button frame and CTA Label child, plus the design's text and shape layers."
+  region={{ sourceWidth: 3456, sourceHeight: 2168, x: 0, y: 132, width: 560, height: 1050 }}
+  maxWidth={360}
+  caption="Pages and Layers in the installed Public Alpha 1.0.0 app, captured on October 13, 2026, from our launch-card sample."
+/>
 
 ## Files and Project Assets
 
@@ -24,6 +34,14 @@ The Variables workspace manages collections, modes, values, aliases, and binding
 ## Code
 
 The Code workspace opens the active page's `page.fnx` and `page.json`, or a component master's `master.fnx` and `def.json`. Select **FNX** or **JSON** to edit that source file. **Find** searches the selected source buffer. Save the design once before opening source. Save or discard canvas changes before editing source; while either source buffer has unsaved changes, canvas content editing is locked, but pan and selection remain available.
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/fnx-workspace.jpg"
+  alt="Fanta's Code workspace with FNX selected, pages/fanta-studio/page.fnx open, and the launch-card design expressed as nested Frame, Rect, Text, and Ellipse elements."
+  width={3456}
+  height={2168}
+  caption="The same launch card in the native Code workspace. Public Alpha 1.0.0, October 13, 2026; our own sample project."
+/>
 
 While a source draft is unsaved, select one canvas layer to read its last accepted properties in the Design inspector, including position, size, and layout gap. These rows cannot be edited until the draft is saved or discarded. With no selection or a mixed selection, the inspector asks you to select one layer. A source draft also blocks **Go to main component** when that action would switch page or component scope; save or discard the draft first.
 

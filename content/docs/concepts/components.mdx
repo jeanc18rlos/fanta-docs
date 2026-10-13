@@ -3,6 +3,8 @@ title: Components and instances
 description: Reuse a master design and manage local overrides.
 ---
 
+import { ProductScreenshot } from '@/components/product-screenshot';
+
 # Components and instances
 
 A component is a reusable master layer tree. An instance refers to that master and can carry local overrides. Fanta stores component masters in `components/<slug>/master.fnx`, alongside the project's page source.
@@ -16,6 +18,14 @@ A component is a reusable master layer tree. An instance refers to that master a
 5. Use **Go to main component** to find the rendered master. Use the instance controls to reset overrides or detach the instance when you need an independent layer tree.
 
 Open a component master to edit it in its own canvas. The master root appears as a row in Layers; expand it to inspect and select its descendants. Selecting a descendant reveals its ancestor chain in the panel.
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/component-master.jpg"
+  alt="The native inspector identifying the selected CTA Button as a Component, with its layout controls and an empty Component properties section."
+  region={{ sourceWidth: 3456, sourceHeight: 2168, x: 2816, y: 204, width: 640, height: 1540 }}
+  maxWidth={420}
+  caption="The CTA Button after creating a component master. The Component properties section is visible; this sample has no exposed properties yet. Public Alpha 1.0.0, captured October 13, 2026."
+/>
 
 ## Variant sets and properties
 

@@ -1,0 +1,75 @@
+{
+  "capturedOn": "2026-10-13",
+  "application": "Fanta",
+  "version": "1.0.0 Public Alpha",
+  "applicationBinarySha256": "1679cbc87fa6bd2675aa50543c77915cb3c373c3ccf94d053c173fd7f4988baf",
+  "captureMethod": "Screenshots of the installed native macOS application through Computer Use",
+  "assetPolicy": "Unchanged original JPEG captures; focused views are framed with CSS and link to the original.",
+  "sampleData": "Owned copies of the published Launch Card sample. Variables, motion clip and prototype reaction are illustrative sample data loaded and inspected in the native app. The sample collection is not an official brand palette.",
+  "screenshots": [
+    {
+      "file": "auto-layout-inspector.jpg",
+      "width": 3456,
+      "height": 2168,
+      "sha256": "68b19c3bf306b88a9eceeea16885dfdade32ac0e0bca93c30b4aceec52bd9add",
+      "description": "Selected CTA Button frame with horizontal auto layout, edited through native UI.",
+      "sampleProject": "Fanta Launch Card capture copy"
+    },
+    {
+      "file": "component-master.jpg",
+      "width": 3456,
+      "height": 2168,
+      "sha256": "4dd4bfe79032953b5f92de2c03600b5e5e35215778b3ab4b3fc8c71a76ad5828",
+      "description": "CTA Button converted to a component through native UI; Component properties is empty.",
+      "sampleProject": "Fanta Launch Card capture copy"
+    },
+    {
+      "file": "fnx-workspace.jpg",
+      "width": 3456,
+      "height": 2168,
+      "sha256": "44772bf0e546c0e15d28c439222b86852d58ba7f57679638294a314318722526",
+      "description": "Native Code workspace showing Launch Card page.fnx.",
+      "sampleProject": "Fanta Launch Card capture copy"
+    },
+    {
+      "file": "layers-and-inspector.jpg",
+      "width": 3456,
+      "height": 2168,
+      "sha256": "b5688fb3ce3e9eb2d4bf6f507cf704c47f45b6cd7b9656f0221cd5db6ede8e9f",
+      "description": "Expanded Layers and native canvas with page inspector.",
+      "sampleProject": "Fanta Launch Card capture copy"
+    },
+    {
+      "file": "motion-timeline.jpg",
+      "width": 3416,
+      "height": 2128,
+      "sha256": "e32824f371ebbf964e312797123dcc38e37dd1b69d21e00b16d1eff6eb91a4a9",
+      "description": "Sample CTA opacity clip at 800 ms with keys at 0 and 800 ms, duration 1200 ms.",
+      "sampleProject": "Fanta Docs Showcase"
+    },
+    {
+      "file": "prototype-inspector.jpg",
+      "width": 3416,
+      "height": 2128,
+      "sha256": "b064c4117fc68b22ea717a95a8ec27fa43a68dd4a43af59ffc99f042c6d22067",
+      "description": "CTA Button with sample On click / Open link / Instant interaction.",
+      "sampleProject": "Fanta Docs Showcase"
+    },
+    {
+      "file": "prototype-interaction.jpg",
+      "width": 3416,
+      "height": 2128,
+      "sha256": "9abf553d12870018e6e7d3223084d80f4470aaabd12309650f87632fd53a44d7",
+      "description": "Native interaction popover showing the sample docs URL and Instant transition.",
+      "sampleProject": "Fanta Docs Showcase"
+    },
+    {
+      "file": "variables-workspace.jpg",
+      "width": 3416,
+      "height": 2128,
+      "sha256": "5041fed8e9705b8717e05c153d33a03ec2d57f0640d17e48b23c4e1bc712d1a5",
+      "description": "Illustrative Fanta Brand collection: nine sample variables, Dark and Light modes, and an alias.",
+      "sampleProject": "Fanta Docs Showcase"
+    }
+  ]
+}
