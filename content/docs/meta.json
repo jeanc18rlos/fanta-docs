@@ -2,6 +2,11 @@
   "pages": [
     "index",
     "capabilities",
+    "fanta-vs-figma",
+    "roadmap",
+    "screenshots",
+    "demos",
+    "brand",
     "getting-started",
     "concepts",
     "editor",

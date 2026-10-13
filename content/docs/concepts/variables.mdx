@@ -3,11 +3,20 @@ title: Variables
 description: Define reusable values, modes, aliases, and property bindings.
 ---
 
+import { ProductScreenshot } from '@/components/product-screenshot';
+
 # Variables
 
 Variables let one value drive multiple properties. Fanta's Variables workspace lets you create collections, variables, and modes, edit values, create aliases, and bind values to design properties. The active mode can be selected for a scope so the same design can resolve different values.
 
 The variable editor handles color, number, string, and boolean values. The agent operation schema also accepts typed `typography` variables. Imported documents may contain additional variable data; inspect the current design system before changing it.
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/variables-workspace.jpg"
+  alt="Fanta's native Variables workspace with the Fanta Brand collection, nine color and number variables, Dark and Light mode columns, and project and page mode selectors."
+  region={{ sourceWidth: 3416, sourceHeight: 2128, x: 0, y: 132, width: 3416, height: 960 }}
+  caption="The populated Variables workspace in our Fanta Docs Showcase sample. Captured in the installed Fanta Public Alpha 1.0.0 app on October 13, 2026."
+/>
 
 ## Create a collection and bind a value
 
@@ -16,6 +25,16 @@ The variable editor handles color, number, string, and boolean values. The agent
 3. Set a value for each relevant mode.
 4. Return to the canvas, select a layer, and bind a compatible property in the inspector.
 5. Switch modes and inspect the resulting design.
+
+In our sample, **Collections** selects the illustrative **Fanta Brand** launch-card collection, while **Groups** filters its Color, Radius, Semantic, and Spacing entries. Use **Create variable** at the bottom of the workspace to add another value. Under **Modes**, **Project** selects **Dark** and **Page: Fanta Studio** uses **Inherit parent**, so the page follows the project's mode.
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/variables-workspace.jpg"
+  alt="A closer view of the Name and Dark columns showing Color/Accent as FF6B35, Semantic/Action aliased to Color/Accent, Spacing/Small as 8, Spacing/Large as 24, and Radius/Card as 24."
+  region={{ sourceWidth: 3416, sourceHeight: 2128, x: 560, y: 212, width: 960, height: 860 }}
+  maxWidth={760}
+  caption="The sample's Dark values. Semantic/Action references Color/Accent and displays its resolved orange value. Native Public Alpha 1.0.0 capture, October 13, 2026."
+/>
 
 Aliases point one variable at another. Check alias and mode resolution when a bound property appears to use a surprising value. Variable workspace controls are in `crates/fig_viewer/src/variables_workspace.rs`; value types are in `crates/fanta-doc/src/value.rs`.
 

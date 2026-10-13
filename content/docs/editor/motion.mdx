@@ -3,9 +3,19 @@ title: Motion
 description: Animate layers with clips, keyframes, playback, and time-linked comments.
 ---
 
+import { ProductScreenshot } from '@/components/product-screenshot';
+
 # Motion
 
 Motion mode adds an animation timeline below the canvas and an Animations inspector for the selected layer. Motion is stored in the design document as clips, tracks, and keyframes. Select one layer before adding an animation or keyframe.
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/motion-timeline.jpg"
+  alt="The native Fanta Motion workspace with CTA Button selected, an Opacity animation in the inspector, and its expanded Opacity track with two keyframes in the timeline below the canvas."
+  width={3416}
+  height={2128}
+  caption="An opacity clip in our Fanta Docs Showcase sample. Captured in the installed Fanta Public Alpha 1.0.0 app on October 13, 2026."
+/>
 
 ## Create an animation
 
@@ -14,11 +24,21 @@ Motion mode adds an animation timeline below the canvas and an Animations inspec
 3. In the Animations inspector, use **+** to add Position, Scale, Rotation, Size, or Opacity. These presets create start and end keyframes. The toolbar also offers **Slide in**, **Scale in**, **Rotate in**, **Grow**, and **Fade in**.
 4. Select the animation to adjust its direction or amount, delay, duration, and easing. Drag the playhead or press **Play** to preview it.
 
+<ProductScreenshot
+  src="/screenshots/native-20261013/motion-timeline.jpg"
+  alt="The Motion inspector for CTA Button, showing the CTA fade in clip, At playhead values, and an Opacity animation labeled Fade in, 800 milliseconds."
+  region={{ sourceWidth: 3416, sourceHeight: 2128, x: 2776, y: 204, width: 640, height: 920 }}
+  maxWidth={420}
+  caption="The sample's Opacity animation uses Fade in with an 800 ms duration. Real native Motion controls in Public Alpha 1.0.0, October 13, 2026."
+/>
+
 The preset editor recognizes only its own simple start/end pattern. If you change timing or values into a custom keyframe sequence, edit it in the timeline; Fanta displays **Custom keyframes** rather than rewriting it with the preset controls. A layer can have one animation per property in an active clip. **Path** appears in the add menu as “soon” and is disabled. Size is offered only for compatible layers.
 
 ## Edit the timeline
 
 The timeline offers Play/Pause, Return to start, Loop playback, a Current time field, clip name and duration, a **+ Keyframe** menu, and zoom controls. Type a time in Current time and press Return to seek the playhead. The keyframe menu includes Position X/Y, Rotation, Scale X/Y, Opacity, and Fill color. Select a keyframe to change its interpolation between Linear and Hold, choose an easing preset or custom cubic Bézier values, or delete it. Drag a keyframe horizontally to retime it within the clip. Click the clip name or duration to edit them.
+
+The capture shows a **1.20 s** clip with the playhead at **0.80 s**. Expand **CTA Button** in the timeline to see its **Opacity** track and the diamond keyframes. Select a diamond to edit that keyframe, or drag it along the time ruler to change when it occurs.
 
 Turn on **Auto key** to edit compatible values in the **At playhead** inspector while playback is paused. Those edits preview immediately and commit as keyframe changes. Without Auto key, the playhead values are read-only. For multiple clips, choose the active one from the Motion inspector. Playback cannot start without a clip of positive duration.
 

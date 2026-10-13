@@ -2,6 +2,64 @@
 @import 'fumadocs-ui/css/neutral.css';
 @import 'fumadocs-ui/css/preset.css';
 
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  --color-fd-background: #fafaf7;
+  --color-fd-foreground: #05070b;
+  --color-fd-card: #f2f2ed;
+  --color-fd-primary: #05070b;
+  --color-fd-primary-foreground: #fafaf7;
+  --color-fd-ring: #5563c1;
+  --fanta-accent: #5563c1;
+}
+
+.dark {
+  --color-fd-background: #05070b;
+  --color-fd-foreground: #ededed;
+  --color-fd-card: #101319;
+  --color-fd-popover: #101319;
+  --color-fd-primary: #d8ff78;
+  --color-fd-primary-foreground: #05070b;
+  --color-fd-border: #292d35;
+  --color-fd-muted-foreground: #a7acb6;
+  --color-fd-ring: #8191ff;
+  --fanta-accent: #aeb8ff;
+}
+
+.fanta-label {
+  color: var(--fanta-accent);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.fanta-link {
+  color: var(--fanta-accent);
+}
+
+.fanta-hero {
+  background-image: radial-gradient(ellipse at 90% 0%, rgba(129, 145, 255, 0.1), transparent 55%);
+}
+
+.fanta-shot {
+  box-shadow: 0 20px 70px -30px rgba(5, 7, 11, 0.45);
+}
+
+.prose img {
+  border-radius: 0.75rem;
+}
+
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--color-fd-ring);
+  outline-offset: 4px;
+}
+
 html {
   scrollbar-gutter: stable;
 }

@@ -1,9 +1,31 @@
 ---
 title: FNX design source
-description: Read and edit pages and component masters as restricted JSX-like project files.
+description: Learn the static JSX-like format that makes Fanta designs readable, editable, and reviewable in Git.
 ---
 
 FNX is Fanta's text source for a page or component master. Pages live at <code>pages/&lt;page&gt;/page.fnx</code>. Standalone component masters live at <code>components/&lt;component&gt;/master.fnx</code>; a variant master lives one level deeper at <code>components/&lt;set&gt;/&lt;variant&gt;/master.fnx</code>. Each element is a scene node; literal attributes hold its properties and nested elements hold its children.
+
+## Read a small design
+
+This compact page example describes a 320 × 180 frame containing an orange rectangle:
+
+```tsx
+export default function Card() {
+  return (
+    <Frame id="01M4PFJPB3KH16C0Y3D3B05SGS" name="Card" clip_size={[320, 180]}>
+      <Rect id="01M4PFJPB3GTBBRJ8YZAGVWBRP" name="Accent"
+        x={24} y={24} width={80} height={40}
+        fills={[{"kind": "solid", "color": fnxColor("#FF6B35")}]} />
+    </Frame>
+  );
+}
+```
+
+<code>name</code> is the layer label; <code>id</code> is its stable identity. The rectangle's <code>x</code> and <code>y</code> place it relative to its parent. <code>width</code> and <code>height</code> describe its geometry, and <code>fills</code> describes its paint. Changing 80 to 120 makes the rectangle wider when the valid source is saved and reloaded.
+
+Generated files can also include JSX declarations, imports, and additional properties. Keep the generated header and project companions when editing an existing file, and use fresh IDs when creating your own nodes. This example explains the source tree; a working project also needs its manifest and supporting files.
+
+FNX is declarative design data. It supports literal strings, numbers, arrays, and objects, with helpers such as <code>fnxColor</code> for colors. Its JSX-like appearance does not make it executable React application code: arbitrary functions, dynamic rendering, and application event handlers are outside the format. See [FNX design as source](/docs/concepts/fnx-design-as-source) for the canvas-to-source workflow.
 
 ## Edit safely
 

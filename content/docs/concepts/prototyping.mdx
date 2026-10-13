@@ -3,11 +3,21 @@ title: Prototyping
 description: Add interactions and present a design.
 ---
 
+import { ProductScreenshot } from '@/components/product-screenshot';
+
 # Prototyping
 
 Prototype interactions connect an event on a layer to an action. The inspector's Prototype section provides controls for triggers, destinations, and transitions. Then use **Present** to try the flow.
 
 Available triggers include click, drag, hover, while pressing, after a delay, and key input. Imported interactions may also include mouse enter, mouse leave, and while hovering. Actions include navigating to a destination, opening an overlay, scrolling to a target, setting a variable, updating a variant, opening a link, going back, and closing an overlay. Transitions include instant, dissolve, smart animate, and directional slide, push, or move effects.
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/prototype-inspector.jpg"
+  alt="The native Prototype inspector for CTA Button, showing Flow starting point, an On click interaction with Open link and Instant, Add interaction, and prototype device and background settings."
+  region={{ sourceWidth: 3416, sourceHeight: 2128, x: 2776, y: 204, width: 640, height: 790 }}
+  maxWidth={420}
+  caption="An open-link reaction in our Fanta Docs Showcase sample. Captured in the installed Fanta Public Alpha 1.0.0 app on October 13, 2026."
+/>
 
 ## Build a simple flow
 
@@ -16,6 +26,18 @@ Available triggers include click, drag, hover, while pressing, after a delay, an
 3. In the Prototype section, add a trigger and navigation action.
 4. Set the destination and transition.
 5. Choose **Present** and test the interaction.
+
+## Open a link from a button
+
+The sample button uses an **On click** trigger to open the Fanta docs. Select the button, open **Prototype**, and use **Add interaction** to create a reaction. Open the interaction's detail control, choose **On click** for **Trigger** and **Open link** for **Action**, then enter the destination in **URL**. This example uses `https://fanta-docs.vercel.app/`, **Instant** for **Transition**, and **None** for **Motion clip**.
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/prototype-interaction.jpg"
+  alt="The native Interaction 1 popup showing Trigger On click, Action Open link, URL https://fanta-docs.vercel.app/, Transition Instant, and Motion clip None."
+  region={{ sourceWidth: 3416, sourceHeight: 2128, x: 2802, y: 1618, width: 590, height: 439 }}
+  maxWidth={420}
+  caption="The actual open-link interaction details for the sample CTA Button. Native Public Alpha 1.0.0 capture, October 13, 2026."
+/>
 
 In an interaction's detail view, **X** closes the details and keeps the interaction. Use **Remove interaction** on its row to delete it. Closing the details applies a valid pending parameter edit; if a value is invalid, Fanta keeps the details open and shows the error. When you copy a layer tree within the document, references to destinations inside that copied tree are remapped to the new nodes. References outside it continue to point to their original targets.
 

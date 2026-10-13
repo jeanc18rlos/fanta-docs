@@ -3,15 +3,94 @@ title: Install & Build
 description: Install the non-Store macOS alpha, build from source, and understand Store build limits.
 ---
 
-## Install the non-Store alpha
+## Install Fanta 1.0.0 Public Alpha
 
-The documented alpha DMG targets Apple Silicon. macOS 26.6.2 is the version recorded in its release rehearsal; Intel and other macOS versions have not been verified for that DMG. If an alpha DMG is available from Fanta's official release channel, open it and drag Fanta to Applications. The documented rehearsal bundle is ad-hoc signed. If macOS blocks first launch, try opening it, then use **System Settings → Privacy & Security → Open Anyway**.
+The first public distribution targets **Apple Silicon Macs**. Use the
+[official download page](https://www.fantaisa.net/download) for current
+availability, the immutable installer, checksum and macOS versions actually
+tested for that package. The public label is **Public Alpha**, the app version is
+**1.0.0**, and the internal release channel is **stable**.
 
-The current non-Store release workflow targets a direct-download DMG. Before signing, the bundler sets both macOS bundle version fields to the explicit version in `crates/zed/Cargo.toml`. DMG creation retries the exact transient `Resource busy` failure up to three times, retaining diagnostics and leaving a previous final image untouched if creation fails. Before upload, the workflow verifies the mounted app against the staged bundle, its document and URL registrations, bundled Git, and code signature; when notarization is required, it also checks the Developer ID identity, staple, and Gatekeeper assessment. An internal arm64 optimized DMG from the October 9 source passed bounded mounted-app verification, but it was ad-hoc signed and its public release job was skipped. A Developer ID-signed, notarized public download and clean-Mac installation remain unverified.
+The final **Build45** package is Developer ID signed, Apple-notarized and stapled.
+Distribution and tested installation checks have passed. Public availability
+remains **preparing / on hold** while website review and publication checks are
+unfinished. The [launch overview and three workflows](/docs/demos) have been
+reviewed on this signed app.
 
-Automatic updates are disabled by default. If you use an available alpha build, check Fanta's official release channel for a newer version and follow its installation instructions.
+The accepted package is bound to source
+`57d86330289153ead8a3bdbd114e1fa530a74e03`. Its `Fanta-aarch64.dmg` SHA-256 is:
 
-The source also contains a separate Mac App Store feature build. Its packaging checks require macOS 12.0 or later, but a package or review build does not establish a public Store release. Check Fanta's official distribution channel for availability. The DMG and external-agent commands in this guide describe a non-Store build.
+~~~text
+5e6b68605bbb601e70778acb2b8fcf72186d1b9a368b7947554f316ab96b87b8
+~~~
+
+On **12 October 2026**, an authenticated Chrome draft download retained
+quarantine and passed Gatekeeper as Notarized Developer ID. Native edit, Save,
+normal Quit and reopen passed. Finder replacement with the same signed build
+preserved the saved change after reopening, and the installed bundle matched the
+accepted signed bundle. These tests cover the draft download and same-build
+replacement; anonymous public download, clean-account installation and migration
+from an older version are not established by these checks.
+
+1. When the download page reports availability, download `Fanta-aarch64.dmg`
+   and `SHA256SUMS.txt` from its linked GitHub prerelease.
+2. Verify the checksum in the folder containing both files:
+
+   ~~~bash
+   shasum -a 256 -c SHA256SUMS.txt
+   ~~~
+
+   Continue only when the installer reports `OK`.
+3. Open the disk image, drag **Fanta** into **Applications**, and eject the image.
+4. Open Fanta from Applications. macOS may ask you to confirm opening an app
+   downloaded from the internet.
+5. Follow the [ten-minute exercise](/docs/demos#the-ten-minute-exercise).
+
+The accepted package has passed signature, notarization, stapling and Gatekeeper
+checks. If Gatekeeper refuses the public installer, stop and report the dialog to
+[support@fantaisa.net](mailto:support@fantaisa.net). Do not remove quarantine or
+bypass Gatekeeper. Earlier ad-hoc-signed internal QA packages retain their
+original identities and are separate artifacts.
+
+## Requirements
+
+The signed Build45 package was tested on an **Apple Silicon Mac running macOS
+27.0 (26A428)**. A minimum supported macOS version has not been established. Check
+the download page for the tested versions of each package. Intel and universal
+installers are outside this release.
+
+## Manual updates
+
+Automatic updates are disabled in this alpha. Save work, close Fanta and back up
+the complete project folder before replacing the app. Download the newer public
+installer, verify its checksum and drag its Fanta app into Applications. Choose
+**Replace**, keeping your project and application data folders. Reopen the sample,
+make an edit, save and reopen it before continuing important work.
+
+## Limits and support
+
+Start with a copy of a small project. Imported Figma structures and rendering can
+differ. Code edits supported FNX and managed JSON, while **Saved Code** in Dev
+mode is read-only. Source drafts can lock conflicting canvas edits, and saving
+several source buffers is sequential rather than an atomic rollback operation.
+Review project trust prompts and keep manifests, identity sidecars and assets
+with the source. [Current capabilities and limitations](/docs/capabilities).
+
+In a **12 October 2026 signed Build45** recording, Code showed
+`Could not refresh saved source: oneshot canceled` after a canvas Save. The saved
+FNX retained the edit and reopening that project restored the source view.
+Verify the saved change and resolve any unsaved drafts before closing, then
+reopen before editing source. Report a persistent warning or a saved-source/canvas
+mismatch. See [source refresh troubleshooting](/docs/mcp/troubleshooting#code-reports-a-source-refresh-warning).
+
+Use the verified community and issue-reporting links on the download page for
+reproducible bugs. Include app version, macOS, steps and expected versus observed
+behavior. Send account and billing reports privately to
+[support@fantaisa.net](mailto:support@fantaisa.net).
+
+A separate Mac App Store feature build exists in source. It is a different
+packaging route and does not establish public Store availability. The installer
+and external-agent guidance on this page describe the direct-download build.
 
 ## Build from source
 
@@ -27,7 +106,9 @@ Maintainers can enable **build diagnostics** on a manual macOS release workflow 
 
 ## Mac App Store build differences
 
-A build compiled with <code>mac_app_store</code> is sandboxed. It does not ship the CLI helper or bundled Git runtime and does not automatically initialize Git repositories. It cannot launch command-backed MCP servers, external agent processes, terminal tasks, or external formatters from inside the app, and remote project connections are disabled. Remote HTTP MCP servers remain available. Purchase, restore, and offer-code actions use Apple's in-app purchase flow in this build; non-Store builds use web checkout.
+A build compiled with <code>mac_app_store</code> is sandboxed. It does not ship the CLI helper or bundled Git runtime and does not automatically initialize Git repositories. It cannot launch command-backed MCP servers, external agent processes, terminal tasks, or external formatters from inside the app, and remote project connections are disabled. Remote HTTP MCP servers remain available.
+
+All new AI credit and subscription purchases use [web Billing](https://app.fantaisa.net/billing). The current public non-Store DMG supports web checkout. Native Store web-billing controls are a source change for the next app release; the backend already prevents the retired Apple purchase, restore, offer-code, and trial paths from granting AI credits. Public accounts receive no signup, referral, or trial credits. Existing founder exceptions are restricted on the backend. Previously purchased Apple subscriptions must still be canceled in the Apple Account.
 
 The in-app live canvas MCP server is a separate setting, but an external client's bridge to a packaged Store build still needs validation. File access follows macOS user-selected Open and Save permissions. See [Settings and build differences](/docs/editor/settings).
 

@@ -3,6 +3,8 @@ title: Inspector
 description: Edit selected layers and export designs.
 ---
 
+import { ProductScreenshot } from '@/components/product-screenshot';
+
 # Inspector
 
 The inspector reflects the current selection. Select one layer for its full set of compatible controls or several layers for shared properties and multi-selection actions. A control may be absent or unavailable for a node type that does not support it.
@@ -10,6 +12,14 @@ The inspector reflects the current selection. Select one layer for its full set 
 The inspector toolbar has zoom out and in, a percentage menu with 25%, 50%, 100%, and 200%, **Fit to View**, **Fit to Selection**, and a control to collapse or show Properties. When Properties is collapsed, these view controls stay in a compact floating bar. In Prototype mode, the toolbar also offers **Play Prototype** when the document has an entry frame.
 
 Common sections include geometry and rotation, corners and smoothing, appearance and opacity, blend mode, fills and strokes, typography, image fitting, layout and child layout, effects, prototype interactions, variable bindings, components and instances, and export. Use the inspector when exact dimensions or values matter; canvas handles are faster for rough adjustments.
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/auto-layout-inspector.jpg"
+  alt="The Design inspector for the selected CTA Button frame, showing position, a 184 by 52 layout, centered alignment, padding, opacity, corner radius, and orange fill."
+  region={{ sourceWidth: 3456, sourceHeight: 2168, x: 2816, y: 204, width: 640, height: 1320 }}
+  maxWidth={420}
+  caption="A selected frame's real inspector in Public Alpha 1.0.0. Captured from our launch-card sample on October 13, 2026."
+/>
 
 With one layer selected, the selection header offers **Select matching layers** when another layer of the same kind exists on the active page. It selects matching descendants on that page without changing artwork or adding an Undo step. Sections match other Sections, even when their paints or inspector presets differ; they do not match ordinary Frames or Groups. Component masters keep their component identity. Converting a layer to a Frame or Section changes which layers match it.
 

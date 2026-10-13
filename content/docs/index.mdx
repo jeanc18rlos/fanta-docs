@@ -3,11 +3,28 @@ title: Fanta documentation
 description: "Learn Fanta's current alpha: canvas editing, source-backed projects, agents, generation, export, and Git."
 ---
 
-Fanta is a native design editor built around an ordinary project folder. Canvas edits write readable `.fnx` files; valid source edits update the canvas. If Git is available, those changes can be reviewed and committed like code.
+import { ProductScreenshot } from '@/components/product-screenshot';
+
+Fanta is a native design editor built around an ordinary project folder. Canvas edits write readable `.fnx` files; valid source edits update the canvas. If Git is available, those changes can be reviewed and committed like code. **Your design is source.**
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/auto-layout-inspector.jpg"
+  alt="Fanta's real native editor with the Launch Card, expanded Layers, and the selected CTA Button's auto-layout inspector."
+  width={3456}
+  height={2168}
+  caption="Captured directly in the installed Fanta 1.0.0 Public Alpha app on October 13, 2026. Explore the editor screens in the visual tour."
+/>
 
 The documented release target remains an **Apple Silicon macOS alpha**. These pages track [fanta-edit main at `22f73419`](https://github.com/jeanc18rlos/fanta-edit/tree/22f734193844eab66485e3cb322b529c2965e297), with build and release limits called out where they matter. Some source capabilities may reach a packaged release later. Start with the [full capability map](/docs/capabilities).
 
 <Cards>
+  <Card title="What is FNX?" href="/docs/concepts/fnx-design-as-source" description="The readable design format behind the canvas." />
+  <Card title="Fanta and Figma" href="/docs/fanta-vs-figma" description="Compare project files, collaboration, agents, and version control." />
+  <Card title="Design with Git" href="/docs/guides/version-control-designs" description="Understand diffs, commits, branches, and design review." />
+  <Card title="Roadmap" href="/docs/roadmap" description="Current workflows, planned improvements, and future directions." />
+  <Card title="Editor screenshots" href="/docs/screenshots" description="Real Layers, Variables, layout, components, Motion, Prototype, and FNX screens." />
+  <Card title="Watch the workflows" href="/docs/demos" description="Real canvas editing, FNX and Git, and an agent edit." />
+  <Card title="Brand and assets" href="/docs/brand" description="Fanta's logo, visual identity, and product screenshots." />
   <Card title="How Fanta works" href="/docs/capabilities" description="A complete map of current capabilities and alpha limits." />
   <Card title="Your first project" href="/docs/getting-started/first-project" description="Make a design, inspect its files, and review a change." />
   <Card title="Connect an agent" href="/docs/getting-started/connect-an-agent" description="Use the 13 local MCP tools from Claude Code or Codex." />

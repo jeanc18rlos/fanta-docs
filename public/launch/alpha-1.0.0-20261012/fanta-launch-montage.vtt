@@ -1,0 +1,42 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.000
+Design in Fanta: change a native fill.
+
+00:00:03.000 --> 00:00:06.000
+Keep control with Undo and Redo.
+
+00:00:06.000 --> 00:00:11.000
+Undo restores the original orange.
+
+00:00:11.000 --> 00:00:13.000
+Redo restores gold.
+
+00:00:13.000 --> 00:00:16.000
+Later: inspect the actual PNG in Preview.
+
+00:00:16.000 --> 00:00:19.000
+Your design is source: edit valid FNX.
+
+00:00:19.000 --> 00:00:23.000
+Change the label to PUBLIC ALPHA.
+
+00:00:23.000 --> 00:00:26.000
+The canvas reflects your source edit.
+
+00:00:26.000 --> 00:00:32.000
+Later: review the same saved FNX in Git.
+
+00:00:32.000 --> 00:00:38.000
+External Opus 5.5 through Fanta MCP:
+one bounded native edit.
+
+00:00:38.000 --> 00:00:45.000
+Undo restores the original design.
+
+00:00:45.000 --> 00:00:48.000
+Redo restores the agent’s edit.
+
+00:00:48.000 --> 00:00:53.000
+Later: clean saved FNX after reopening
+following a refresh warning.
