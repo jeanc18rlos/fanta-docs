@@ -3,11 +3,11 @@ title: Architecture
 description: How Fanta’s app shell, design engine, source files, and MCP connect.
 ---
 
-Fanta’s desktop executable is built by the `zed` Cargo package and named `fanta`. Its shell is a fork of Zed. `fig_viewer` connects the design UI, canvas, project persistence, and local MCP server to the vendored design engine.
+Fanta’s desktop executable is built by the `fanta` Cargo package and named `fanta`. `fig_viewer` connects the design UI, canvas, project persistence, and local MCP server to the vendored design engine.
 
 | Area | Source |
 | --- | --- |
-| App shell and executable | `crates/zed` |
+| App shell and executable | `crates/fanta` |
 | Design UI, source reload, export, MCP | `crates/fig_viewer` |
 | Agent operation types and guidelines | `crates/design_surface` |
 | Scene graph and edit operations | `crates/fanta-doc` |

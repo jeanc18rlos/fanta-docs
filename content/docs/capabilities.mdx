@@ -28,7 +28,7 @@ A native project has a `fanta.json` manifest, `pages/<slug>/page.fnx`, reusable 
 
 Structural canvas saves retain authored FNX attributes on surviving nodes and source comments when supported. A deletion or type change that would silently lose source-only data can make Save refuse the change with a preservation error. Saved files remain intact, but the live canvas edit may remain until Undo; edit FNX directly to remove that data intentionally. [Source preservation →](/docs/concepts/fnx-design-as-source)
 
-On direct-download macOS, a fresh `.fig` import stages a complete sibling project before publishing it; if that first publication fails, the parsed design stays open for a save retry. Existing project saves use the transaction journal, and unchanged generated design files are not rewritten. A received project with `.zed` settings or executable Git configuration can open in **Restricted Mode** until you review and trust it. [Import →](/docs/formats/figma-import) · [Project format →](/docs/formats/fant)
+On direct-download macOS, a fresh `.fig` import stages a complete sibling project before publishing it; if that first publication fails, the parsed design stays open for a save retry. Existing project saves use the transaction journal, and unchanged generated design files are not rewritten. A received project with `.fanta` settings or executable Git configuration can open in **Restricted Mode** until you review and trust it. [Import →](/docs/formats/figma-import) · [Project format →](/docs/formats/fant)
 
 ## Edit by hand
 
