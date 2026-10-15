@@ -96,10 +96,10 @@ and external-agent guidance on this page describe the direct-download build.
 Clone the [fanta-edit repository](https://github.com/jeanc18rlos/fanta-edit), install its Rust and macOS build dependencies, and run from the repository root:
 
 ~~~bash
-cargo run -p zed
+cargo run
 ~~~
 
-The Cargo package is <code>zed</code>; its binary is <code>fanta</code>. Use <code>cargo build --release -p zed</code> for a release binary. The repository uses <code>./script/clippy</code> for linting. The release verifier's `--stage lint` checks twelve editor and engine crates with all features, then separately checks `fanta-format`, `fig_viewer`, and `fs` with default features.
+The Cargo package and its binary are both named <code>fanta</code>. Use <code>cargo build --release -p fanta</code> for a release binary. The repository uses <code>./script/clippy</code> for linting. The release verifier's `--stage lint` checks twelve editor and engine crates with all features, then separately checks `fanta-format`, `fig_viewer`, and `fs` with default features.
 
 Maintainers can enable **build diagnostics** on a manual macOS release workflow run. This opt-in setting records bounded CPU, memory, disk, and swap progress during the Cargo build and retains Cargo timing reports when produced. It is disabled by default and requires GitHub Actions CI. Diagnostic output helps investigate a build; it does not establish signing, notarization, installation, or release readiness.
 

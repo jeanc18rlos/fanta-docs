@@ -30,7 +30,7 @@ Fanta saves canvas changes back to project files. It watches for external edits 
 
 Unchanged generated design files are not rewritten. Save and external-change checks still inspect project files for integrity, so a very large project may take longer even when a small part changes. If another process writes the same path between Fanta's check and rename, Fanta's watcher or transaction recovery may report a conflict; review the result before continuing.
 
-A received project folder may open in **Restricted Mode** when it contains a <code>.zed</code> configuration directory or Git metadata that could run commands. Review the folder's origin and the trust prompt before enabling project features. Keep its Git history intact; removing it or trusting every project globally is not needed to review the design.
+A received project folder may open in **Restricted Mode** when it contains a <code>.fanta</code> configuration directory or Git metadata that could run commands. Review the folder's origin and the trust prompt before enabling project features. Keep its Git history intact; removing it or trusting every project globally is not needed to review the design.
 
 ## Save As
 

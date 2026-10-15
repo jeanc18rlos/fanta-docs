@@ -3,7 +3,7 @@ title: Connect an agent
 description: Launch the stdio bridge to the running editor.
 ---
 
-1. Run a non-Store Fanta build and focus an open design. A source build uses `cargo run -p zed`; the non-Store app binary is `/Applications/Fanta.app/Contents/MacOS/fanta` when installed there.
+1. Run a non-Store Fanta build and focus an open design. A source build uses `cargo run`; the non-Store app binary is `/Applications/Fanta.app/Contents/MacOS/fanta` when installed there.
 2. Choose **Help → Connect Claude Code / Codex…** in Fanta. It copies commands for the *running app executable* and its user data directory. Run the Claude command from the project directory, or put the Codex snippet in that project's `.codex/config.toml`. For example, an app installed at `/Applications/Fanta.app` produces this command shape:
 
    ```bash
