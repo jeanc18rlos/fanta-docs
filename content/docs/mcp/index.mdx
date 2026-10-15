@@ -13,7 +13,7 @@ The connection instructions below are for a non-Store build. Fanta's Settings ca
 | `get_design_system` | Inspect components, variants, variable collections, modes, values, and selected-node bindings. |
 | `prepare_design_asset` | Open a draft image or SVG generation request for the user to review and submit. |
 | `batch_get` | Read exact nodes or a paged page tree. |
-| `batch_design` | Preview typed operations one by one, then commit or roll back one undoable transaction. |
+| `batch_design` | Preview content edits, then commit or roll back one undoable transaction; selection- or viewport-only batches create no undo step. |
 | `get_screenshot` | Render a page, node, or motion-clip sample as PNG. |
 | `read_fnx_source` | List or read source files in the open project. |
 | `validate_fnx_source` | Check a complete FNX or managed project JSON candidate without writing it. |
@@ -25,7 +25,7 @@ The connection instructions below are for a non-Store build. Fanta's Settings ca
 
 The built-in Agent Panel uses the same `design_surface::DesignOp` vocabulary through its own tools. External MCP clients see these thirteen tools, rather than a tool for every design operation. Read the [tool reference](/docs/tools) for the operation list.
 
-In a `batch_design` call, operations appear on the canvas progressively while the call runs. The batch remains one undo step; if an operation fails, the preview rolls back. Keep batches to one visible component or screen section so the user can follow each milestone.
+In a `batch_design` call, content edits appear on the canvas progressively while the call runs. Content edits form one undo step; a selection- or viewport-only batch creates none. If an operation fails, the content preview rolls back; earlier selection or viewport changes can remain. Keep batches to one visible component or screen section so the user can follow each milestone.
 
 The current `batch_design` schema includes 43 operations, covering grid layout, shape creation, gradients and image fills, effect stacks, constraints, componentizing similar layers, and variant-set maintenance. Call `get_editor_state` to inspect capability flags for the running build, then read nodes with `batch_get` before making a change.
 

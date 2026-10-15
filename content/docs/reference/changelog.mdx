@@ -3,9 +3,17 @@ title: Changelog
 description: What this source-aligned Fanta documentation covers.
 ---
 
+## October 15, 2026 source update
+
+These pages track published [fanta-edit main at `44584c26`](https://github.com/jeanc18rlos/fanta-edit/tree/44584c26eebb91b1ae97dd07a6715cb22ef289ee). The signed Fanta 1.0.0 Public Alpha installer remains bound to earlier source `57d86330`; this source update is not a new accepted app build.
+
+External MCP still registers 13 tools. `get_editor_state` now previews at most 100 components and reports the total and whether more remain. `get_design_system` pages variables, components, and variant sets independently, and `batch_get` rejects page listings whose traversal exceeds 1,000 nodes. Default page reads and screenshots follow the focused page or opened component. A `batch_design` batch containing only selection or viewport operations does not create an undo step; content edits still commit as one undoable batch.
+
+Current macOS source prefers Skia Graphite on Metal, with Ganesh fallback if Graphite cannot start. Retained translation is enabled unless `FANTA_RETAINED_TRANSLATION=0`. Loading, scoped saving, canvas panning, and memory use have changed for large documents. Bounded benchmarks and source tests do not establish general responsiveness or behavior in the released Build45 installer. Native builds route new AI credit purchases to web Billing; existing Apple subscriptions still open Apple's subscription management.
+
 ## October 13, 2026 source and release update
 
-These pages now track published [fanta-edit main at `9e582bee`](https://github.com/jeanc18rlos/fanta-edit/tree/9e582bee494b85f54e4dcb4084b5d55acd097d37). The signed Fanta 1.0.0 Public Alpha installer is bound to source `57d86330`; current main has no later application-code changes. Source inclusion and installed-app acceptance are described separately. The [official download page](https://www.fantaisa.net/download) makes the Public Alpha available. Its matching Developer ID-signed and notarized DMG passed local installation and save/reopen checks, and an anonymous public download matched the accepted checksum. Clean-account installation and migration from an older version remain unverified.
+At this checkpoint the pages tracked [fanta-edit main at `9e582bee`](https://github.com/jeanc18rlos/fanta-edit/tree/9e582bee494b85f54e4dcb4084b5d55acd097d37). The signed Fanta 1.0.0 Public Alpha installer is bound to source `57d86330`; that checkpoint had no later application-code changes. Source inclusion and installed-app acceptance are described separately. The [official download page](https://www.fantaisa.net/download) makes the Public Alpha available. Its matching Developer ID-signed and notarized DMG passed local installation and save/reopen checks, and an anonymous public download matched the accepted checksum. Clean-account installation and migration from an older version remain unverified.
 
 Current source limits a native Agent turn to 64 model requests, preserving completed work at the visible stop. Other changes since the previous source baseline cover focused numeric draft handling before Save and close, fractional TextPath positioning, rounded-clip targeting, closed-tab restoration, narrow-canvas Crop controls, generated-audio completion feedback, gallery timestamps, and Settings search Escape behavior. The external MCP surface remains 13 tools with 43 design operations; FNX and import/export formats did not change in this interval.
 

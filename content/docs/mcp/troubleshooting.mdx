@@ -21,7 +21,7 @@ Other HTTP MCP servers can use their own OAuth flow. If such a server fails to s
 
 ## A tree query is refused
 
-`batch_get` caps responses at 256 KiB. Use smaller `limit`, `offset`, lower `depth`, fewer exact IDs, or `detail: "summary"` instead of `"style"`. A wide imported `.fig` page can have thousands of siblings.
+`batch_get` has two separate limits. A page listing that would traverse more than 1,000 nodes is refused before its response is built; lower `depth`, reduce `limit` and advance `offset`, or fetch relevant exact IDs. A response over 256 KiB is also refused; request fewer nodes or use `detail: "summary"` instead of `"style"`. A wide imported `.fig` page can have thousands of siblings.
 
 ## Source looks incomplete
 

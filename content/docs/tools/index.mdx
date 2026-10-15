@@ -12,7 +12,7 @@ Fanta's external MCP server acts on the focused design. Use **Help → Connect C
 | `prepare_design_asset` | Open a user-reviewed image or SVG generation draft without submitting it. |
 | `get_guidelines` | Read current design and source-editing rules. |
 | `batch_get` | Read exact nodes or a paged page tree. |
-| `batch_design` | Preview typed ops in order, then commit or roll back one undoable transaction. |
+| `batch_design` | Preview content edits in order, then commit or roll back one undoable transaction; selection- or viewport-only batches create no undo step. |
 | `get_screenshot` | Render a page, node, or motion-clip sample as PNG. |
 | `read_fnx_source` | List or read source files in slices. |
 | `validate_fnx_source` | Validate a complete FNX or managed project JSON candidate without writing. |
@@ -28,7 +28,7 @@ Fanta's external MCP server acts on the focused design. Use **Help → Connect C
 - **Variables:** `create_variable_collection`, `add_variable_mode`, `create_variable`, `set_variable_value`, `set_variable_mode`, `bind_variable`, `unbind_variable`.
 - **Components:** `create_component`, `componentize`, `combine_variants`, `add_variants`, `remove_variant`, `arrange_variants`, `rename_component`, `create_component_property`, `bind_component_property`, `set_instance_property`.
 
-Ask your MCP client for the live schema to see every field and enum value. `get_editor_state.capabilities` advertises newer operation support in the running build. Operations are shown one by one while the call runs. The completed batch is one undo step; a failed operation rolls back its preview. `batch_get` can return editable `style` detail, so inspect a node before changing its full fill or effect stack.
+Ask your MCP client for the live schema to see every field and enum value. `get_editor_state.capabilities` advertises newer operation support in the running build. Content edits are shown one by one while the call runs. They commit as one undo step; a failed operation rolls content edits back. Selection and viewport changes are not transactional. `batch_get` can return editable `style` detail, so inspect a node before changing its full fill or effect stack.
 
 <Cards>
   <Card title="Create" href="/docs/tools/create" />

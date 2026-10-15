@@ -26,7 +26,7 @@ A gradient needs at least two stops between 0 and 1. Linear gradient `from` and 
 
 ## Reusable variables
 
-Call `get_design_system` before adding tokens. It returns collections, modes, typed variables, component metadata, and source paths. Use `collection`, `offset`, and `limit` to page a large library; `include_bindings: true` includes bindings on selected nodes. Existing names must be unique when used in place of IDs.
+Call `get_design_system` before adding tokens. It returns collections, modes, typed variables, component metadata, and source paths. Use `offset` and `limit` (default 100, maximum 200) to page variables, components, and component sets independently. Continue while the relevant `more_variables`, `more_components`, or `more_component_sets` flag is true. `collection` filters variables only; `include_bindings: true` includes bindings on selected nodes. Existing names must be unique when used in place of IDs.
 
 Use `create_variable_collection` (default mode `Default`), `add_variable_mode`, `create_variable`, and `set_variable_value` to create values by mode. Variable kinds are `color`, `float`, `string`, `boolean`, and `typography`; a value can also alias another variable using `{"alias":"<variable-id-or-unique-name>"}`. `set_variable_mode` selects a collection mode for the document or pins one to a frame. `bind_variable` and `unbind_variable` connect values to node properties.
 

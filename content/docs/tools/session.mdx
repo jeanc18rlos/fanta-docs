@@ -3,7 +3,7 @@ title: Sessions, input & checkpoints
 description: Use undo batches, autosave, and Git milestones.
 ---
 
-`batch_design` previews its ordered operations one by one while the call runs, then commits them as one named undo step. If an operation fails or the call is interrupted, the preview rolls back. The result identifies a failing operation. Use a descriptive `label` for a single component or coherent section; a whole screen in one batch is harder to follow and review.
+`batch_design` previews content edits in order while the call runs, then commits them as one named undo step. A batch containing only `select` or `set_viewport` operations changes the current view without a content preview or undo step. If an operation fails or the call is interrupted, content edits in the batch roll back; selection and viewport changes are not transactional. The result identifies a failing operation. Use a descriptive `label` for a single component or coherent section; a whole screen in one batch is harder to follow and review.
 
 Canvas edits autosave to `.fnx` after editing stops. Review the source diff and use Git commits for durable milestones. A dirty Code workspace FNX or JSON buffer locks canvas editing until its draft is saved or discarded. Source Save validates and reloads the project; **Discard draft** reloads the selected buffer from disk. Finish a source edit and its reload before returning to canvas edits on the same nodes.
 

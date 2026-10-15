@@ -15,7 +15,7 @@ The master stays on canvas and the result returns a component ID. Place a copy w
 {"label":"Place button","ops":[{"op":"create_instance","component":"<component-id>","x":400,"y":120}]}
 ```
 
-An instance inherits its master’s size and follows later master edits. `get_editor_state` lists component source paths and `get_design_system` reports component properties and variant sets. A standalone component uses `components/<slug>/master.fnx`. A variant set uses one `components/<set>/` folder with `set.json` and a subfolder with `master.fnx` for each variant. Older flat variant folders are read and moved into the set folder on the next save.
+An instance inherits its master’s size and follows later master edits. `get_editor_state` previews at most 100 component source paths. If `more_components` is true, page `get_design_system` with `offset` and `limit` for the remaining definitions; its components and variant sets have separate counts and `more_*` flags. A standalone component uses `components/<slug>/master.fnx`. A variant set uses one `components/<set>/` folder with `set.json` and a subfolder with `master.fnx` for each variant. Older flat variant folders are read and moved into the set folder on the next save.
 
 ## Componentize existing copies
 
