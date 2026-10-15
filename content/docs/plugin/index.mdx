@@ -3,7 +3,7 @@ title: Claude Code plugin
 description: Install Fanta's optional Claude Code plugin for the local stdio MCP bridge.
 ---
 
-The plugin in this repository provides a ready-to-use MCP connection, a `/design` command, and three skills for building and checking designs. It talks to the **running Fanta desktop app** through `/Applications/Fanta.app/Contents/MacOS/fanta --mcp-stdio`.
+The plugin in the [Fanta-JS repository](https://github.com/jeanc18rlos/Fanta-JS) provides a ready-to-use MCP connection, a `/design` command, and three skills for building and checking designs. It talks to the **running Fanta desktop app** through `/Applications/Fanta.app/Contents/MacOS/fanta --mcp-stdio`. See the [plugin README](https://github.com/jeanc18rlos/Fanta-JS/blob/main/plugin/README.md) for what it configures.
 
 <Callout type="info">
   The plugin is optional. Claude Code and Codex can also connect directly using the [agent connection guide](/docs/getting-started/connect-an-agent).
@@ -15,8 +15,8 @@ The plugin in this repository provides a ready-to-use MCP connection, a `/design
 2. In Claude Code, run:
 
 ```bash
-claude plugin marketplace add jeanc18rlos/fanta-docs
-claude plugin install fanta@fanta-docs
+claude plugin marketplace add jeanc18rlos/Fanta-JS
+claude plugin install fanta@fanta
 ```
 
 3. Confirm the `fanta` MCP server is connected, then try:
@@ -31,7 +31,12 @@ The local server exposes [13 tools](/docs/tools), including design-system inspec
 
 The bundled MCP configuration uses the default `/Applications/Fanta.app` path. For a different app location or user-data directory, use the exact connection command copied from the running Fanta instance and update the plugin's MCP configuration.
 
-Older plugin versions pointed to an HTTP service on `:3846` and named tools that the current app does not expose. Update or reinstall the plugin if your installed copy still uses that endpoint.
+Older plugin versions pointed to an HTTP service on `:3846` and named tools that the current app does not expose. The plugin has since moved from the `fanta-docs` marketplace to Fanta-JS, and copies installed from `fanta-docs` no longer update. If you added that marketplace, remove it, then follow the install steps above:
+
+```bash
+claude plugin uninstall fanta@fanta-docs
+claude plugin marketplace remove fanta-docs
+```
 
 <Cards>
   <Card title="Plugin skills" href="/docs/plugin/skills" description="The bundled skills and when to use them." />
