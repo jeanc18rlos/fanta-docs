@@ -3,6 +3,12 @@ title: Changelog
 description: What this source-aligned Fanta documentation covers.
 ---
 
+## October 19, 2026 source alignment
+
+These pages now track published [fanta-edit main at `e143440a`](https://github.com/jeanc18rlos/fanta-edit/tree/e143440a93732422ac37c6ad1901ff14c420ec7b). Changes merged after the previous checkpoint renamed the app's Cargo package and action namespace to `fanta`, its project-local configuration directory to `.fanta`, and its app link scheme to `fanta://`. The repository now builds explicitly with `cargo run -p fanta`; plain `cargo run` works through the workspace default. The local canvas MCP roster remains 13 tools with 43 design operations; no new format or generation behavior was found in this source interval.
+
+The accepted signed Build45 installer is still bound to earlier source `57d86330`. It uses `.zed` project settings, `zed::` app actions in keymaps, and `zed://` app links. Current source uses `.fanta`, `fanta::`, and `fanta://`. Custom configuration and links should be reviewed when moving to a future build; automatic migration and a newer public installer have not been verified.
+
 ## October 15, 2026 source update
 
 These pages track published [fanta-edit main at `44584c26`](https://github.com/jeanc18rlos/fanta-edit/tree/44584c26eebb91b1ae97dd07a6715cb22ef289ee). The signed Fanta 1.0.0 Public Alpha installer remains bound to earlier source `57d86330`; this source update is not a new accepted app build.

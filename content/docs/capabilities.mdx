@@ -9,7 +9,7 @@ Fanta 1.0.0 Public Alpha is available for Apple Silicon Macs through the [offici
 
 The inventory below follows current main; the accepted signed Build45 app is bound to earlier source `57d86330`. Later changes to MCP inspection, rendering, and large-project handling are documented from source and are not part of that accepted installer. The release recordings validate bounded workflows rather than every source-listed capability. Automatic updates remain disabled.
 
-Fanta is a design editor whose working document is a project folder. You can create a design on the canvas, inspect and edit its `.fnx` and managed JSON source, ask an agent to work on the open design, and review the saved files in Git. This map follows [fanta-edit main at `44584c26`](https://github.com/jeanc18rlos/fanta-edit/tree/44584c26eebb91b1ae97dd07a6715cb22ef289ee) as of October 15, 2026. It describes implemented source paths and states native acceptance separately.
+Fanta is a design editor whose working document is a project folder. You can create a design on the canvas, inspect and edit its `.fnx` and managed JSON source, ask an agent to work on the open design, and review the saved files in Git. This map follows [fanta-edit main at `e143440a`](https://github.com/jeanc18rlos/fanta-edit/tree/e143440a93732422ac37c6ad1901ff14c420ec7b) as of October 19, 2026. It describes implemented source paths and states native acceptance separately.
 
 ## The core loop
 
@@ -28,7 +28,7 @@ A native project has a `fanta.json` manifest, `pages/<slug>/page.fnx`, reusable 
 
 Structural canvas saves retain authored FNX attributes on surviving nodes and source comments when supported. A deletion or type change that would silently lose source-only data can make Save refuse the change with a preservation error. Saved files remain intact, but the live canvas edit may remain until Undo; edit FNX directly to remove that data intentionally. [Source preservation →](/docs/concepts/fnx-design-as-source)
 
-On direct-download macOS, a fresh `.fig` import stages a complete sibling project before publishing it; if that first publication fails, the parsed design stays open for a save retry. Existing project saves use the transaction journal, and unchanged generated design files are not rewritten. A received project with `.fanta` settings or executable Git configuration can open in **Restricted Mode** until you review and trust it. [Import →](/docs/formats/figma-import) · [Project format →](/docs/formats/fant)
+On direct-download macOS, a fresh `.fig` import stages a complete sibling project before publishing it; if that first publication fails, the parsed design stays open for a save retry. Existing project saves use the transaction journal, and unchanged generated design files are not rewritten. A received project with project-local settings or executable Git configuration can open in **Restricted Mode** until you review and trust it. The signed Build45 app checks `.zed` settings; current source checks `.fanta`. [Import →](/docs/formats/figma-import) · [Project format →](/docs/formats/fant)
 
 ## Edit by hand
 
@@ -113,5 +113,6 @@ The connection command copied by the running app includes its executable and ins
 - Node graph, generic AI artifact, and embed node types render as placeholders. Existing 3D content can survive unrelated edits and saves, but that does not establish a complete 3D editor.
 - Canvas comments and agent cursor presence are local to the open app and project. Real-time multi-user editing and cross-agent locks are not part of the current implementation.
 - The current external MCP surface is the 13 registered tools above. Older references to a `:3846` HTTP server, 127 design tools, `cargo run -p fanta-app`, or `save_document` describe a different implementation.
+- In current source, app keymap actions use `fanta::` and app links use `fanta://`; the signed Build45 package uses `zed::` and `zed://`. Review custom keymaps and links when a newer installer is available. [Shortcuts →](/docs/editor/shortcuts)
 
 The [alpha issue log in fanta-edit](https://github.com/jeanc18rlos/fanta-edit/blob/9e582bee494b85f54e4dcb4084b5d55acd097d37/docs/alpha/KNOWN_ISSUES.md) records earlier implementation and release observations. Several entries predate the committed features described here. The [release capability coverage report](https://github.com/jeanc18rlos/fanta-edit/blob/9e582bee494b85f54e4dcb4084b5d55acd097d37/docs/alpha/CAPABILITY_COVERAGE.md) records bounded checks and remaining native limits; this map describes implemented source paths. [Installation](/docs/getting-started/install) records the released package separately.

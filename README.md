@@ -25,7 +25,7 @@ Recorded workflow screenshots come from the owned Launch Card exercise under `pu
 
 ## Keep the docs accurate
 
-The capability map was checked against `fanta-edit` remote `main` commit `44584c26eebb91b1ae97dd07a6715cb22ef289ee` on October 15, 2026. When `fanta-edit` changes, compare the new source with these pages before updating claims. In particular, verify the live MCP tool list, platform support, user-visible controls, generated media flows, format handlers, and alpha limitations. A merged source change is not proof of a public release. Build and typecheck before publishing.
+The capability map was checked against `fanta-edit` remote `main` commit `e143440a93732422ac37c6ad1901ff14c420ec7b` on October 19, 2026. When `fanta-edit` changes, compare the new source with these pages before updating claims. In particular, verify the live MCP tool list, platform support, user-visible controls, generated media flows, format handlers, and alpha limitations. A merged source change is not proof of a public release. Build and typecheck before publishing.
 
 The Claude Code plugin that `content/docs/plugin/` documents lives in [Fanta-JS](https://github.com/jeanc18rlos/Fanta-JS), under `plugin/` and `.claude-plugin/`. Keep those pages aligned with it. Draft platform/API files in a working checkout should be verified against the live backend before publication.
 

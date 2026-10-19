@@ -7,7 +7,7 @@ From the [fanta-edit repository](https://github.com/jeanc18rlos/fanta-edit):
 
 | Command | Purpose |
 | --- | --- |
-| `cargo run` | Build and run the app; binary name `fanta`. |
+| `cargo run -p fanta` | Build and run the current app package; plain `cargo run` also works because `fanta` is the workspace default. |
 | `cargo build --release -p fanta` | Build `target/release/fanta`. |
 | `./script/bundle-mac` | Package the macOS app and DMG. |
 | `./script/clippy` | Repository lint workflow. |
@@ -20,3 +20,5 @@ claude mcp add --scope project --transport stdio fanta -- /Applications/Fanta.ap
 ```
 
 Use the copied command verbatim so the instance path is correct. For Codex, Fanta provides a `[mcp_servers.fanta]` snippet for the trusted project's `.codex/config.toml`. The bridge requires a running app and focused design. `fanta_live_mcp.enabled` defaults to true in user settings. There is no `FANTA_MCP_ADDR` or `fanta-mcp` binary in this checkout. The packaged Mac App Store bridge has not been verified; its in-app local MCP subprocesses are disabled.
+
+Current source also registers `fanta://` app links; the signed Build45 app was built from earlier source that registered `zed://`. This protocol rename has not been checked in a newer public installer.
