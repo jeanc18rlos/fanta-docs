@@ -10,6 +10,7 @@ In Settings search, Escape clears the search while keeping Settings open; Comman
 | Area | Current controls |
 | --- | --- |
 | General | Startup view, autosave, quit confirmation, and system file dialogs. |
+| Updates in current source | Automatic update preference, check and download status, manual check, and restart after a downloaded update when a release channel permits it. |
 | Appearance | Color and icon themes, interface text size. |
 | Canvas | Show or hide Layers, Inspector, Files, Git, and Threads panels. |
 | Editor | Cursor and line-number settings, FNX source text size, keyboard shortcuts. |
@@ -24,6 +25,10 @@ The **MCP & Tools** page separates Fanta's hosted tools, the live canvas server 
 The committed defaults differ by release channel. Preview and Dev point account, model, and hosted MCP requests to Fanta's v2 service and enable a separate remote **fanta-design** MCP connection. Stable keeps the original service endpoint and leaves that connection disabled. Available remote tools and models depend on the connected service; check the active build and account when one is missing.
 
 The Mac App Store feature build cannot launch local command-backed MCP servers, external agent processes, terminal commands, or external formatters from inside Fanta. Remote project connections are also disabled. Its MCP settings direct you to remote HTTP servers instead. This restriction does not remove the live canvas server toggle or prove that an external client cannot connect to the Store build; that inbound path needs build-specific verification. Non-Store builds retain the local command option.
+
+## Updates and released builds
+
+The accepted Fanta 1.0.0 Build45 installer has automatic updates disabled. Current unreleased v2 source adds an **Updates** group in Settings, **Check for Updates…** in the app menu, and check or restart controls in About. The controls can show checking, downloading, installation, failure, and restart states. A development build can instead show that updates are managed separately. The committed source has no compiled release verification key, so a build from it cannot check for updates. A release key, published signed feed, and verified replacement installation are required before these controls can be recommended as an upgrade route; use the [public download page](https://www.fantaisa.net/download) for the accepted installer.
 
 ## Account and privacy
 

@@ -9,7 +9,7 @@ import { ProductScreenshot } from '@/components/product-screenshot';
 
 Variables let one value drive multiple properties. Fanta's Variables workspace lets you create collections, variables, and modes, edit values, create aliases, and bind values to design properties. The active mode can be selected for a scope so the same design can resolve different values.
 
-The variable editor handles color, number, string, and boolean values. The agent operation schema also accepts typed `typography` variables. Imported documents may contain additional variable data; inspect the current design system before changing it.
+The installed Public Alpha 1.0.0 variable editor handles color, number, string, and boolean values. The agent operation schema also accepts typed `typography` variables. Imported documents may contain additional variable data; inspect the current design system before changing it.
 
 <ProductScreenshot
   src="/screenshots/native-20261013/variables-workspace.jpg"
@@ -41,6 +41,12 @@ Aliases point one variable at another. Check alias and mode resolution when a bo
 For a color paint bound to a variable, the inspector shows its resolved color in the active mode and the variable name. The paint's opacity and visibility are read-only while the color binding is in place. Use **Detach** on the color variable to keep the resolved color as an ordinary paint, then edit the paint independently.
 
 The Design inspector also resolves single-layer opacity, visibility, and uniform vector radius bindings through aliases and inherited mode pins. If an explicit four-corner radius is present, it takes precedence over the uniform radius binding. An unresolved binding shows the layer's fallback value with a label and can still be detached. A direct text-content binding on component text prevents local text edits in both the canvas and the instance Content row; edit the variable or remove the binding to change that text.
+
+## Added in unreleased v2 source
+
+The committed v2 implementation adds **enum** variables with named options and **image** variables whose values refer to project assets. An enum can bind to text content so a mode or prototype action changes the displayed option name. An image variable can bind to a fill's artwork so modes or animation keyframes can switch the asset. An image value of “no image” leaves the existing paint in place; it does not erase the fill.
+
+The Variables workspace edits enum values and image asset IDs as text. It does not yet offer dedicated pickers for those kinds, and typography values remain uneditable there. Agent design operations can create enum and image variables and set enum options. These additions are verified in source at `2136e0d2`; they have not been accepted in the signed Public Alpha installer.
 
 ## Work through an agent
 

@@ -1,0 +1,41 @@
+---
+title: Export a static website
+description: Package saved design pages with Fanta's read-only WebAssembly viewer.
+---
+
+The `fanta-site` command in current, unreleased v2 source exports a **saved Fanta project** as a static website. Each design page gets a URL with page navigation and a canvas viewer that can pan and zoom. The viewer loads a bundle through the `@fanta/runtime` WebAssembly package built from the matching Fanta engine revision. This is a source-level CLI workflow, not an export control in the signed Public Alpha app.
+
+The website is read-only. Prototype interactions and motion playback are disabled; live audio and video use their authored posters rather than playing. Keep the editable [project directory](/docs/formats/fant) for changes, then re-export it.
+
+## Build and export
+
+Build `packages/runtime` in the separate Fanta-JS repository at the same engine revision as `fanta-site`. Point `--runtime` to that built package directory. It must contain:
+
+```text
+dist/fanta-runtime.mjs
+dist/fanta_runtime_wasm.wasm
+src/index.js
+site/viewer.js
+site/viewer.css
+```
+
+From the Fanta source checkout, run:
+
+```bash
+cargo run --locked -p fanta-site -- \
+  "/path/to/My Design" "/path/to/site-output" \
+  --runtime "/path/to/Fanta-JS/packages/runtime" \
+  --offline
+```
+
+The first path is the saved project folder containing `fanta.json`. The second is a new, empty output folder or a previous Fanta website export. Re-exporting replaces generated pages and removes obsolete page HTML while retaining unrelated hosting files such as `CNAME`; the exporter refuses an unrelated occupied folder.
+
+The runtime bundle embeds text faces. Add repeatable `--font-dir "/path/to/licensed-fonts"` options for font files you may publish, or `--substitute "Brand Font=Source Sans 3"` to choose a replacement. With `--offline`, missing families use bundled substitutes. Without it, the exporter may download open-licensed fonts. The report names substitutions; if no embedded face can render required glyphs, export fails instead of producing an unreadable page. `--title "My site"` overrides the document title.
+
+Upload the complete output directory to a static host. For a local preview, serve the folder over HTTP, for example:
+
+```bash
+python3 -m http.server --directory "/path/to/site-output" 8000
+```
+
+The generated pages load their JavaScript, WebAssembly and document bundle from `fanta/` in that directory. Source tests cover bundle creation, page names, HTML escaping, font registration, re-export behavior, and refusal to overwrite an unrelated folder. Browser playback and signed Public Alpha acceptance have not been verified in this documentation audit.

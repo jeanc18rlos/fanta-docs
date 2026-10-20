@@ -15,7 +15,7 @@ Fanta combines an editable design canvas with an in-app agent, a local MCP conne
 | [Generation Workspaces](/docs/agents/media-generation) | Generate images, video, audio, vectors, and masks | Hosted models, with results reviewed in Fanta |
 | [FNX and managed JSON source](/docs/formats/fnx) | Edit detailed design properties and review source diffs | In project files |
 
-The local MCP server exposes thirteen tools for canvas state and edits, design-system inspection, source validation, image import, comments, activity, and screenshots. The in-app agent has related design-state, edit, screenshot, design-system, comment, and generation-placement tools. Their names and permissions differ; see the [external tool reference](/docs/tools) and [Agent Panel](/docs/agents/in-app-ai).
+The signed Public Alpha local MCP server exposes 13 tools for canvas state and edits, design-system inspection, source validation, image import, comments, activity, and screenshots. Current unreleased source adds `add_comment` as a fourteenth tool. The in-app agent has related design-state, edit, screenshot, design-system, comment, and generation-placement tools. Their names and permissions differ; see the [external tool reference](/docs/tools) and [Agent Panel](/docs/agents/in-app-ai).
 
 The documented external-agent bridge and in-app local agent process workflows apply to a non-Store build. A Mac App Store feature build prevents Fanta from launching local external agent and MCP processes or terminal tools. Remote HTTP MCP connections can still be configured in Settings. [Build differences →](/docs/editor/settings)
 

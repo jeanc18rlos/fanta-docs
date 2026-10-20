@@ -41,4 +41,10 @@ The sample button uses an **On click** trigger to open the Fanta docs. Select th
 
 In an interaction's detail view, **X** closes the details and keeps the interaction. Use **Remove interaction** on its row to delete it. Closing the details applies a valid pending parameter edit; if a value is invalid, Fanta keeps the details open and shows the error. When you copy a layer tree within the document, references to destinations inside that copied tree are remapped to the new nodes. References outside it continue to point to their original targets.
 
+## Added in unreleased v2 source
+
+Current source adds **Adjust number**, **Toggle boolean**, **Cycle enum option**, and **Conditional** actions. A conditional reaction tests a variable and runs the first matching branch, or its otherwise branch. The Prototype inspector can edit simple variable comparisons. Compound `all`, `any`, and `not` conditions can exist in the document model but are shown as labels, rather than fully editable controls. Present mode evaluates these actions; an adjustment with a missing or incompatible value does nothing. These are implemented in source at `2136e0d2`, but have not been accepted in the signed Public Alpha installer.
+
+The presentation engine also implements **Contain**, **Cover**, and **Fill** fit calculations and preserves a backdrop behind overlays. The current editor does not expose a verified control for choosing those fit modes.
+
 The prototype data model is in `crates/fanta-doc/src/node/prototype.rs`; controls and presentation are in `crates/fig_viewer/src/prototype_panel.rs` and `crates/fig_viewer/src/view.rs`. Imported prototype features can be broader than the controls currently exposed, so test the flow in Present mode.

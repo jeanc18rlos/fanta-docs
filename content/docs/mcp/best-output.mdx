@@ -10,6 +10,6 @@ description: Practical rules for reliable agent changes.
 - Screenshot the changed node or page, inspect it visually, and review the autosaved `.fnx` diff.
 - Edit `.fnx` or managed project JSON directly for supported source changes outside the MCP operation vocabulary. Read all relevant source first, preserve node and component identities, validate the complete candidate with `validate_fnx_source`, and let it reload before touching the same nodes on canvas.
 - Import generated image files or URLs with `import_image`, then place the saved asset using an appropriate editor or source workflow. `prepare_design_asset` only opens a generation draft for user review.
-- Use `report_agent_activity` for visible milestones, including the actual page, node, coordinates, source path, and workspace. Reuse the same agent ID and name in `batch_design.activity`; clear the activity with `active: false` when finished. Reply to comments in their threads and resolve only verified requests.
+- Use `report_agent_activity` for visible milestones, including the actual page, node, coordinates, source path, and workspace. Reuse the same agent ID and name in `batch_design.activity`; clear the activity with `active: false` when finished. Reply to comments in their threads and resolve only verified requests. In newer source builds, use `add_comment` for a new, anchored review finding; posting a suggested fix does not apply it.
 
 See the [tool reference](/docs/tools) and [alpha known issues](https://github.com/jeanc18rlos/fanta-edit/blob/main/docs/alpha/KNOWN_ISSUES.md).

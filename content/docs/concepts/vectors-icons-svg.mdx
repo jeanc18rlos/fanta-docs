@@ -9,6 +9,8 @@ Fanta has native vector tools: Pen, Node Edit, basic shapes, line, arrow, polygo
 
 Right-click a selected vector on the canvas and choose **Edit vector** to enter Node Edit. Its path anchors appear as soon as editing opens. **Flatten** checks whether it can preserve the artwork's appearance and behavior. It can refuse variable bindings, nested component masters, animated children, masks, unsupported child effects or blends, clipped content, and pattern sources referenced by another layer. Simplify or detach that content first. A supported flatten remains undoable.
 
+In committed, **unreleased v2 source** (`2136e0d2`), the vector context menu adds **Close path**, **Join paths**, **Simplify path**, and **Reverse path**; Draw controls also expose the first three. Joining requires at least two open vector paths in the same group or frame. These commands reject locked or nonvector selections. While editing one path, the context menu also offers **Break at selected anchor** and **Delete selected anchors**. Node Edit adds segment bending and fits curved gaps when deleting anchors to preserve their shape. These controls have source and test coverage, but no signed Public Alpha installed-app acceptance yet.
+
 For authoring hits, rounded ancestor clips exclude invisible portions of Text, Vector, and Bitmap children. Node Edit can reach a visible vector underneath a clipped child; selected-node controls and parent-frame bounds keep their normal behavior. Source tests cover this repair, while matching installed-app acceptance remains pending.
 
 ## Boolean shapes

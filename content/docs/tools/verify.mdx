@@ -7,4 +7,4 @@ description: Use PNG screenshots for MCP review and the editor UI for exports.
 
 After `batch_design`, screenshot the changed frame, compare it with the intended layout, make a targeted correction, and inspect another screenshot. Review the `.fnx` diff after autosave. A successful operation response alone is not a visual check.
 
-The external MCP server has no `export_png`, `export_svg`, `compare_screenshot`, or `review_design` tool. Fanta’s editor export UI can write PNG, JPG, SVG, and PDF under the project’s `exports/` directory. Use the UI for those outputs; `get_screenshot` is the MCP verification tool.
+The external MCP server has no `export_png`, `export_svg`, `export_motion`, `compare_screenshot`, or `review_design` tool. The signed Public Alpha's editor export UI writes PNG, JPG, SVG, and PDF under the project's `exports/` directory. Current source adds Motion JSON and Figma Motion JSON to editor export, with a separate Design menu action for the active clip. Use the UI for file output; `get_screenshot` is the MCP verification tool. [Export formats →](/docs/formats/export)

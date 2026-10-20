@@ -3,6 +3,14 @@ title: Changelog
 description: What this source-aligned Fanta documentation covers.
 ---
 
+## October 20, 2026 source alignment — unreleased v2
+
+These pages now track published [fanta-edit main at `2136e0d2`](https://github.com/jeanc18rlos/fanta-edit/tree/2136e0d2d7ae6a02b20341725efc6961df16a8fb). Its Cargo package declares **Fanta 2.0.0**, while the accepted signed Public Alpha remains **Fanta 1.0.0 Build45** from source `57d86330`. The source changes do not establish a v2 installer, signed update feed, or installed-app acceptance.
+
+The source adds enum and image variables, conditional prototype actions and variable arithmetic, Motion clip settings and portable/Figma Motion JSON export, expanded vector path editing, anchored AI Review findings with explicit undoable suggested fixes, and a command-line static website exporter that requires a matching runtime from Fanta-JS. It also adds update controls in Settings, About, and the app menu. Presentation-engine changes add Contain, Cover, and Fill fit modes and preserve the backdrop behind overlays; a matching editor control was not verified. The website viewer is read-only; prototype interactions and Motion playback are disabled there. Stage JSX, MP4/GIF export, trigger inputs, and a state-machine view are not implemented in this interval.
+
+The external canvas MCP server now registers **14 tools** after adding `add_comment`. Agent comments can anchor to a layer and include review severity, category, run ID, and an optional suggested content-editing fix. `batch_design` now exposes **44 operations**, adding `set_variable_options` for enum variables. This source checkpoint does not change the accepted Build45 recording or the public installer instructions.
+
 ## October 19, 2026 source alignment
 
 These pages now track published [fanta-edit main at `e143440a`](https://github.com/jeanc18rlos/fanta-edit/tree/e143440a93732422ac37c6ad1901ff14c420ec7b). Changes merged after the previous checkpoint renamed the app's Cargo package and action namespace to `fanta`, its project-local configuration directory to `.fanta`, and its app link scheme to `fanta://`. The repository now builds explicitly with `cargo run -p fanta`; plain `cargo run` works through the workspace default. The local canvas MCP roster remains 13 tools with 43 design operations; no new format or generation behavior was found in this source interval.

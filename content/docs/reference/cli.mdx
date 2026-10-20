@@ -21,4 +21,16 @@ claude mcp add --scope project --transport stdio fanta -- /Applications/Fanta.ap
 
 Use the copied command verbatim so the instance path is correct. For Codex, Fanta provides a `[mcp_servers.fanta]` snippet for the trusted project's `.codex/config.toml`. The bridge requires a running app and focused design. `fanta_live_mcp.enabled` defaults to true in user settings. There is no `FANTA_MCP_ADDR` or `fanta-mcp` binary in this checkout. The packaged Mac App Store bridge has not been verified; its in-app local MCP subprocesses are disabled.
 
+## Static website export in unreleased v2 source
+
+The source repository includes a `fanta-site` CLI for a saved Fanta project. It needs a matching, separately built `@fanta/runtime` package from Fanta-JS; point `--runtime` at that package directory. The output is a static, read-only site with one URL per design page, page navigation, pan, and zoom. It does not play prototype interactions or motion, and the CLI does not deploy the site. This source workflow has not been verified in the signed Public Alpha 1.0.0 installer.
+
+```bash
+cargo run --locked -p fanta-site -- \
+  "/path/to/My Design" "/path/to/site-output" \
+  --runtime "/path/to/Fanta-JS/packages/runtime" --offline
+```
+
+The output directory must be empty or an earlier Fanta site export. See [website export](/docs/formats/website-export) for the required runtime files, font choices, and hosting steps.
+
 Current source also registers `fanta://` app links; the signed Build45 app was built from earlier source that registered `zed://`. This protocol rename has not been checked in a newer public installer.
