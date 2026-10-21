@@ -1,0 +1,29 @@
+---
+title: Project Assets
+description: Keep generated and existing media in a Fanta project and place it on a page.
+---
+
+The **Assets** section of the file inspector lists media stored with the open project. It includes generated results added through **Add to project** and supported image, video, or audio files already used by the design. Each row shows a name, media type, size, and a preview when available. Assets remain in the project even when they are not placed on a page.
+
+## Add and place generated media
+
+1. Open a project canvas and create an image, SVG, video, or audio result in [Generation Workspaces](/docs/v2/agents/media-generation).
+2. Select the result and choose **Add to project**. Fanta copies supported media into the project and records it in `doc/asset_library.json`.
+3. Expand **Assets** in the file inspector. Choose the destination under **Place in**, then use the **+** button on the asset row. Its tooltip says **Place on selected page**.
+4. Inspect the new layer. Fanta places it near the center of the visible canvas and fits large media within the viewport. You can place a stored asset on another page later.
+
+PNG, JPEG, and WebP become bitmap layers. A supported SVG is parsed into editable vector content. MP4 becomes a video layer. WAV, MP3, and FLAC become audio layers with a decoded duration. On macOS, selected audio and video layers have playback controls in **Motion** or **Prototype** mode. In a bounded MP3 placement check, storage and history survived cold reopen, but the Audio preview was absent for both the original and newly placed MP3; WAV preview was not verified.
+
+## Place a file from your computer
+
+On an editable canvas page, press **Command Shift K** to open **Place image or MP4 video**. Choose one PNG, JPEG, WebP, GIF, BMP, TIFF, or MP4 file. Fanta decodes and places it near the center of the visible canvas as a layer, fits oversized media to the viewport, and stores its bytes with the project. MP4 placement requires the macOS video decoder. The file picker also rejects unsupported or corrupt files and reports the reason on the canvas.
+
+Direct placement has separate limits from **Add to project**: images are capped at 32 MiB, 16,384 px per side, and 32 megapixels; MP4 files are capped at 100 MiB. Finish any active edit before placing media, and stay on the same page while the file is prepared. If preparation exceeds 30 seconds, try a smaller file.
+
+## Storage and limits
+
+Project media bytes are stored under `assets/`; the library's names and kinds are stored in `doc/asset_library.json`. Commit those files with the page source so another copy of the project can resolve the media. See [Document model](/docs/v2/concepts/document-model).
+
+**Add to project** rejects an empty result, a file over 128 MiB, or an unsupported media format. A raster image over 32 megapixels cannot be placed on the canvas. SVG must parse as supported editable vectors; MP4 and audio must decode to usable media. Missing or unsupported assets remain visible in the file inspector's Assets section with the placement action disabled and a reason. The Design inspector's image and video paint source chooser lists only compatible project assets. Placing also requires a page and a clean, editable source state.
+
+Local placement is implemented in `crates/fig_viewer/src/view_media.rs` and `crates/fig_viewer/src/generation_media.rs`. Masks cannot be added to Assets as standalone media. They remain inputs to supported generation workflows.

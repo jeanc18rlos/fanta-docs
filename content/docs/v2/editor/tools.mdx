@@ -1,0 +1,54 @@
+---
+title: Tools
+description: Select, draw, edit, and navigate on the Fanta canvas.
+---
+
+# Tools
+
+The toolbar includes selection tools, shapes, frames, drawing tools, text, comments, and navigation. You can choose a tool from the toolbar or use a shortcut where one is assigned.
+
+## Select and transform
+
+**Move** selects layers and moves them. Click a layer, Shift or Command click to extend the selection, or drag from empty canvas to draw a marquee. Double-click drills into a container's child; an initial click on a nested layer can select the outer frame first. Selection shows resize and rotation handles. **Scale** is a dedicated tool for scaling selected content. Arrow keys nudge by 1 px; Shift plus an arrow nudges by 10 px. Escape cancels an active interaction.
+
+With **Move** active in Design mode, double-click an already selected text layer to edit text, a vector to edit nodes, or an image to crop it. Double-clicking an instance opens text editing if the pointer is over editable instance text; otherwise it shows Properties. Video, audio, and other supported non-shape layers also reveal Properties. The first double-click into a frame or group selects a child; a later double-click can edit that child. The editor checks the visible hit target, so a covered or locked layer does not open through another layer.
+
+Entering **Edit vector** or **Edit Path** shows the selected path's anchors immediately. To edit a Boolean operand, enter its selected vector child and use those anchors. During ordinary text editing, Escape commits the text and exits. If a text-content variable binding begins controlling the text while a draft is open, Fanta keeps the draft and asks you to copy it if needed; Escape then cancels that blocked draft.
+
+**Inspect** selects artwork for inspection in Dev mode without editing it. **Path Selection** targets paths. Rectangle Selection, Ellipse Selection, Lasso, Polygonal Lasso, and Magic Wand provide area selection. **Crop** edits an image's visible area. **Hand** pans the view; hold Space to pan temporarily.
+
+Moving layers can snap to the 8 px grid and to other layers' edges or centers. Layer targets come from the active page, or the component subtree you have opened for editing; layers on unrelated pages do not attract the drag. Watch the canvas guides when positioning objects. If a Select drag loses its mouse press outside the canvas or when the window deactivates, Fanta cancels the pending move, so returning the pointer does not continue it.
+
+Right-click a layer on the canvas to select it and open a context menu. A click within the current selection keeps that selection; a click on an unselected nested layer selects its top-level layer for the page. The menu offers copy, cut, paste, duplicate, delete, grouping, and front/back ordering where editable. Depending on the target, it also offers **Edit text** for ordinary or path text, **Edit vector**, **Crop image**, media or layer Properties, component actions, auto layout, outline stroke, flatten, or mask actions. A Properties entry reveals the Design inspector if it is collapsed. Specialized layers expose their own Properties entry, including Boolean, node graph, 3D, AI artifact, and embed layers. Escape closes the menu without clearing the selection. Right-click empty canvas to clear the selection and access Paste. The canvas menu is unavailable while presenting a prototype or using Draw mode.
+
+Copy and paste work within one design document, including between its pages. Canvas paste into a different document is unavailable. Duplicating a component master or a complete variant set also duplicates its component definitions, so the copy can be edited independently.
+
+Keyboard Cut, Delete, and Duplicate respect a selected layer's own lock and locks inherited from its ancestors. When Cut or Delete cannot preserve component content, Fanta refuses the operation with an explanation; a failed Cut leaves the existing clipboard unchanged. See [Components and instances](/docs/v2/concepts/components) for the supported copy and removal cases.
+
+## Crop an image
+
+In Design mode on an editable canvas, select an image and double-click it, or choose **Crop image** from its canvas context menu. The Crop tool shows **Ratio**, **Cancel**, and **Apply crop** controls above the toolbar. Choose a ratio, such as **1:1**, then drag a crop rectangle on the image. The ratio constrains the preview before the document changes.
+
+Those controls stay inset when the canvas is narrow.
+
+Choose **Apply crop** to commit the pending rectangle as one undoable change. Applying without a pending rectangle leaves the document unchanged. **Cancel** first discards a pending rectangle while keeping Crop active; choose **Cancel** again to leave Crop. The controls are available while Crop is active in editable Design mode.
+
+## Create and draw
+
+- **Frame**, **Section**, and **Slice** establish structure or export areas.
+- **Rectangle**, **Ellipse**, **Line**, **Arrow**, **Polygon**, and **Star** create geometry.
+- **Pen** builds paths; **Node Edit** adjusts their geometry.
+- **Brush**, **Pencil**, and **Eraser** provide freehand drawing and editing.
+- **Text** creates text layers.
+- **Comment** places a comment in the canvas workflow.
+- **Measurement** and **Annotation** create page-bound developer marks in Dev mode; they do not create ordinary artwork layers.
+
+## Text on Path
+
+1. Select exactly one visible, unlocked vector path.
+2. Choose **Text on Path**. Fanta converts that vector to a TextPath layer and opens inline text editing.
+3. Replace the placeholder text and use text controls to style it.
+
+The conversion keeps the vector path as the text baseline. It needs a finite path with nonzero length. Flatten rounded corners and remove clipping first. The source vector must have either no paint or exactly one normal solid fill or stroke; gradients, image paints, blends, and multiple paints are rejected. The converted layer is editable and renders on the canvas. Its inspector can change the text start, direction, and side of the path. Some ordinary text layout controls do not apply to path text. See [Vectors, icons, and SVG](/docs/v2/concepts/vectors-icons-svg).
+
+The toolbar catalog is in `crates/fig_viewer/src/tools.rs`. Selection and transform behavior are in `crates/fanta-tools/src/select/dispatch.rs` and `crates/fanta-tools/src/scale.rs`; Text on Path conversion is in `crates/fanta-tools/src/text_path.rs`, and snapping is in `crates/fanta-canvas/src/snap.rs`.

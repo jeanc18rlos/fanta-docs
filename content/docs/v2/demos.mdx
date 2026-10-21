@@ -1,0 +1,79 @@
+---
+title: Demos and examples
+description: Watch an AI-assisted Airbnb recreation and try native editing, FNX, Git, and agent workflows in Fanta.
+---
+
+import { LaunchDemos } from '@/components/launch-demos';
+
+The launch overview and three recordings below use the Fanta 1.0.0 Public Alpha app; Fanta 2.0 has no recorded demos yet. These players use silent recordings with captions and load
+when you choose Play. Captions identify later checkpoints and reopened views.
+Complete, readable workflows matter more than speed.
+
+<LaunchDemos />
+
+## Examples
+
+### I Asked AI to Recreate Airbnb — Here’s the Result
+
+A walkthrough from [Fanta Design Editor](https://www.youtube.com/@FantaDesignEditor).
+
+<div className="not-prose my-6 relative aspect-video overflow-hidden rounded-xl border border-fd-border bg-black">
+  <iframe
+    src="https://www.youtube-nocookie.com/embed/3-dNfeDpgu0"
+    title="I Asked AI to Recreate Airbnb — Here’s the Result"
+    className="absolute inset-0 h-full w-full border-0"
+    loading="lazy"
+    allow="encrypted-media; picture-in-picture; fullscreen"
+    referrerPolicy="strict-origin-when-cross-origin"
+    allowFullScreen
+  />
+</div>
+
+[Watch on YouTube](https://youtu.be/3-dNfeDpgu0)
+
+## The ten-minute exercise
+
+Download the owned [Fanta Launch Card sample](/launch/alpha-1.0.0-20261012/Fanta-launch-card-sample.zip)
+and unzip it into a folder you own. Open its native project or import the included
+original [Fanta Launch Card .fig](/launch/alpha-1.0.0-20261012/Fanta-Launch-Card.fig).
+The card uses native text and shapes without third-party artwork. Keep a fresh
+copy for resets. The [download page](https://www.fantaisa.net/download) reports
+app availability and installation steps.
+
+| Time | Action | Observable result |
+| --- | --- | --- |
+| 0–2 min | Open the unzipped sample project, or import its original `.fig` and save into a new folder | Canvas and layers show the same design |
+| 2–4 min | Change one shape's fill or position, then Undo and Redo | Both before and after states are visible |
+| 4–6 min | Save, open Code and inspect Review Changes | FNX and Git show the canvas edit |
+| 6–8 min | Change a Text layer's existing `content` literal in Code and save | Canvas shows the valid source edit |
+| 8–10 min | Save, close and reopen, then export a selected frame as PNG | Saved content returns and the PNG opens |
+
+Keep node IDs unchanged and retain the manifest, identity sidecars and assets.
+An invalid source draft retains the last valid canvas and file with an error.
+Resolve or discard it before visual edits. Saving multiple buffers is sequential.
+[Source editing](/docs/v2/concepts/fnx-design-as-source).
+
+## Agent extension
+
+The recorded example uses an **external Opus 5.5 agent through Fanta MCP** to
+edit one CTA. It shows the resulting native layers, saved source and Undo/Redo.
+The request ran through the external client; the footage shows the actual result
+and its inspection in Fanta. Captions identify the later source-view recovery
+described in [troubleshooting](/docs/v2/mcp/troubleshooting#code-reports-a-source-refresh-warning).
+
+[Connect the agent](/docs/v2/getting-started/connect-an-agent), verify the intended
+project with `get_editor_state`, and ask for one edit:
+
+> Change only the existing button label to “Explore Fanta”. Keep its geometry,
+> styles, IDs and all other layers unchanged. Inspect the result and stop.
+> Do not generate media or call paid services.
+
+Inspect the canvas and FNX, then Undo and Redo. Use the configured verified route
+and approved spending controls. The local bridge is separate from hosted metered
+services. [Tool scopes](/docs/v2/mcp).
+
+## Help with the first workflow
+
+Use verified community and issue links on the download page for product reports.
+Include version, macOS, steps and screenshots. Keep account or billing reports
+private at [support@fantaisa.net](mailto:support@fantaisa.net).

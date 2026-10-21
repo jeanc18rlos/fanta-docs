@@ -1,0 +1,25 @@
+{
+  "title": "Fanta 2.0 preview",
+  "description": "In development and not released yet",
+  "root": true,
+  "pages": [
+    "index",
+    "capabilities",
+    "fanta-vs-figma",
+    "roadmap",
+    "screenshots",
+    "demos",
+    "brand",
+    "getting-started",
+    "concepts",
+    "editor",
+    "mcp",
+    "agents",
+    "plugin",
+    "tools",
+    "guides",
+    "formats",
+    "reference",
+    "platform"
+  ]
+}

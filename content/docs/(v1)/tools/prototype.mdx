@@ -1,0 +1,8 @@
+---
+title: Prototyping & interactions
+description: Current MCP boundary for prototype and motion work.
+---
+
+The external MCP server’s `batch_design` schema has no operation for prototype flows, reactions, transitions, or animation keyframes. Older `create_flow` and `set_reaction` examples are not valid for this alpha server.
+
+Authored animation clips live in `doc/motion.json`, apart from page `.fnx` nodes. Read the existing schema before editing clips, tracks, or keyframes with file tools, preserve IDs, and validate screenshots at several `motion_clip` / `playhead_ms` samples. The external MCP tools can inspect motion samples, but cannot author a clip through `batch_design`. Check the current app and [known issues](https://github.com/jeanc18rlos/fanta-edit/blob/main/docs/alpha/KNOWN_ISSUES.md) for UI readiness.

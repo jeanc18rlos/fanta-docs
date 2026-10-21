@@ -1,0 +1,5 @@
+{
+  "title": "Claude Plugin & Skills",
+  "icon": "Puzzle",
+  "pages": ["index", "skills", "recipes"]
+}

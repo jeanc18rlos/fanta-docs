@@ -1,0 +1,62 @@
+---
+title: FNX design source
+description: Learn the static JSX-like format that makes Fanta designs readable, editable, and reviewable in Git.
+---
+
+FNX is Fanta's text source for a page or component master. Pages live at <code>pages/&lt;page&gt;/page.fnx</code>. Standalone component masters live at <code>components/&lt;component&gt;/master.fnx</code>; a variant master lives one level deeper at <code>components/&lt;set&gt;/&lt;variant&gt;/master.fnx</code>. Each element is a scene node; literal attributes hold its properties and nested elements hold its children.
+
+## Read a small design
+
+This compact page example describes a 320 × 180 frame containing an orange rectangle:
+
+```tsx
+export default function Card() {
+  return (
+    <Frame id="01M4PFJPB3KH16C0Y3D3B05SGS" name="Card" clip_size={[320, 180]}>
+      <Rect id="01M4PFJPB3GTBBRJ8YZAGVWBRP" name="Accent"
+        x={24} y={24} width={80} height={40}
+        fills={[{"kind": "solid", "color": fnxColor("#FF6B35")}]} />
+    </Frame>
+  );
+}
+```
+
+<code>name</code> is the layer label; <code>id</code> is its stable identity. The rectangle's <code>x</code> and <code>y</code> place it relative to its parent. <code>width</code> and <code>height</code> describe its geometry, and <code>fills</code> describes its paint. Changing 80 to 120 makes the rectangle wider when the valid source is saved and reloaded.
+
+Generated files can also include JSX declarations, imports, and additional properties. Keep the generated header and project companions when editing an existing file, and use fresh IDs when creating your own nodes. This example explains the source tree; a working project also needs its manifest and supporting files.
+
+FNX is declarative design data. It supports literal strings, numbers, arrays, and objects, with helpers such as <code>fnxColor</code> for colors. Its JSX-like appearance does not make it executable React application code: arbitrary functions, dynamic rendering, and application event handlers are outside the format. See [FNX design as source](/docs/v2/concepts/fnx-design-as-source) for the canvas-to-source workflow.
+
+## Edit safely
+
+FNX is a restricted, static JSX-like grammar, not arbitrary executable React or JavaScript. Preserve an existing element's explicit <code>id</code> when changing that node. Give a copied or newly created node a new ID. Keep its companion <code>page.ids.json</code> or <code>master.ids.json</code> sidecar with the project; it records identity and sibling order.
+
+Modern FNX with explicit valid IDs on every element can recover from a missing or damaged sidecar. Fanta reconstructs the sidecar from the source and repairs it on a successful save. Older source without explicit IDs still requires the sidecar. Do not remove sidecars as part of a normal edit.
+
+The Code workspace offers **FNX** and its companion **JSON** header for the active page or component master. Both are editable while the canvas is clean. For a variant, the companion is its own <code>def.json</code> under the set folder. **Find** searches the selected FNX or JSON editor. **Discard draft** reloads only the selected source buffer, leaving a draft in the other buffer intact.
+
+Fanta locks canvas edits while either source buffer is dirty; saving validates the complete project, writes the source, and reloads the canvas. When both buffers have edits, Save processes the selected buffer first, then the other. A conflict or simultaneous canvas edit blocks the source save until resolved. Successful Save retains the authored text edit as an Undo step and persists layout geometry recomputed from the source change. A failed validation keeps the last saved file and canvas visible. You can also use an external editor or an agent's file tools.
+
+The local MCP <code>read_fnx_source</code> tool reads bounded source slices. <code>validate_fnx_source</code> checks a complete FNX or managed JSON candidate and returns diagnostics without writing. For an existing project file, validation materializes the full candidate project, including typed values and references. A new managed file is checked against its source schema until its companion exists.
+
+Canvas edits patch affected source while preserving unrelated comments and whitespace where possible. Structural edits such as inserting or reparenting a node now keep authored attributes on surviving nodes, including source-only page dimensions, and carry a child comment with its node. An explicit source edit remains authoritative: if you remove an attribute in FNX, a later canvas rebuild does not recreate it.
+
+FNX printing preserves the exact value of finite JSON numbers, including very small coordinates, sizes, gradient stops, and authored extension data. It no longer rounds magnitudes below <code>1e-9</code> to zero. Extremely small floating-point values may print in exponent notation to keep the file readable, so a source diff can show arithmetic residue that earlier versions hid. Integer values retain their integer form.
+
+A delete or node-type change can be refused when it would erase an authored FNX attribute or child comment that canvas Undo could not restore. The editor reports a preservation error; make the intended removal in FNX first, then retry the canvas operation. A failed save leaves the persisted files intact, but a preceding live canvas change may need Undo. Invalid syntax or unresolved references leave the previous valid canvas visible and show a diagnostic. Unknown attributes can produce nonfatal warnings; inspect the rendered result. Fanta can also detect overlapping canvas and external edits and surface a conflict.
+
+## Readable references and version 5 layout
+
+In layout version 4 and 5 projects, an instance may refer to a component by name, such as <code>component="Button"</code>. A bare component ID also works and is required when names are ambiguous; Fanta prints IDs in that case. Variable bindings may use collection and variable paths such as <code>$Theme/bg</code>, including in a bindings map. The variables themselves live in <code>doc/variables.json</code>. Colors print through <code>fnxColor("#RRGGBB")</code>, or eight-digit hex for opacity.
+
+Version 5 changes where variant sources live, rather than removing these readable references. A version 4 project remains readable and moves to version 5 on its next save. Earlier app builds reject a version 5 manifest. Do not rename a component by editing its <code>def.json</code> name alone: instances may use the old name. Use the canvas or <code>rename_component</code> operation, which updates references with the definition. Project-local <code>AGENTS.md</code> gives a syntax guide, and <code>fnx.d.ts</code> supplies editor declarations.
+
+FNX can express a frame's horizontal, vertical, or grid auto layout. A grid frame stores tracks in its <code>grid</code> property; child <code>layout_child.grid</code> selects an explicit cell or leaves placement automatic. Paints, effects, constraints, and rich-text runs can also be represented in source.
+
+## When to use it
+
+Structured agent operations now cover linear and radial gradient fills, layered effects, constraints, vector shapes, grid layout, strokes, components and variant sets, variables, and bindings. FNX remains useful for source review in Git, source-level edits, and properties such as individual rich-text runs that the structured operation vocabulary does not edit. Keep referenced binary media in <code>assets/</code>; FNX refers to an asset by ID rather than embedding raw bytes.
+
+<Callout type="info">
+An isolated FNX file is not the full project: it depends on the manifest, sidecars, shared document data, and referenced assets.
+</Callout>

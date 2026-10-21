@@ -1,0 +1,14 @@
+---
+title: Plugin skills
+description: The design, verification, and component skills in the Fanta Claude Code plugin.
+---
+
+The plugin ships three Markdown skills. They guide Claude Code; the Fanta app controls which MCP operations are available.
+
+| Skill | Helps with |
+| --- | --- |
+| `fanta-design` | Inspect editable node styles, stream small `batch_design` edits with agent activity, and check each result. |
+| `fanta-verify` | Check structure and screenshots, validate FNX or managed JSON, review comments, and inspect Git changes. |
+| `fanta-components` | Componentize copies, create and maintain variant sets, expose properties, and place linked instances. |
+
+The source is under [`plugin/skills`](https://github.com/jeanc18rlos/Fanta-JS/tree/main/plugin/skills) in the Fanta-JS repository. See the [tool reference](/docs/v2/tools) for the actual server contract. The plugin adds guidance and configuration, not new Fanta tools.

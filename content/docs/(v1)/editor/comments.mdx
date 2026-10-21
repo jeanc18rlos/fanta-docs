@@ -1,0 +1,22 @@
+---
+title: Comments
+description: Discuss a design with page pins, threads, attachments, mentions, and motion time links.
+---
+
+# Comments
+
+Comments are anchored to a point on a design page. They are saved in page metadata, so they travel with the project. Open **Comments** mode or choose the **Comment** tool (**C**), click the canvas to place a pin, write a message, and send it. A draft does not become a saved comment until you send it.
+
+Click a pin to open its thread. The thread shows the original message, replies, author, and relative time. You can reply, resolve or reopen the thread, delete it, and copy its text. The document **Comments** panel lists threads from all pages, shows open and resolved counts, and opens a selected thread on its page. Dev mode can read and copy comments, but its thread mutation controls are disabled.
+
+## Add context to a message
+
+The composer has controls to mention an agent or layer, attach images or files, and choose an AI skill. Skills are **Summarize**, **Search**, **Format**, and **Review**. When a message with a skill is posted, Fanta opens its prompt as a reviewed draft in the Agent Panel; posting the comment does not submit the agent run. Attachments are saved as path references in comment metadata rather than embedded bytes, so keep referenced files accessible to collaborators.
+
+You can attach context to the initial message or a reply. If a reply has unsent text or attachments, Fanta asks you to send or clear it before switching to another thread or placing another comment. If posting fails, the composer retains its contents for retry.
+
+## Comment on motion
+
+In **Motion**, use the time comment control at the current playhead, then place a pin and send the comment. Its anchor stores both clip and time. The document Comments panel labels a timed thread and navigates to that clip and time when opened. See [Motion](/docs/editor/motion).
+
+Implementation: `crates/fig_viewer/src/comments.rs` defines page metadata, threads, replies, attachments, skills, and motion anchors; `crates/fig_viewer/src/comments_ui.rs` handles composer and canvas interactions; `crates/fig_viewer/src/comments_panel.rs` lists document comments.

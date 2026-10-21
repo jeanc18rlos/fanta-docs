@@ -1,0 +1,48 @@
+---
+title: Roadmap and current limits
+description: What Fanta supports today, which improvements are being validated, and the longer-term directions in its source specifications.
+---
+
+Fanta's direction is to bring visual design, readable source, Git, and agents into one workspace. The immediate focus is making that loop dependable: edit, save, review, reopen, and keep your design intact.
+
+This page separates **implemented workflows**, **planned improvements and validation**, and **exploratory directions**. It describes the documented work, without promising delivery dates. A feature implemented in source may not yet be in your installed app. Use the [installation guide](/docs/v2/getting-started/install) for the accepted package and the [capability map](/docs/v2/capabilities) for detailed limits.
+
+## Available workflows
+
+| Area | Current capability |
+| --- | --- |
+| Visual design | Pages and layers, shapes, text, vectors, frames, components, variables, and supported horizontal, vertical, and grid auto-layout. [Editor](/docs/v2/editor) |
+| Design as source | FNX and managed JSON, validated Code edits, canvas synchronization, and source conflict handling. [FNX](/docs/v2/formats/fnx) |
+| Git | File diffs and commits when a repository and Git are available. Non-Store builds can initialize new project repositories; Store feature builds skip that setup. [Version control](/docs/v2/guides/version-control-designs) |
+| Agents | Local MCP inspection, edits, screenshots, source validation, and an in-app Agent Panel. [Connect an agent](/docs/v2/getting-started/connect-an-agent) |
+| Motion and prototypes | Clips, keyframes, supported property animation, playback, and supported prototype interactions. [Motion](/docs/v2/editor/motion) · [Prototyping](/docs/v2/concepts/prototyping) |
+| Import and output | `.fig` migration, supported media assets, and PNG, JPEG, SVG, or PDF export. [Formats](/docs/v2/formats) |
+
+The [reviewed demos](/docs/v2/demos), recorded in Fanta 1.0, show a bounded native edit, source and Git workflow, and external agent edit. The broader 2.0 source inventory includes workflows with separate acceptance work.
+
+## Planned improvements and validation priorities
+
+| Focus | What the work is intended to improve | Current boundary |
+| --- | --- | --- |
+| Source reliability | Preserve drafts, saved files, and the last valid canvas during conflicts, failed reloads, and interrupted saves. | Concurrent external edits and multiwindow recovery need broader native validation. The signed demo also recorded a saved-source refresh warning; reopening restored its source view. [Recovery guidance](/docs/v2/mcp/troubleshooting#code-reports-a-source-refresh-warning) |
+| Large projects | Reduce save cost and improve dragging, rendering, and memory behavior on dense imported pages. | Renderer checks and performance work exist, but they do not establish a universal speed advantage or the native drag target. [Current limits](/docs/v2/capabilities#current-limits) |
+| Editing consistency | Complete inspector and per-node journeys, including lock handling, entry into editors, Undo/Redo, and save/reopen. | Bounded checks pass; more node, property, gesture, and dependency combinations remain to be checked. |
+| Media reliability | Broaden playback, seeking, trimming, recovery, and saved-asset checks across supported audio and video. | Placing a media layer or opening its properties does not establish every playback and editing workflow. [Assets](/docs/v2/editor/assets) |
+| Motion expansion | Extend the existing property-animation tools toward path animation. | **Path** is marked “soon” and disabled in the current animation menu. It has no published delivery date. [Motion](/docs/v2/editor/motion) |
+| Cloud review and generation | Run AI Review, Ultrareview, and design generation in the cloud on a project's GitHub repository, returning findings as canvas comments or a pull request. | In development and not offered in any build. The shared headless engine core is in source; the cloud worker service, review pipeline, and in-app client are not finished, and pricing is undecided. |
+| Linux and Windows | Public Linux and Windows downloads with in-app updates. | Installer and release work is under review. Windows builds are planned to start unsigned. Neither platform is a supported release yet. |
+| Release quality | Verify advertised workflows against the exact distributed build, including installation, account services, and repeatable persistence. | Acceptance is tied to a particular package and journey. Follow the live [download page](https://www.fantaisa.net/download) for availability. |
+
+The reliability and acceptance priorities come from the repository's [capability coverage report](https://github.com/jeanc18rlos/fanta-edit/blob/main/docs/alpha/CAPABILITY_COVERAGE.md) and [capability guide](https://github.com/jeanc18rlos/fanta-edit/blob/main/docs/fanta/capabilities.md). Dated reports retain earlier failures and pending checks, so read their named build and later corrections before treating an item as current.
+
+## Longer-term directions
+
+The source specifications name broader image, audio, video, 3D, and game-editor work as future directions. Dedicated editor experiences are exploratory rather than announced releases. The [feature specification guide](https://github.com/jeanc18rlos/fanta-edit/blob/main/features/README.md) asks for acceptance scenarios as these areas develop; its `.feature` files are human-readable specifications, not an automated test runner.
+
+Some specialist node types already exist in the format. Node graph, generic AI artifact, and embed content currently use placeholders; preserving 3D payloads through save/reopen does not establish a complete 3D editor. [Specialist boundaries](/docs/v2/capabilities#current-limits).
+
+## Limits to plan around
+
+Fanta currently targets Apple Silicon macOS. Other operating systems, Intel builds, full Figma import parity, and shared cloud multiplayer are not established supported workflows. Same-document canvas paste is supported; cross-document paste is rejected. Some Figma grid behaviors and effects remain unsupported, and Dev **Readiness** is unavailable. These are current limits, not delivery commitments. [Detailed capabilities](/docs/v2/capabilities) · [Fanta vs Figma](/docs/v2/fanta-vs-figma).
+
+For important work, keep the complete project in Git, review source changes with screenshots, and test the workflows you depend on in your installed version. Report reproducible issues with the app version, steps, expected result, and screenshots through the verified support links on the download page.

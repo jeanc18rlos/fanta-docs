@@ -1,0 +1,25 @@
+---
+title: Pages and coordinates
+description: Organize canvases and understand positions in Fanta.
+---
+
+# Pages and coordinates
+
+A project can contain multiple pages. Use the Pages section of the Layers panel to create, select, rename, duplicate, reorder, or delete pages. A page contains its own layer tree, and selecting it changes the active canvas. The panel can also search and replace names and text.
+
+Canvas coordinates use pixels with X increasing to the right and Y increasing downward. Canvas and live design tool coordinates are in world space. A node's visible position combines its parent transforms. In FNX, placement is represented relative to its parent, so a child may have different local and canvas coordinates.
+
+When drawing, moving, or resizing, edge and center snap targets come from the active page or the component subtree opened for editing. Another page cannot supply a layer snap target, even if its layers overlap in world coordinates. Grid snapping remains available within the current canvas scope.
+
+## Place and inspect a layer
+
+1. Select the intended page.
+2. Create a frame or shape with a toolbar tool, or use a live design tool.
+3. Select the layer and use the inspector's X, Y, width, height, and rotation controls for precise changes.
+4. Use the Layers panel to move a layer within or between page trees.
+
+A page root scopes rendering and export. When exporting the active page, unrelated pages do not appear just because they reuse the same coordinate values. You can also export selected layers.
+
+Duplicating a page copies its layer tree and component definitions belonging to that page. Prototype links whose targets are inside the copied tree point to the copies; links to targets outside it keep their original destinations. Clean canvas tabs restore their project, page, or component scope when the workspace reopens.
+
+The page operations are implemented in `crates/fig_viewer/src/design_panel.rs` and `crates/fig_viewer/src/gpui_adapters/pages.rs`. Export targeting is in `crates/fig_viewer/src/export.rs`.

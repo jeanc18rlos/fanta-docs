@@ -1,0 +1,42 @@
+---
+title: Tool Reference
+description: External MCP tools and typed operations in batch_design.
+---
+
+Fanta's external MCP server acts on the focused design. Use **Help → Connect Claude Code / Codex…** to copy the command for the running app. It exposes **14** tools, with `batch_design` carrying the individual edit operations. Confirm the live schema in the connected build.
+
+| Tool | Purpose |
+| --- | --- |
+| `get_editor_state` | Read project, pages, selection, viewport, editability; optionally ask for `empty_space: [width,height]`. |
+| `get_design_system` | Read components, variant sets, variable collections, modes, values, and selected bindings. |
+| `prepare_design_asset` | Open a user-reviewed image or SVG generation draft without submitting it. |
+| `get_guidelines` | Read current design and source-editing rules. |
+| `batch_get` | Read exact nodes or a paged page tree. |
+| `batch_design` | Preview content edits in order, then commit or roll back one undoable transaction; selection- or viewport-only batches create no undo step. |
+| `get_screenshot` | Render a page, node, or motion-clip sample as PNG. |
+| `read_fnx_source` | List or read source files in slices. |
+| `validate_fnx_source` | Validate a complete FNX or managed project JSON candidate without writing. |
+| `import_image` | Import a local file, HTTP(S) URL, or base64 image into project Assets. |
+| `list_comments` | Read unresolved or resolved canvas comment threads. |
+| `reply_comment` | Reply to a thread and optionally mark it resolved. |
+| `add_comment` | Create a layer-anchored comment or review finding with an optional suggested fix. |
+| `report_agent_activity` | Report an agent's canvas, variables, or code focus to Fanta. |
+
+`batch_design` takes `ops: [{"op":"…",…}]`, an optional `label`, and optional `activity` containing a stable `agent_id`, `agent_name`, and `action`. Reuse the identity from `report_agent_activity` to keep Follow on the same agent during streamed placements. Its 44 operations are:
+
+- **Create and arrange:** `create_node`, `create_shape`, `create_image`, `create_instance`, `set_props`, `set_index`, `rotate`, `align`, `distribute`, `group`, `frame_selection`, `ungroup`, `duplicate`, `reparent`, `delete`, `select`, `set_viewport`.
+- **Style and layout:** `set_stroke`, `set_shadow`, `set_effects`, `set_fill`, `set_text_style`, `set_constraints`, `set_auto_layout`, `set_grid_layout`, `set_layout_child`.
+- **Variables:** `create_variable_collection`, `add_variable_mode`, `create_variable`, `set_variable_value`, `set_variable_options`, `set_variable_mode`, `bind_variable`, `unbind_variable`.
+- **Components:** `create_component`, `componentize`, `combine_variants`, `add_variants`, `remove_variant`, `arrange_variants`, `rename_component`, `create_component_property`, `bind_component_property`, `set_instance_property`.
+
+Ask your MCP client for the live schema to see every field and enum value. `get_editor_state.capabilities` advertises newer operation support in the running build. Content edits are shown one by one while the call runs. They commit as one undo step; a failed operation rolls content edits back. Selection and viewport changes are not transactional. `batch_get` can return editable `style` detail, so inspect a node before changing its full fill or effect stack.
+
+<Cards>
+  <Card title="Create" href="/docs/v2/tools/create" />
+  <Card title="Layout" href="/docs/v2/tools/layout" />
+  <Card title="Style" href="/docs/v2/tools/style-variables" />
+  <Card title="Components" href="/docs/v2/tools/components-instances" />
+  <Card title="Inspect" href="/docs/v2/tools/inspect" />
+  <Card title="Verify" href="/docs/v2/tools/verify" />
+  <Card title="Comments" href="/docs/v2/tools/comments" />
+</Cards>

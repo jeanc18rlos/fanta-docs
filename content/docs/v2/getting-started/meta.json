@@ -1,0 +1,5 @@
+{
+  "title": "Getting Started",
+  "icon": "Rocket",
+  "pages": ["index", "install", "first-project", "connect-an-agent", "quickstart-claude-code"]
+}

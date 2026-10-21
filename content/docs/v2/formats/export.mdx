@@ -1,0 +1,34 @@
+---
+title: Export designs
+description: Export visuals and animations.
+---
+
+The inspector's visual export controls support PNG, JPG, SVG, and PDF. Add export settings in the inspector, choose a format, and run the export. Raster PNG and JPG presets offer 1x, 2x, and 4x scale. The app writes files into the project's <code>exports/</code> directory. The Design menu also exports animations: Motion JSON, Figma Motion JSON, a Claude Motion Stage package, MP4 video, GIF, and PNG frames.
+
+## What gets exported
+
+If layers are selected, each selected layer is exported separately using its visual bounds. With no selection, Fanta exports the active page. Output names are made safe for filenames, and duplicate selected-layer names receive distinct names.
+
+PNG and JPG are raster images. JPG is encoded as opaque RGB at a fixed quality setting of 95; transparent areas are composited over white. JPG compression can change pixel colors, particularly near sharp transitions. Use PNG when you need transparency or pixel-level comparison, and inspect important JPG exports. SVG and PDF are visual outputs, not editable Fanta project files. To keep working with design layers, retain the [native project](/docs/v2/formats/fant). Canvas comments and editor measurement annotations are review aids; they are excluded from rendered output.
+
+## Motion exports
+
+The inspector's export format list also offers **Motion JSON** and **Figma Motion JSON**. A motion export needs exactly one animation clip in its target. Select the frame scoped to that clip, including all of its animated layers, or export the complete clip from **Design → Export Motion JSON**. An empty target, multiple clips, or tracks extending beyond the selected frame produce an error rather than a partial animation.
+
+Motion JSON is Fanta's portable clip specification: it uses seconds and degrees, distinct from the project's `doc/motion.json` storage. Figma Motion JSON maps supported tracks to manual keyframe tracks and includes diagnostics for unsupported properties or transforms. Its node references are Fanta IDs. A Figma plugin or import workflow must map them to matching destination nodes with their resting placement before applying tracks; exporting JSON alone does not animate a Figma file. Physical spring segments are sampled at the clip's frame rate, with a 10,000-sample limit per segment. Keep the editable Fanta project for further authoring. [Motion editor →](/docs/v2/editor/motion)
+
+The Design menu also offers **Export Claude Motion Stage…**, **Export MP4 Video…**, **Export GIF…**, and **Export PNG Frames…** for the selected clip. Fanta renders the video, GIF, and frames itself, so they match the timeline frame for frame. Each export writes into the project's `exports/` folder.
+
+- **MP4 video** needs `ffmpeg`, found through the `FANTA_FFMPEG` environment variable or on `PATH`. Apps opened from the Finder may not see your shell's `PATH`. Without `ffmpeg`, the export writes the video's frames as PNGs and reports the command that encodes them.
+- **Claude Motion Stage** writes a folder. Its `index.html` is a `<Stage>` project for Claude Motion and claude-video-export, and its `preview.html` plays offline. Each animated layer is a bitmap that Fanta renders at rest, then moves with a port of Fanta's keyframe evaluator. The folder's `README.md` lists what the package cannot represent.
+- **PNG frames** sample the clip at its frame rate. A **GIF** samples at most 30 frames per second, because browsers slow down faster GIFs. An animation that needs more than 7,200 frames is refused; lower its frame rate or duration.
+
+Trigger inputs and a state-machine view remain unimplemented.
+
+## Size limits
+
+Raster export is bounded by an 8192-pixel maximum dimension and about 16 million total pixels per output. A large design at 4x may exceed these limits; reduce the scale or export a smaller selection. The export flow reports failures rather than silently writing a partial result.
+
+## Agent screenshots are different
+
+The local MCP <code>get_screenshot</code> tool returns PNG image content to the agent for inspection. It captures the active page by default, or a specified page or node, and defaults to a 768-pixel maximum dimension; the requested maximum is clamped to 16–1568 pixels. It is a review tool, not the inspector's file-export command. None of the 14 MCP tools is a file export method for PNG, SVG, PDF, Motion JSON, or JSX.
