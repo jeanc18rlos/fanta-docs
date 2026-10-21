@@ -3,6 +3,14 @@ title: Changelog
 description: What this source-aligned Fanta documentation covers.
 ---
 
+## October 21, 2026 source alignment — unreleased v2
+
+These pages now track published [fanta-edit main at `578c1283`](https://github.com/jeanc18rlos/fanta-edit/tree/578c12839286b62f2fafabc134a56929ab3ef60e). It still declares **Fanta 2.0.0**, and the accepted signed Public Alpha remains **Fanta 1.0.0 Build45** from source `57d86330`.
+
+The Design menu now also exports the selected animation as a Claude Motion Stage package, an MP4 video, a GIF, or PNG frames. Fanta renders them itself; MP4 needs `ffmpeg`. [Motion exports →](/docs/formats/export#motion-exports-in-current-source) On macOS, canvas images now decode on background threads at the size they are drawn. An image can show a light grey wash, or look soft, for a moment. In a bounded release-build measurement on a page of 24 large photos, the slowest canvas render dropped from 1.9 s to 64 ms; that does not establish general responsiveness.
+
+Current source builds and runs its tests on Windows in CI. Linux and Windows installers, and cloud AI Review and generation, are in development; none is offered in a build. The shared engine code they need now lives in separate crates (`fanta-design-ops`, `fanta-headless`, and the in-development `fanta-engine`), without changing what the editor does. The external MCP server still registers 14 tools, and `batch_design` still exposes 44 operations. [Roadmap →](/docs/roadmap)
+
 ## October 20, 2026 source alignment — unreleased v2
 
 These pages now track published [fanta-edit main at `2136e0d2`](https://github.com/jeanc18rlos/fanta-edit/tree/2136e0d2d7ae6a02b20341725efc6961df16a8fb). Its Cargo package declares **Fanta 2.0.0**, while the accepted signed Public Alpha remains **Fanta 1.0.0 Build45** from source `57d86330`. The source changes do not establish a v2 installer, signed update feed, or installed-app acceptance.
