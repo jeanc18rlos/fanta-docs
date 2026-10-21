@@ -9,7 +9,9 @@ Fanta’s desktop executable is built by the `fanta` Cargo package and named `fa
 | --- | --- |
 | App shell and executable | `crates/fanta` |
 | Design UI, source reload, export, MCP | `crates/fig_viewer` |
-| Agent operation types and guidelines | `crates/design_surface` |
+| Agent operation types and guidelines | `crates/fanta-design-ops`, re-exported by the app's agent seam `crates/design_surface` |
+| Project loading, layout, comments, screenshots, and saving without the app | `crates/fanta-headless`, shared by the editor |
+| Cloud engine worker (in development; not deployed) | `crates/fanta-engine` |
 | Scene graph and edit operations | `crates/fanta-doc` |
 | `.fnx` parser and printer | `crates/fanta-fnx` |
 | Project layout and `.fant` format | `crates/fanta-format` |
