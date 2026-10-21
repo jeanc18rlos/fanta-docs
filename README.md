@@ -32,7 +32,7 @@ Each Fanta version has its own content folder, which the sidebar shows as a vers
 | `content/docs/(v1)` | `/docs` | Fanta 1.0.0 Public Alpha (Build45), the signed installer people can download |
 | `content/docs/v2` | `/docs/v2` | Fanta 2.0, in development on `fanta-edit` `main` and not released |
 
-`(v1)` describes only what Build45 ships. Its pages start from this repository's `409c3e7`, the last revision that tracked the Build45 source (`fanta-edit` `57d86330`), so they keep that build's names: the `.zed` settings folder, `zed::` actions, `zed://` links and the `zed` Cargo package. Don't add unreleased features or later renames to it.
+`(v1)` describes only what Build45 ships. Its pages start from this repository's `409c3e7`, which tracked `fanta-edit` `9e582bee`, the same app code as Build45's source `57d86330`. They use that build's names: the `.zed` settings folder, `zed::` actions, `zed://` links and the `zed` Cargo package. Don't add unreleased features or later renames to it.
 
 Every `v2` page shows a preview banner that links to the same page in 1.0 when one exists, and links between `v2` pages use `/docs/v2/...`. Search starts in the version being read and can switch to the other. `/llms.txt` and `/llms-full.txt` describe only the released version.
 
