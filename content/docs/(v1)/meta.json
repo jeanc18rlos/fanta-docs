@@ -1,0 +1,25 @@
+{
+  "title": "Fanta 1.0",
+  "description": "Public Alpha: the app you can install today",
+  "root": true,
+  "pages": [
+    "index",
+    "capabilities",
+    "fanta-vs-figma",
+    "roadmap",
+    "screenshots",
+    "demos",
+    "brand",
+    "getting-started",
+    "concepts",
+    "editor",
+    "mcp",
+    "agents",
+    "plugin",
+    "tools",
+    "guides",
+    "formats",
+    "reference",
+    "platform"
+  ]
+}

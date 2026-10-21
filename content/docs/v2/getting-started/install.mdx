@@ -1,0 +1,44 @@
+---
+title: Build Fanta 2.0
+description: Fanta 2.0 has no installer yet. Build it from source, and know which build differences apply.
+---
+
+## No 2.0 installer yet
+
+Fanta 2.0 is in development. There is no signed 2.0 package, download, or update yet. To use the released app, [install the Fanta 1.0 Public Alpha](/docs/getting-started/install). To try 2.0, build it from source.
+
+## Build from source
+
+Clone the [fanta-edit repository](https://github.com/jeanc18rlos/fanta-edit), install its Rust and macOS build dependencies, and run from the repository root:
+
+~~~bash
+cargo run
+~~~
+
+The Cargo package and its binary are both named <code>fanta</code>. Use <code>cargo build --release -p fanta</code> for a release binary. The repository uses <code>./script/clippy</code> for linting. The release verifier's `--stage lint` checks twelve editor and engine crates with all features, then separately checks `fanta-format`, `fig_viewer`, and `fs` with default features.
+
+Maintainers can enable **build diagnostics** on a manual macOS release workflow run. This opt-in setting records bounded CPU, memory, disk, and swap progress during the Cargo build and retains Cargo timing reports when produced. It is disabled by default and requires GitHub Actions CI. Diagnostic output helps investigate a build; it does not establish signing, notarization, installation, or release readiness.
+
+## Platforms
+
+Fanta 2.0 targets **Apple Silicon macOS** first. Its source also builds and runs its tests on Windows in CI. Linux and Windows installers, with in-app updates, are under review; neither platform has a release.
+
+## Updates
+
+Fanta 2.0 adds update controls in Settings, About, and the app menu. They need a signed release feed and a release key, which do not exist yet, so a build from source cannot update itself. See [Settings](/docs/v2/editor/settings).
+
+## Limits and support
+
+Start with a copy of a small project. Imported Figma structures and rendering can differ. Code edits supported FNX and managed JSON, while **Saved Code** in Dev mode is read-only. Source drafts can lock conflicting canvas edits, and saving several source buffers is sequential rather than an atomic rollback operation. Review project trust prompts and keep manifests, identity sidecars and assets with the source. [Current capabilities and limitations](/docs/v2/capabilities).
+
+Report reproducible problems with a 2.0 source build as issues in the [fanta-edit repository](https://github.com/jeanc18rlos/fanta-edit). Include the commit, macOS version, steps, and expected versus observed behavior. Send account and billing reports privately to [support@fantaisa.net](mailto:support@fantaisa.net).
+
+## Mac App Store build differences
+
+A build compiled with <code>mac_app_store</code> is sandboxed. It does not ship the CLI helper or bundled Git runtime and does not automatically initialize Git repositories. It cannot launch command-backed MCP servers, external agent processes, terminal tasks, or external formatters from inside the app, and remote project connections are disabled. Remote HTTP MCP servers remain available.
+
+All new AI credit and subscription purchases use [web Billing](https://app.fantaisa.net/billing); Store builds route new purchases there. The backend prevents the retired Apple purchase, restore, offer-code, and trial paths from granting AI credits. Public accounts receive no signup, referral, or trial credits. Existing founder exceptions are restricted on the backend. Previously purchased Apple subscriptions must still be canceled in the Apple Account.
+
+The in-app live canvas MCP server is a separate setting, but an external client's bridge to a packaged Store build still needs validation. File access follows macOS user-selected Open and Save permissions. See [Settings and build differences](/docs/v2/editor/settings).
+
+Next choose **File → New Design…** or **File → Open…** to import a <code>.fig</code> file. See [Your First Project](/docs/v2/getting-started/first-project).

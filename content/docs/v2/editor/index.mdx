@@ -1,0 +1,33 @@
+---
+title: Editor
+description: Navigate Fanta's canvas, workspaces, modes, and panels.
+---
+
+import { ProductScreenshot } from '@/components/product-screenshot';
+
+# Editor
+
+Fanta's editor has three main workspaces: **Canvas**, **Variables**, and **Code**. Canvas is where you select and draw layers. Variables manages reusable values and modes. Code opens the active page or component's FNX and JSON source files. Saving a source edit validates the project before the canvas reloads it.
+
+Within the canvas, modes include **Design**, **Motion**, **Draw**, **Dev**, **Code**, **Prototype**, **Comments**, and **Build**. The available panels and controls follow the selected mode and layer. The Layers panel organizes pages and nodes; the file inspector's **Assets** section places stored media; the design inspector edits the current selection. A toolbar gives you selection, shape, drawing, text, and view tools.
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/layers-and-inspector.jpg"
+  alt="Fanta's native editor showing the launch-card canvas, Pages and Layers on the left, page properties on the right, and the canvas toolbar below."
+  width={3456}
+  height={2168}
+  caption="Captured in the installed Fanta Public Alpha 1.0.0 app on October 13, 2026, using our own launch-card sample."
+/>
+
+## A typical session
+
+1. Create a design with **File → New Design**, or open an existing design.
+2. Select a page and create a frame, shape, text layer, or other supported node.
+3. Select the layer on the canvas or in Layers. Use the inspector for precise properties.
+4. Organize the tree through Layers: rename, hide, lock, group, reorder, or move a layer to another page. Use **Assets** to place a stored image, SVG, video, or audio result.
+5. Use **Variables** for shared values, **Code** for the active page or component's FNX and JSON source, and **Present** for prototype testing.
+6. Export a selection or page through the inspector when you need a deliverable.
+
+Fanta saves its local project after a short idle period. If saving fails, it shows a notice until a later save succeeds; the design remains unsaved in the meantime. The project is a folder, so keep its metadata, pages, components, and assets together. Read [Document model](/docs/v2/concepts/document-model) for the file structure.
+
+Learn the [tools](/docs/v2/editor/tools), [inspector](/docs/v2/editor/inspector), [Project Assets](/docs/v2/editor/assets), [surfaces](/docs/v2/editor/surfaces), [Motion](/docs/v2/editor/motion), [Dev mode](/docs/v2/editor/dev-mode), [Comments](/docs/v2/editor/comments), [Settings](/docs/v2/editor/settings), and [shortcuts](/docs/v2/editor/shortcuts). Editor modes and workspaces are defined in `crates/fig_viewer/src/editor_session.rs`.

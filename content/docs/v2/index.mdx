@@ -1,0 +1,44 @@
+---
+title: Fanta documentation
+description: "Learn Fanta's current alpha: canvas editing, source-backed projects, agents, generation, export, and Git."
+---
+
+import { ProductScreenshot } from '@/components/product-screenshot';
+
+Fanta is a native design editor built around an ordinary project folder. Canvas edits write readable `.fnx` files; valid source edits update the canvas. If Git is available, those changes can be reviewed and committed like code. **Your design is source.**
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/auto-layout-inspector.jpg"
+  alt="Fanta's real native editor with the Launch Card, expanded Layers, and the selected CTA Button's auto-layout inspector."
+  width={3456}
+  height={2168}
+  caption="Captured directly in the installed Fanta 1.0.0 Public Alpha app on October 13, 2026. Explore the editor screens in the visual tour."
+/>
+
+These pages preview **Fanta 2.0**, which is in development and has no installer yet. They track [fanta-edit main at `578c1283`](https://github.com/jeanc18rlos/fanta-edit/tree/578c12839286b62f2fafabc134a56929ab3ef60e), with limits called out where they matter. For the app you can install today, read the [Fanta 1.0 docs](/docs). Start with the [full capability map](/docs/v2/capabilities).
+
+<Cards>
+  <Card title="What is FNX?" href="/docs/v2/concepts/fnx-design-as-source" description="The readable design format behind the canvas." />
+  <Card title="Fanta and Figma" href="/docs/v2/fanta-vs-figma" description="Compare project files, collaboration, agents, and version control." />
+  <Card title="Design with Git" href="/docs/v2/guides/version-control-designs" description="Understand diffs, commits, branches, and design review." />
+  <Card title="Roadmap" href="/docs/v2/roadmap" description="Current workflows, planned improvements, and future directions." />
+  <Card title="Editor screenshots" href="/docs/v2/screenshots" description="Real Layers, Variables, layout, components, Motion, Prototype, and FNX screens." />
+  <Card title="Watch the workflows" href="/docs/v2/demos" description="Real canvas editing, FNX and Git, and an agent edit." />
+  <Card title="Brand and assets" href="/docs/v2/brand" description="Fanta's logo, visual identity, and product screenshots." />
+  <Card title="How Fanta works" href="/docs/v2/capabilities" description="A complete map of current capabilities and alpha limits." />
+  <Card title="Your first project" href="/docs/v2/getting-started/first-project" description="Make a design, inspect its files, and review a change." />
+  <Card title="Connect an agent" href="/docs/v2/getting-started/connect-an-agent" description="Connect Claude Code or Codex to Fanta's live design tools." />
+  <Card title="The editor" href="/docs/v2/editor" description="Canvas, grid layout, inspector, Motion, Dev, Build, Code, and shortcuts." />
+  <Card title="Design as source" href="/docs/v2/concepts/fnx-design-as-source" description="Edit .fnx and supported project JSON behind the canvas." />
+  <Card title="Project Assets" href="/docs/v2/editor/assets" description="Save and place generated image, SVG, video, and audio assets." />
+  <Card title="Import and export" href="/docs/v2/formats" description="Open .fig and export PNG, JPEG, SVG, or PDF." />
+</Cards>
+
+## A first pass
+
+1. Use **File → New Design…** or open a `.fig` file. Fanta creates a native project directory when it can write to the chosen location.
+2. Work on the canvas, in the inspector, or in the Code workspace. Valid external `.fnx` edits reload the canvas.
+3. Connect an agent to the running app through its local MCP bridge, if you want one.
+4. Let autosave update the project files, review the Git diff, then export a page or selection.
+
+The site also serves [`/llms.txt`](/llms.txt), [`/llms-full.txt`](/llms-full.txt), and a Markdown version of each page.

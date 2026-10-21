@@ -1,0 +1,32 @@
+---
+title: Settings and build differences
+description: Configure the editor, agent models, MCP connections, account, and privacy controls.
+---
+
+Fanta's Settings window groups everyday preferences and account controls. The available actions depend on the build and the signed-in account.
+
+In Settings search, Escape clears the search while keeping Settings open; Command-W closes the Settings window.
+
+| Area | Current controls |
+| --- | --- |
+| General | Startup view, autosave, quit confirmation, and system file dialogs. |
+| Appearance | Color and icon themes, interface text size. |
+| Canvas | Show or hide Layers, Inspector, Files, Git, and Threads panels. |
+| Editor | Cursor and line-number settings, FNX source text size, keyboard shortcuts. |
+| AI & Models | Open the Agent Panel and configure model providers. |
+| MCP & Tools | Toggle Fanta hosted tools or the live canvas MCP server; manage configured MCP servers. |
+| Account, Billing, and Privacy | Account links, credit and plan views when available, diagnostics and usage controls, legal links. |
+
+## MCP connections inside Fanta
+
+The **MCP & Tools** page separates Fanta's hosted tools, the live canvas server used by external clients, extension tools, and MCP servers that the in-app agent can call. For the last group, Fanta can save a server globally or for a workspace, add or edit it, enable or disable it, authenticate, retry, remove it, and show connection status. Supported connection types include a local command and a remote HTTP endpoint. [Connect an external agent to Fanta's canvas →](/docs/mcp/connect)
+
+The committed defaults differ by release channel. Preview and Dev point account, model, and hosted MCP requests to Fanta's newer backend service and enable a separate remote **fanta-design** MCP connection. Stable keeps the original service endpoint and leaves that connection disabled. Available remote tools and models depend on the connected service; check the active build and account when one is missing.
+
+The Mac App Store feature build cannot launch local command-backed MCP servers, external agent processes, terminal commands, or external formatters from inside Fanta. Remote project connections are also disabled. Its MCP settings direct you to remote HTTP servers instead. This restriction does not remove the live canvas server toggle or prove that an external client cannot connect to the Store build; that inbound path needs build-specific verification. Non-Store builds retain the local command option.
+
+## Account and privacy
+
+Billing views show account state, credit balance, usage, plans, and activity when the service provides them. Usage offers rolling 7, 30, and 90-day UTC windows ending at the request time; the first and last calendar days in its daily chart can therefore be partial. Daily usage and usage by API key use the same request bounds, and CSV export uses the selected range. New AI credit and subscription purchases happen through [web Billing](https://app.fantaisa.net/billing). Public accounts receive no signup, referral, or trial credits. Local editing remains free; hosted AI requires purchased credits. Restore, sync, redemption, and introductory trial actions are discontinued. Previously purchased Apple subscriptions must still be canceled in the Apple Account. Checkout availability, products, prices, and account entitlements come from the live billing service. Deleting a Fanta account is separate from canceling a subscription.
+
+Privacy controls include crash diagnostics and anonymous usage metrics. The App Store feature build also describes macOS access to user-selected files, saved sign-in, and network services under **App Access**. See [Install and build](/docs/getting-started/install) for distribution status and setup.

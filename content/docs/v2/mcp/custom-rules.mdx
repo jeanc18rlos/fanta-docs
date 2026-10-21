@@ -1,0 +1,16 @@
+---
+title: Custom rules & project context
+description: Keep design conventions beside the project source.
+---
+
+A new Fanta project includes an `AGENTS.md` seed. Put project-specific working conventions there. The in-app designer also reads a project-root `fanta.md` before each model round for product and visual direction, layout preferences, asset choices, design-system conventions, and acceptance criteria. Nested project specifications can refine workspace rules; the combined design-specification context has a 64 KiB limit. Direct user instructions, `AGENTS.md`, and the current agent mode and tool permissions take precedence.
+
+```md
+# Product design rules
+
+- Reuse existing color and spacing variables before adding tokens.
+- Use the existing button component for primary actions.
+- Check narrow-width wrapping and screenshot each changed screen.
+```
+
+`get_guidelines` describes the current coordinate system, batch workflow, source editing rules, and project design specification when one is present. Read it at the start of an external-agent session. Project instructions add local choices; they do not change the live tool schema. Review an agent’s proposed `.fnx` diff before committing.

@@ -1,0 +1,55 @@
+---
+title: Variables
+description: Define reusable values, modes, aliases, and property bindings.
+---
+
+import { ProductScreenshot } from '@/components/product-screenshot';
+
+# Variables
+
+Variables let one value drive multiple properties. Fanta's Variables workspace lets you create collections, variables, and modes, edit values, create aliases, and bind values to design properties. The active mode can be selected for a scope so the same design can resolve different values.
+
+The variable editor handles color, number, string, and boolean values, and edits enum values and image asset IDs as text. The agent operation schema also accepts typed `typography` variables. Imported documents may contain additional variable data; inspect the current design system before changing it.
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/variables-workspace.jpg"
+  alt="Fanta's native Variables workspace with the Fanta Brand collection, nine color and number variables, Dark and Light mode columns, and project and page mode selectors."
+  region={{ sourceWidth: 3416, sourceHeight: 2128, x: 0, y: 132, width: 3416, height: 960 }}
+  caption="The populated Variables workspace in our Fanta Docs Showcase sample. Captured in the installed Fanta Public Alpha 1.0.0 app on October 13, 2026."
+/>
+
+## Create a collection and bind a value
+
+1. Open the **Variables** workspace.
+2. Create a collection and a variable in it.
+3. Set a value for each relevant mode.
+4. Return to the canvas, select a layer, and bind a compatible property in the inspector.
+5. Switch modes and inspect the resulting design.
+
+In our sample, **Collections** selects the illustrative **Fanta Brand** launch-card collection, while **Groups** filters its Color, Radius, Semantic, and Spacing entries. Use **Create variable** at the bottom of the workspace to add another value. Under **Modes**, **Project** selects **Dark** and **Page: Fanta Studio** uses **Inherit parent**, so the page follows the project's mode.
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/variables-workspace.jpg"
+  alt="A closer view of the Name and Dark columns showing Color/Accent as FF6B35, Semantic/Action aliased to Color/Accent, Spacing/Small as 8, Spacing/Large as 24, and Radius/Card as 24."
+  region={{ sourceWidth: 3416, sourceHeight: 2128, x: 560, y: 212, width: 960, height: 860 }}
+  maxWidth={760}
+  caption="The sample's Dark values. Semantic/Action references Color/Accent and displays its resolved orange value. Native Public Alpha 1.0.0 capture, October 13, 2026."
+/>
+
+Aliases point one variable at another. Check alias and mode resolution when a bound property appears to use a surprising value. Variable workspace controls are in `crates/fig_viewer/src/variables_workspace.rs`; value types are in `crates/fanta-doc/src/value.rs`.
+
+For a color paint bound to a variable, the inspector shows its resolved color in the active mode and the variable name. The paint's opacity and visibility are read-only while the color binding is in place. Use **Detach** on the color variable to keep the resolved color as an ordinary paint, then edit the paint independently.
+
+The Design inspector also resolves single-layer opacity, visibility, and uniform vector radius bindings through aliases and inherited mode pins. If an explicit four-corner radius is present, it takes precedence over the uniform radius binding. An unresolved binding shows the layer's fallback value with a label and can still be detached. A direct text-content binding on component text prevents local text edits in both the canvas and the instance Content row; edit the variable or remove the binding to change that text.
+
+## Enum and image variables
+
+Fanta 2.0 adds **enum** variables with named options and **image** variables whose values refer to project assets. An enum can bind to text content so a mode or prototype action changes the displayed option name. An image variable can bind to a fill's artwork so modes or animation keyframes can switch the asset. An image value of “no image” leaves the existing paint in place; it does not erase the fill.
+
+The Variables workspace edits enum values and image asset IDs as text. It does not yet offer dedicated pickers for those kinds, and typography values remain uneditable there. Agent design operations can create enum and image variables and set enum options.
+
+## Work through an agent
+
+Call `get_design_system` (or in-app `design_system`) first to read collection IDs, modes, typed values, and selected-node bindings. The external `batch_design` operations can create collections and variables, add a mode, set values or aliases per mode, set an active mode for the document or a frame, and bind or unbind compatible properties. Binding targets include fill or stroke color, stroke width, corner radius, opacity, visibility, text content or style, and clip size. Use exact IDs from the response for follow-up edits; names work only when unique.
+
+The managed variable sources are `doc/variables.json` and `doc/active_modes.json`. If you edit one directly, validate the complete candidate with `validate_fnx_source` before saving and inspect the canvas after reload. See [style and variables](/docs/v2/tools/style-variables) for an MCP example.

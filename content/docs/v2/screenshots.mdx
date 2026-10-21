@@ -1,0 +1,106 @@
+---
+title: Inside the app
+description: A visual tour of Fanta’s real Layers, Variables, layout, components, FNX, Motion, and Prototype screens.
+---
+
+import { ProductScreenshot } from '@/components/product-screenshot';
+
+These screenshots were taken in the **Fanta Public Alpha 1.0.0** app on **October 13, 2026**, before 2.0, using our own Launch Card and Docs Showcase projects. Each close-up links to the original full app capture.
+
+## Layers
+
+Expand a frame to see its children. Here, **Launch Card** contains text, shapes, the Design Tile, and a **CTA Button** with its own label. [Explore the editor surfaces →](/docs/v2/editor/surfaces)
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/layers-and-inspector.jpg"
+  alt="Fanta Studio page and Layers panel, with Launch Card and CTA Button expanded to show CTA Label."
+  region={{ sourceWidth: 3456, sourceHeight: 2168, x: 0, y: 132, width: 560, height: 820 }}
+  maxWidth={360}
+  caption="The launch card’s actual page and layer hierarchy."
+/>
+
+## Variables and modes
+
+Open the **Variables** workspace to work with collections, mode values, and aliases. The showcase’s sample collection, **Fanta Brand**, uses Light and Dark values for the navy-and-orange launch card, plus spacing and radius tokens. **Semantic/Action** aliases **Color/Accent**. [Work with variables →](/docs/v2/concepts/variables) · [Official brand identity →](/docs/v2/brand)
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/variables-workspace.jpg"
+  alt="Fanta’s Variables workspace populated with the Fanta Brand sample collection, Dark and Light columns, color variables, an Action alias, spacing, and card radius."
+  region={{ sourceWidth: 3416, sourceHeight: 2128, x: 0, y: 134, width: 3416, height: 970 }}
+  caption="Nine sample variables shown in the real Variables workspace, with both mode columns visible."
+/>
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/variables-workspace.jpg"
+  alt="Close-up of the sample variables’ names and Dark values, including Semantic/Action resolving through Color/Accent and numeric spacing and radius values."
+  region={{ sourceWidth: 3416, sourceHeight: 2128, x: 565, y: 212, width: 960, height: 826 }}
+  maxWidth={850}
+  caption="A closer look at the Dark values and the color alias."
+/>
+
+## Auto layout
+
+Select a container to edit its **Layout** controls. This button uses a horizontal layout with centered alignment and separate vertical and horizontal padding. [Set up auto layout →](/docs/v2/concepts/auto-layout)
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/auto-layout-inspector.jpg"
+  alt="The CTA Button’s native Design inspector showing horizontal layout, dimensions, alignment, gap, padding, and clipping controls."
+  region={{ sourceWidth: 3456, sourceHeight: 2168, x: 2816, y: 204, width: 640, height: 1140 }}
+  maxWidth={420}
+  caption="The selected button’s Layout inspector in the Launch Card project."
+/>
+
+## A component master
+
+The **CTA Button** was created as a component in the app. Its inspector identifies it as **Component**; the sample has no exposed component properties yet. [Create components and instances →](/docs/v2/concepts/components)
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/component-master.jpg"
+  alt="The selected CTA Button identified as Component, with layout controls and an empty Component properties section."
+  region={{ sourceWidth: 3456, sourceHeight: 2168, x: 2816, y: 204, width: 640, height: 1540 }}
+  maxWidth={420}
+  caption="The component master’s native inspector."
+/>
+
+## FNX source
+
+Switch to **Code**, then choose **FNX**, to inspect the page’s design source. The launch card appears as nested frames, text, and shapes with stable layer IDs. [Understand FNX →](/docs/v2/concepts/fnx-design-as-source) · [Version control a design →](/docs/v2/guides/version-control-designs)
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/fnx-workspace.jpg"
+  alt="Fanta’s Code workspace with FNX selected and pages/fanta-studio/page.fnx open, showing the launch card’s nested design elements and IDs."
+  width={3456}
+  height={2168}
+  caption="The actual page.fnx file open inside Fanta."
+/>
+
+## Motion
+
+**Motion** shows the selected layer’s animation controls and timeline. The showcase includes a **CTA fade in** clip: button opacity goes from 0 to 100% over 800 ms within a 1.2-second clip. The capture is paused at 0.8 seconds. [Animate a layer →](/docs/v2/editor/motion)
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/motion-timeline.jpg"
+  alt="Motion inspector for CTA Button, showing playhead properties at 100 percent opacity and an Opacity Fade in animation lasting 800 milliseconds."
+  region={{ sourceWidth: 3416, sourceHeight: 2128, x: 2776, y: 204, width: 640, height: 920 }}
+  maxWidth={420}
+  caption="The sample opacity animation in the Motion inspector."
+/>
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/motion-timeline.jpg"
+  alt="The native timeline with CTA Button’s Opacity track, keyframes at the start and 0.8 seconds, and a 1.2-second clip duration."
+  region={{ sourceWidth: 3416, sourceHeight: 2128, x: 0, y: 1464, width: 2650, height: 320 }}
+  caption="The opacity keyframes and playhead in the same real app capture."
+/>
+
+## Prototype interactions
+
+In **Prototype**, open an interaction to inspect its trigger and action. The showcase button uses **On click → Open link** with the docs URL and an Instant transition. [Build a prototype →](/docs/v2/concepts/prototyping)
+
+<ProductScreenshot
+  src="/screenshots/native-20261013/prototype-interaction.jpg"
+  alt="The native Interaction 1 popup showing On click, Open link, https://fanta-docs.vercel.app/, Instant transition, and no motion clip."
+  region={{ sourceWidth: 3416, sourceHeight: 2128, x: 2802, y: 1618, width: 590, height: 439 }}
+  maxWidth={500}
+  caption="The sample button’s actual interaction settings."
+/>

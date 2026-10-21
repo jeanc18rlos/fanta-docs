@@ -1,0 +1,22 @@
+---
+title: Build a component & variants
+description: Create masters, combine variants, and customize an instance.
+---
+
+1. Build a frame or group for the reusable element and inspect its exact ID with `batch_get`.
+2. Promote it with `{"op":"create_component","id":"<frame-id>"}` in `batch_design`. The master stays on canvas, and the response includes its component ID.
+3. For states such as Default and Hover, name each standalone master with axis values such as `Variant=Primary, State=Default` and `Variant=Primary, State=Hover`, promote them, and pass their master node IDs to `combine_variants`. The result returns `component_set` and `frame`; the frame displays the variants as a grid. Plain master names instead form one `Variant` axis. Use `get_design_system` to read the exact set and axis values.
+4. To expand a set later, promote another `Axis=Value` master and call `add_variants` with the set ID and its master node ID. `remove_variant` takes a member out as a standalone component, `arrange_variants` tidies the set frame, and `rename_component` changes a component or set name safely.
+5. Expose a `variant` axis or a text, boolean, number, color, or instance-swap property with `create_component_property`. For a descendant field, bind it with `bind_component_property` using the descendant node ID and a compatible target such as `{"prop":"text_content"}`.
+6. Place a linked copy with `create_instance`, passing the component or set ID and world `x`/`y` coordinates. Use `set_instance_property` with an exposed property ID or unique name and a value of the right type.
+7. Change the master, screenshot an instance, and inspect its source under `components/<set>/<variant>/master.fnx`.
+
+```json
+{"label":"Place button","ops":[{"op":"create_instance","component":"<component-or-set-id>","x":480,"y":120}]}
+```
+
+Master, variant-set, and exposed instance-property operations are in the external MCP schema. Read `get_design_system` after structural changes; invalid values fail and roll back the batch. Use `rename_component` rather than editing component metadata or folder names by hand.
+
+In the editor, **Go to main component** on a variant-set instance opens the member the instance currently displays, including a member selected through a variable mode. **Reset all overrides** restores the resolved default member and its size. Save or discard a Code workspace draft before navigating to another component. A directly bound text-content variable controls its instance text; edit the variable or remove that binding before editing the text in place. Text reached through an exposed component-property alias remains editable.
+
+The editor's Copy/Paste can carry a complete component or variant set with its captured definitions. If the original has been removed, Paste restores an independent usable copy. Cutting only part of a variant set is refused; select the whole set when it needs to move together. Review the saved FNX diff after structural changes.
