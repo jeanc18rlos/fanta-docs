@@ -102,7 +102,7 @@ The connection command copied by the running app includes its executable and ins
 
 ## Current limits
 
-- Fanta 2.0 targets **Apple Silicon macOS** first. Its source also builds and runs its tests on Windows in CI, and Linux and Windows installers are under review. Neither platform has a release. [Install notes →](/docs/v2/getting-started/install)
+- Fanta 2.0 targets **Apple Silicon macOS** first. Windows has a source build for development and CI checks, with CPU canvas rendering and no video playback or audio preview. Linux and Windows installers are under review; neither platform has a release. [Windows setup and install notes →](/docs/v2/getting-started/install)
 - Fanta 2.0.0 has no installer yet. Its review, variable, prototype, motion, vector, website, and updater paths have source and test coverage, but no installed-app acceptance.
 - Some visible tools and inspector actions remain incomplete. Fanta reports unavailable actions where possible. Grid auto-layout is implemented with the Figma behavior gaps above; effects are limited to drop/inner shadows and layer/background blur, **Pass Through** has no engine equivalent, and Dev **Readiness** is unavailable. [Editor status →](/docs/v2/editor/tools)
 - Large `.fig` imports can be slow and memory intensive. Source reads and node reads have response limits, including a 1,000-node page-listing traversal budget, so agents should page through large documents. [Troubleshooting →](/docs/v2/mcp/troubleshooting)
