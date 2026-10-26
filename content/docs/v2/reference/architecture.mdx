@@ -11,7 +11,8 @@ Fanta’s desktop executable is built by the `fanta` Cargo package and named `fa
 | Design UI, source reload, export, MCP | `crates/fig_viewer` |
 | Agent operation types and guidelines | `crates/fanta-design-ops`, re-exported by the app's agent seam `crates/design_surface` |
 | Project loading, layout, comments, screenshots, and saving without the app | `crates/fanta-headless`, shared by the editor |
-| Cloud engine worker (in development; not deployed) | `crates/fanta-engine` |
+| Source-only Rust Design API for sessions, nodes, templates, and export | `crates/fanta-api` (unpublished; no packaged language binding) |
+| Local engine runner (cloud integration in development) | `crates/fanta-engine` |
 | Scene graph and edit operations | `crates/fanta-doc` |
 | `.fnx` parser and printer | `crates/fanta-fnx` |
 | Project layout and `.fant` format | `crates/fanta-format` |
@@ -26,3 +27,7 @@ A project contains `fanta.json`, `.fnx` source under `pages/` and `components/`,
 The external MCP server runs in the app over a private Unix socket. `fanta --mcp-stdio` discovers the socket and bridges a client to the focused design. It registers 14 tools, including `add_comment`, through the shared `design_surface` provider; `batch_design` streams 44 typed `DesignOp` values. Content edits form one undoable transaction and roll back if an operation fails; selection and viewport changes are not transactional. `batch_get` projects requested nodes as a summary, editable style, or raw data; raw requires exact node IDs. The bridge can receive `--user-data-dir` to target the running instance. The older `fanta-app` / `fanta-ai` crate map and fixed HTTP port do not describe this checkout.
 
 The v2 `fanta-runtime` crate loads a compiled source bundle, resolves fonts and assets, and renders a presentation scene. The separate `fanta-site` command packages a saved project with an explicitly supplied matching Fanta-JS runtime into a read-only static site. Its viewer offers page navigation, pan, and zoom; it does not play prototype interactions or motion. Source tests cover the Rust export path, while public browser and installer acceptance for v2 remain separate.
+
+`fanta-api` runs on `fanta-headless` without opening the app. It provides a Rust `DesignSession` for in-memory, project-folder, or `.fant` designs, typed node edits, undo steps, polled events, template filling, and visual export. It is part of the repository and has not been published as a crate or wrapped for Node. [Rust Design API →](/docs/v2/reference/design-api)
+
+The engine's implemented command runs an ordered request file against a local project directory, using this headless path for template filling and batch PNG export. Its source contains a contract for a GitHub-backed HTTP worker and v2 service routes, but the binary has no HTTP server and explicitly rejects GitHub sources. Treat the contract as a future integration design rather than an available network API.

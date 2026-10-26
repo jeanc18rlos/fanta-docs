@@ -11,6 +11,8 @@ The inspector reflects the current selection. Select one layer for its full set 
 
 The inspector toolbar has zoom out and in, a percentage menu with 25%, 50%, 100%, and 200%, **Fit to View**, **Fit to Selection**, and a control to collapse or show Properties. When Properties is collapsed, these view controls stay in a compact floating bar. In Prototype mode, the toolbar also offers **Play Prototype** when the document has an entry frame.
 
+In the 2.0 source, a lock button on this toolbar toggles **Fill In Template** mode for the current window. Supported edits then check each layer's authored template rules. The inspector does not yet show or edit those rules. [Templates and Fill mode →](/docs/v2/concepts/templates)
+
 Common sections include geometry and rotation, corners and smoothing, appearance and opacity, blend mode, fills and strokes, typography, image fitting, layout and child layout, effects, prototype interactions, variable bindings, components and instances, and export. Use the inspector when exact dimensions or values matter; canvas handles are faster for rough adjustments.
 
 <ProductScreenshot
@@ -32,6 +34,10 @@ A valid numeric property draft still in focus is committed before Save, Save All
 For a grid frame, Layout exposes column and row tracks, gaps, automatic or manual item positioning, and each selected child's cell, span, and alignment. [Grid layout →](/docs/v2/concepts/auto-layout) An instance's variant choices appear before its other component properties; picking a value swaps to the matching variant when that combination exists. [Components →](/docs/v2/concepts/components)
 
 An instance's component section also lists Content rows for its visible text layers. Edit a Content row to create a local text override, or reset it to use the master value. A direct text-content variable binding makes that row read-only; edit the variable or remove its binding first. Nested instance text is not recursively listed as a Content row.
+
+## Template rules in the Design inspector
+
+When **Fill In Template** is on, Design inspector edits check the relevant scope for the affected layer. This includes supported geometry, paint, effect, and text actions. If a template denies that scope, Fanta keeps the current value and shows a notice. The same rules apply to supported canvas gestures, Delete, Duplicate, and text editing. Multi-selection arrange and transform actions, variable bindings, and grouping do not yet check the template rules. Treat Fill mode as a partial editing safeguard and review a filled document before export. [Template scopes and current limits →](/docs/v2/concepts/templates)
 
 ## Paints and effects
 
@@ -59,6 +65,6 @@ TextPath X and Y fields use its painted bounds. Editing one coordinate moves the
 
 Raster export is limited to 8192 px per side and 16 million total pixels. If a requested size exceeds a limit, reduce the scale or dimensions. Exporting the active page scopes output to that page. Multiple selected layers can be exported as targets.
 
-Fills include solid colors, gradients, patterns, images, and shaders. Video paint is available on macOS. The renderer uses Skia's standard blend modes, additive blending for Linear Dodge, and a separate blender for Linear Burn. Some imported or visible controls may have incomplete editing paths and show a notice. Drop shadows and inner shadows render as effects. For any imported design or unusual paint combination, inspect the exported result.
+Fills include solid colors, gradients, patterns, images, and shaders. Video paint is available on macOS. The 2.0 raster renderer includes 26 blend modes: Skia's standard modes, additive Linear Dodge, and custom blenders for Linear Burn, Darker Color, Lighter Color, Vivid Light, Linear Light, Pin Light, Hard Mix, Subtract, and Divide. Groups also have Pass Through. SVG export draws all blend modes as Normal; PDF draws those nine custom modes as Normal. Check PNG or JPEG when an exact blend appearance matters. Some imported or visible controls may have incomplete editing paths and show a notice. Drop shadows and inner shadows render as effects. For any imported design or unusual paint combination, inspect the exported result.
 
 Inspector UI and snapshots are in `crates/fig_viewer/src/properties_panel.rs` and `crates/fig_viewer/src/properties_snapshot.rs`; export limits and formats are in `crates/fig_viewer/src/export.rs`. Paint handling is in `crates/fanta-render/src/paint.rs`.

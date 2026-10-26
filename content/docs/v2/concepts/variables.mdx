@@ -42,6 +42,14 @@ For a color paint bound to a variable, the inspector shows its resolved color in
 
 The Design inspector also resolves single-layer opacity, visibility, and uniform vector radius bindings through aliases and inherited mode pins. If an explicit four-corner radius is present, it takes precedence over the uniform radius binding. An unresolved binding shows the layer's fallback value with a label and can still be detached. A direct text-content binding on component text prevents local text edits in both the canvas and the instance Content row; edit the variable or remove the binding to change that text.
 
+## Variables inside text
+
+In the committed 2.0 source, text and Text on Path can display a variable inside a sentence. Write a token such as `Hello {{name}}` in the text content. Fanta keeps that token in the saved design and shows its resolved value when it measures or draws the text. Inline text editing shows the authored token so you can change its name or surrounding words.
+
+A token can use a variable's bare name when that name is unique across collections. If several collections use the same name, write `{{Collection/Name}}`. String, number, boolean, and enum values resolve in the text layer's active or inherited mode. A missing or ambiguous variable, or a color, image, or typography variable, leaves the token visible as typed. When a value changes, the displayed text follows it without rewriting the source.
+
+For a reusable design whose text and images change together, see [Templates](/docs/v2/concepts/templates). This inline-token behavior is in 2.0 source; it has not been accepted in a signed 2.0 installer.
+
 ## Enum and image variables
 
 Fanta 2.0 adds **enum** variables with named options and **image** variables whose values refer to project assets. An enum can bind to text content so a mode or prototype action changes the displayed option name. An image variable can bind to a fill's artwork so modes or animation keyframes can switch the asset. An image value of “no image” leaves the existing paint in place; it does not erase the fill.

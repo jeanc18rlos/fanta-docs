@@ -11,6 +11,8 @@ If layers are selected, each selected layer is exported separately using its vis
 
 PNG and JPG are raster images. JPG is encoded as opaque RGB at a fixed quality setting of 95; transparent areas are composited over white. JPG compression can change pixel colors, particularly near sharp transitions. Use PNG when you need transparency or pixel-level comparison, and inspect important JPG exports. SVG and PDF are visual outputs, not editable Fanta project files. To keep working with design layers, retain the [native project](/docs/v2/formats/fant). Canvas comments and editor measurement annotations are review aids; they are excluded from rendered output.
 
+The 2.0 raster renderer supports 26 layer blend modes and group Pass Through. SVG export draws every blend mode as Normal. PDF export draws Linear Burn, Darker Color, Lighter Color, Vivid Light, Linear Light, Pin Light, Hard Mix, Subtract, and Divide as Normal. Use PNG or JPG and check the result when those blends must look like the canvas.
+
 ## Motion exports
 
 The inspector's export format list also offers **Motion JSON** and **Figma Motion JSON**. A motion export needs exactly one animation clip in its target. Select the frame scoped to that clip, including all of its animated layers, or export the complete clip from **Design → Export Motion JSON**. An empty target, multiple clips, or tracks extending beyond the selected frame produce an error rather than a partial animation.
@@ -28,6 +30,10 @@ Trigger inputs and a state-machine view remain unimplemented.
 ## Size limits
 
 Raster export is bounded by an 8192-pixel maximum dimension and about 16 million total pixels per output. A large design at 4x may exceed these limits; reduce the scale or export a smaller selection. The export flow reports failures rather than silently writing a partial result.
+
+## Programmatic exports in the 2.0 source
+
+The unpublished Rust `fanta-api` crate can export a page or node as PNG, JPEG, SVG, or PDF. Its raster sizing accepts a scale, target width, target height, or maximum dimension; SVG and PDF use design dimensions. The source-only `fanta-engine` runner has a narrower `export_batch` step: it fills a copy of a local project for each of one to eight data rows and returns a PNG or per-row error, with a maximum 1568-pixel longer side. It does not provide JPEG, SVG, PDF, Motion JSON, or MP4 through that step. [Rust Design API and local engine →](/docs/v2/reference/design-api)
 
 ## Agent screenshots are different
 

@@ -20,6 +20,15 @@ This page separates **implemented workflows**, **planned improvements and valida
 
 The [reviewed demos](/docs/v2/demos), recorded in Fanta 1.0, show a bounded native edit, source and Git workflow, and external agent edit. The broader 2.0 source inventory includes workflows with separate acceptance work.
 
+## Implemented in 2.0 source, awaiting release acceptance
+
+| Area | Current source boundary |
+| --- | --- |
+| Template filling | Text and TextPath can display `{{name}}` variables. Layers can store editing rules, and the editor's Fill mode checks canvas gestures, Delete, Duplicate, text editing, and Design inspector edits against them. Multi-selection arrangement or transforms, bindings, and grouping are not all guarded; the inspector cannot edit rules and placeholders have no overlay. [Capability map](/docs/v2/capabilities#templates-and-inline-variables) |
+| Programmatic design | The in-process Rust `fanta-api` opens a project, snapshot, or in-memory design and exposes typed properties, node edits, undo steps, change events, roles, scopes, template fill, and batch export. There is no shipped Node binding or public hosted API. [Architecture](/docs/v2/reference/architecture) |
+| Local engine steps | The `fanta-engine` source runs ordered inspect, edit, comment, render, template fill, batch PNG export, and changeset steps. These are engine interfaces for development, not extra tools in the 14-tool local MCP server or evidence of a deployed cloud service. [Architecture](/docs/v2/reference/architecture) |
+| Blend modes | Rendering supports 26 layer blend modes and Pass through on groups. SVG draws blend modes as Normal, while PDF draws several newer modes as Normal; check a raster result when fidelity matters. [Export](/docs/v2/formats/export) |
+
 ## Planned improvements and validation priorities
 
 | Focus | What the work is intended to improve | Current boundary |
@@ -29,7 +38,7 @@ The [reviewed demos](/docs/v2/demos), recorded in Fanta 1.0, show a bounded nati
 | Editing consistency | Complete inspector and per-node journeys, including lock handling, entry into editors, Undo/Redo, and save/reopen. | Bounded checks pass; more node, property, gesture, and dependency combinations remain to be checked. |
 | Media reliability | Broaden playback, seeking, trimming, recovery, and saved-asset checks across supported audio and video. | Placing a media layer or opening its properties does not establish every playback and editing workflow. [Assets](/docs/v2/editor/assets) |
 | Motion expansion | Extend the existing property-animation tools toward path animation. | **Path** is marked “soon” and disabled in the current animation menu. It has no published delivery date. [Motion](/docs/v2/editor/motion) |
-| Cloud review and generation | Run AI Review, Ultrareview, and design generation in the cloud on a project's GitHub repository, returning findings as canvas comments or a pull request. | In development and not offered in any build. The shared headless engine core is in source; the cloud worker service, review pipeline, and in-app client are not finished, and pricing is undecided. |
+| Cloud review and generation | Run AI Review, Ultrareview, and design generation in the cloud on a project's GitHub repository, returning findings as canvas comments or a pull request. | In development and not offered in any build. The headless core and local engine steps are in source, but cloud deployment, the review pipeline, and the in-app cloud client have not been verified; pricing is undecided. |
 | Linux and Windows | Public Linux and Windows downloads with in-app updates. | Installer and release work is under review. Windows builds are planned to start unsigned. Neither platform is a supported release yet. |
 | Release quality | Verify advertised workflows against the exact distributed build, including installation, account services, and repeatable persistence. | Acceptance is tied to a particular package and journey. Follow the live [download page](https://www.fantaisa.net/download) for availability. |
 
@@ -43,6 +52,6 @@ Some specialist node types already exist in the format. Node graph, generic AI a
 
 ## Limits to plan around
 
-Fanta currently targets Apple Silicon macOS. Other operating systems, Intel builds, full Figma import parity, and shared cloud multiplayer are not established supported workflows. Same-document canvas paste is supported; cross-document paste is rejected. Some Figma grid behaviors and effects remain unsupported, and Dev **Readiness** is unavailable. These are current limits, not delivery commitments. [Detailed capabilities](/docs/v2/capabilities) · [Fanta vs Figma](/docs/v2/fanta-vs-figma).
+The released app targets Apple Silicon macOS. Windows has a development source build, but other platform installers and Intel builds are not established supported workflows. Full Figma import parity and shared cloud multiplayer are also absent. Same-document canvas paste is supported; cross-document paste is rejected. Some Figma grid behaviors and effects remain unsupported, Fill mode is a partial guard, and Dev **Readiness** is unavailable. These are current limits, not delivery commitments. [Detailed capabilities](/docs/v2/capabilities) · [Fanta vs Figma](/docs/v2/fanta-vs-figma).
 
 For important work, keep the complete project in Git, review source changes with screenshots, and test the workflows you depend on in your installed version. Report reproducible issues with the app version, steps, expected result, and screenshots through the verified support links on the download page.

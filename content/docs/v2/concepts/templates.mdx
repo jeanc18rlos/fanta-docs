@@ -1,0 +1,47 @@
+---
+title: Templates and Fill mode
+description: Reuse text and image content, mark placeholders, and restrict supported edits.
+---
+
+# Templates and Fill mode
+
+A template is a normal Fanta design with reusable content and optional editing rules on its layers. The committed Fanta 2.0 source supports text tokens, image placeholders, per-layer permissions, a Fill mode in the editor, and data-row filling in its headless Rust API and cloud engine contract. These paths have source and test coverage. **No signed 2.0 installer has been accepted**, so check the version you run before relying on them in production.
+
+## Give text a value to fill
+
+Place a token such as `{{name}}` in a text or Text on Path layer, then define a string variable called `name`. The rendered design shows that variable's value in the layer's effective mode. The saved content retains `{{name}}`, and inline text editing shows the token. Number, boolean, and enum values can also appear in text. Color, image, and typography variables do not resolve as inline text.
+
+A bare name works when it is unique across variable collections. Use `{{Collection/Name}}` when names repeat. A token whose variable is missing or ambiguous stays visible as typed. [Variables and modes →](/docs/v2/concepts/variables)
+
+## Mark image placeholders and editing rules
+
+A layer's `editing` data can identify it as a placeholder and list scopes that a template filler cannot change. A placeholder image keeps its box and image fit when its artwork is replaced; the old crop is cleared because it framed the previous image. A rule-free layer allows every scope. The source supports 25 named scopes:
+
+| Area | Scope keys |
+| --- | --- |
+| Layer | `layer/move`, `layer/resize`, `layer/rotate`, `layer/flip`, `layer/crop`, `layer/opacity`, `layer/blend_mode`, `layer/visibility`, `layer/clipping` |
+| Appearance | `appearance/adjustments`, `appearance/filter`, `appearance/effect`, `appearance/blur`, `appearance/shadow`, `appearance/animation` |
+| Lifecycle and editor | `lifecycle/destroy`, `lifecycle/duplicate`, `editor/add`, `editor/select` |
+| Content | `fill/change`, `fill/change_type`, `stroke/change`, `shape/change`, `text/edit`, `text/character` |
+
+Author rules in the node's FNX `editing` attribute or through `fanta-api`'s `DesignSession` methods. For example, a layer can store `disabled_scopes` of `layer/move` and `lifecycle/destroy` while its `placeholder` marks it for replacement. FNX validates and saves this data with the layer. The `placeholder` structure has `show_overlay` and `show_button` flags, but the current editor does not draw a placeholder overlay or offer a rule editor. [FNX source →](/docs/v2/formats/fnx)
+
+The Rust API has three roles. **Creator** can change the design and its editing rules. **Adopter** follows each layer's rules unless a session-wide scope overrides them. **Viewer** cannot edit the design; selection still follows its `editor/select` rule. These roles belong to a design session. They do not describe account permissions for the released app or a public web API.
+
+## Fill in the editor
+
+Select the lock button above the Design inspector to enter **Fill In Template** mode for the current window. Supported canvas gestures, Delete, Duplicate, inline text editing, and Design inspector actions then check the relevant scope on each affected layer. When a change is refused, Fanta shows a canvas notice. Select the button again to return to template editing. The toggle does not write or erase the layer's rules.
+
+Current enforcement is incomplete: multi-selection arrange and transform actions, variable bindings, and grouping do not check those scopes yet. The inspector cannot display or modify a layer's rules, and placeholder overlays are not implemented. Review the filled design and its source before exporting or handing it off.
+
+## Fill data rows without opening the app
+
+The committed `fanta-api` Rust crate can open a project folder, open a `.fant` snapshot, or create a design in memory. `fill_template` accepts one row of string keys and values. Each key first sets the existing String variable it names. Otherwise, if it names an image placeholder, it replaces every matching placeholder's image. Otherwise, it creates a String variable. Edits join the pending undo step for the caller to commit, and a failed key rolls back the whole row. A key naming a non-String variable fails instead of changing its type. `batch_export` fills a copy for each row, returns a result per row, and leaves the original session unchanged.
+
+The API decodes base64 `data:` images by default. A caller may explicitly choose a directory fetcher for paths inside a chosen folder or an HTTPS fetcher; plain HTTP is opt-in, and an HTTPS host allowlist can be configured. The directory fetcher refuses paths that resolve outside its root, including symlinks. No Node package or public HTTP design API is distributed from this crate.
+
+The cloud engine source defines `fill_template` and `export_batch` steps for a project-backed run. Its template step accepts one row and commits it as one undo step. Batch export takes **1–8 rows**, returns a PNG result or error for each row, and caps the longer side at **1568 px**; it fills copies rather than changing the project. In the engine, image values may be `data:` URIs or paths inside the project folder. The worker fetches nothing from the network for this step. A defined step is not confirmation that a hosted service or the signed installer exposes it.
+
+## Source and availability
+
+The [template model](https://github.com/jeanc18rlos/fanta-edit/blob/389e8c905d14168b808af5fd5ce058cf2c3d2ba3/crates/fanta-doc/src/editing.rs), [text token resolver](https://github.com/jeanc18rlos/fanta-edit/blob/389e8c905d14168b808af5fd5ce058cf2c3d2ba3/crates/fanta-doc/src/text_tokens.rs), [Rust API](https://github.com/jeanc18rlos/fanta-edit/blob/389e8c905d14168b808af5fd5ce058cf2c3d2ba3/crates/fanta-api/src/templates.rs), and [engine step contract](https://github.com/jeanc18rlos/fanta-edit/blob/389e8c905d14168b808af5fd5ce058cf2c3d2ba3/docs/cloud-engine-contracts.md) describe this committed implementation. For features accepted in the signed Public Alpha, use the [Fanta 1.0 capability map](/docs/capabilities).

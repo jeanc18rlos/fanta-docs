@@ -1,0 +1,42 @@
+---
+title: Rust Design API and local engine
+description: Programmatic editing and template generation in the Fanta 2.0 source.
+---
+
+The committed Fanta 2.0 source includes a Rust library, `crates/fanta-api`, for editing a design without opening the desktop app. It wraps the same headless document and design operations used by the editor. This is a **source preview**: the crate is not published to crates.io, no Node or other language binding is packaged, and this repository does not expose a public hosted Design API. Fanta 2.0 has no accepted installer yet. The signed Fanta 1.0 Public Alpha does not include this new API.
+
+The details below describe [source commit `389e8c90`](https://github.com/jeanc18rlos/fanta-edit/tree/389e8c905d14168b808af5fd5ce058cf2c3d2ba3/crates/fanta-api). They are useful when building against the repository, but are not a stability promise for a public SDK.
+
+## Sessions and history
+
+`DesignSession::new()` starts an in-memory design with one empty page. `open_project` opens a Fanta project folder; `open_snapshot` reads a `.fant` file into memory. A session can save back to its opened project, write a new project folder, or write a `.fant` snapshot with its assets. `copy()` makes an in-memory design copy without its undo history or event subscriptions.
+
+Edits apply immediately. Successive calls join a pending undo step; `add_undo_step(label)` commits that step. `undo` commits and reverts pending edits first, while `redo` is unavailable after a new edit branches the history. An individual failed edit rolls back its own changes. There is one document history, not multiple independent histories.
+
+## Nodes, properties, and events
+
+The API creates frames, rectangles, ellipses, lines, polygons, stars, SVG path outlines, text, and images supplied as encoded bytes. It can duplicate, destroy, group, ungroup, reparent and reorder nodes; find nodes by name, type or kind; and read or write names and string metadata. Page creation and active-page selection are also available. More node types can be inspected than the `create_node` method directly creates.
+
+Typed property reflection lists the properties present on a node, their value types, and whether they are writable. Values use Boolean, integer, float, string, color, or named enum types. Callers can inspect an enum's allowed names before writing it. Supported paths include geometry, visibility, opacity and blend mode; indexed fills, strokes, shadows and blurs; text and typography; and layout mode and gap. Callers can add and remove these indexed paint and effect entries, flip a node, or resize a frame using constraints or a uniform fit. A literal write to a property driven by a variable is refused until that binding is removed. An unknown path, wrong value type, or invalid enum name returns an error. Some Fanta document properties do not yet have API paths.
+
+`subscribe` follows all nodes or a chosen set of node IDs; `poll_events` returns `Created`, `Updated`, and `Destroyed` changes since the preceding poll. Events are coalesced to one entry per node per poll. They are in-process notifications, not a network event stream.
+
+## Template data and edit permissions
+
+Text can contain `{{name}}` tokens resolved from the document's variables. `set_text_variable` changes a String variable in its active mode, or creates one if the key is new. A unique bare name works; `Collection/Name` disambiguates names shared by collections. Removing a variable leaves its token visible as typed text.
+
+A node can carry a placeholder marker and editing rules. The API recognizes 25 scopes, such as moving, resizing, changing a fill, editing text, or deleting a layer. `Creator` can edit rules and content; `Adopter` follows the node's enabled scopes; `Viewer` cannot change the design. Session-wide scope overrides are possible. These rules are enforced on the API's edit methods; they are not a general access-control service.
+
+`fill_template(row)` applies one map of string keys and values: an existing text variable takes precedence; otherwise a key matching a placeholder's node name replaces its image; any other key creates or updates a text variable. All image values are fetched before the row changes the document, and a failing row rolls back as a whole. The default image fetcher accepts `data:` URIs or bare base64, with no file or network access. A caller can explicitly use a directory-confined fetcher or an HTTPS fetcher. Image sources are limited to 32 MiB of encoded bytes. The HTTPS fetcher has a 30-second timeout and does not follow redirects; plain HTTP and a host allowlist are opt in. For untrusted rows, configure the host allowlist before enabling network image reads. `batch_export` fills a copy per row and returns one success or error per row without changing the original session.
+
+The source has an end-to-end test that creates a text-and-image template through this API, restricts a layer, fills it, checks node events and exported pixels, then checks Undo and Redo. That test covers a bounded workflow, not a released SDK.
+
+## Export from Rust
+
+`DesignSession::export` renders a page or node as PNG, JPEG, SVG, or PDF, with variable values resolved. PNG and JPEG can use a scale, target width, target height, or maximum dimension. SVG and PDF use the design's own dimensions. Raster output is limited to 8192 pixels on either side and 16,777,216 pixels in total. See [export formats](/docs/v2/formats/export) for the editor's file export and motion commands.
+
+## Local engine boundary
+
+`crates/fanta-engine` can run an ordered request against a **local project directory** through `fanta-engine run --request request.json`. Its implemented steps are `inspect`, `create_page`, `apply`, `add_comments`, `project`, `render`, `fill_template`, `export_batch`, and `changeset`. `fill_template` uses `data:` images or files confined to that project folder; this path does not fetch template images from the network. `export_batch` renders PNG for one to eight rows, caps the longer side at 1568 pixels, and reports each row's result separately. The project being batch-exported is not changed.
+
+The repository also has a [cloud-engine contract](https://github.com/jeanc18rlos/fanta-edit/blob/389e8c905d14168b808af5fd5ce058cf2c3d2ba3/docs/cloud-engine-contracts.md) describing future HTTP and GitHub-source integration. At this commit, the engine binary exposes only `run --request` and `healthz`; it has no HTTP server and rejects a GitHub source as unimplemented. The contract's `/v1/run` and `/v2/...` routes are not public endpoints supplied by this source. [Architecture →](/docs/v2/reference/architecture)

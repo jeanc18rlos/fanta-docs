@@ -31,6 +31,14 @@ The file inspector shows project files and an **Assets** section for stored imag
 
 The Variables workspace manages collections, modes, values, aliases, and bindings. Create a collection and variable, set mode values, then bind compatible selected layer properties. Scope a mode to preview a different value set.
 
+## Fill a template
+
+The lock button above the Design inspector switches this window between editing a template and **Fill In Template** mode. In Fill mode, supported canvas gestures, Delete, Duplicate, text editing, and Design inspector edits check the selected layer's template rules and show a notice when a change is refused. The button returns you to template editing; it does not change the saved rules.
+
+Template rules can currently be authored in FNX or through the Rust design API. The inspector cannot show or edit the rules, and placeholder overlays are not displayed. Fill mode does not yet check multi-selection arrange and transform commands, variable bindings, or grouping, so check the result before sharing a filled design. [Template rules and data filling →](/docs/v2/concepts/templates)
+
+Fill mode is implemented in Fanta 2.0 source. The signed 1.0 Public Alpha screenshot below and the current public installer do not establish this workflow.
+
 ## Code
 
 The Code workspace opens the active page's `page.fnx` and `page.json`, or a component master's `master.fnx` and `def.json`. Select **FNX** or **JSON** to edit that source file. **Find** searches the selected source buffer. Save the design once before opening source. Save or discard canvas changes before editing source; while either source buffer has unsaved changes, canvas content editing is locked, but pan and selection remain available.

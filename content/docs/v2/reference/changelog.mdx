@@ -5,6 +5,14 @@ description: What changed in Fanta 2.0's source since the 1.0 Public Alpha.
 
 This changelog lists what changed in Fanta 2.0's source after the 1.0 Public Alpha. Fanta 2.0 has no installer yet. Earlier history is in the [Fanta 1.0 changelog](/docs/reference/changelog).
 
+## October 26, 2026 source alignment
+
+These pages now track published [fanta-edit main at `389e8c9`](https://github.com/jeanc18rlos/fanta-edit/tree/389e8c905d14168b808af5fd5ce058cf2c3d2ba3). The signed, installed Public Alpha remains **Fanta 1.0.0 Build45** from source `57d86330`; the changes below are committed 2.0 source, not an accepted 2.0 installer or deployed cloud service.
+
+Text and TextPath layers can resolve `{{name}}` or `{{Collection/Name}}` tokens from text-like variables while keeping the authored tokens in source. Template rules can restrict layer edits. The editor's **Fill mode** now checks canvas gestures, Delete, Duplicate, text editing, and Design inspector changes against these rules. The inspector does not show or edit rules, placeholders have no overlay, and multi-selection, binding, and grouping paths do not fully enforce them. [Templates and inline variables →](/docs/v2/capabilities#templates-and-inline-variables)
+
+The new in-process Rust `fanta-api` supports typed property reflection, node edits, explicit undo steps, polled node events, roles and scopes, placeholders, template filling, and batch export. The source-only `fanta-engine` worker adds ordered project inspection, editing, rendering, commenting, template fill, batch PNG export, and changeset steps. These do not add local MCP tools or establish a hosted public API. The renderer adds 26 layer blend modes and group Pass through; SVG draws blend modes as Normal and PDF falls back to Normal for several new modes. [Architecture →](/docs/v2/reference/architecture) · [Export limits →](/docs/v2/formats/export)
+
 ## October 21, 2026 source alignment
 
 These pages now track published [fanta-edit main at `578c1283`](https://github.com/jeanc18rlos/fanta-edit/tree/578c12839286b62f2fafabc134a56929ab3ef60e). It still declares **Fanta 2.0.0**, and the accepted signed Public Alpha remains **Fanta 1.0.0 Build45** from source `57d86330`.

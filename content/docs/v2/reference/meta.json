@@ -1,1 +1,1 @@
-{ "title": "Reference", "icon": "Library", "pages": ["index", "architecture", "cli", "llms", "changelog"] }
+{ "title": "Reference", "icon": "Library", "pages": ["index", "architecture", "design-api", "cli", "llms", "changelog"] }

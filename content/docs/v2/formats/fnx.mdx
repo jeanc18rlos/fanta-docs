@@ -53,6 +53,8 @@ Version 5 changes where variant sources live, rather than removing these readabl
 
 FNX can express a frame's horizontal, vertical, or grid auto layout. A grid frame stores tracks in its <code>grid</code> property; child <code>layout_child.grid</code> selects an explicit cell or leaves placement automatic. Paints, effects, constraints, and rich-text runs can also be represented in source.
 
+In the 2.0 source preview, text and text-on-path content can contain <code>{'{{name}}'}</code> tokens. A token resolves from a text-like variable in the layer's active mode; a bare name must be unique, or you can use <code>{'{{Collection/Name}}'}</code>. Unresolved tokens remain visible as typed, and the stored FNX retains the tokens. A node's <code>editing</code> property can hold template <code>disabled_scopes</code> and optional placeholder flags. These rules are saved in FNX but cannot yet be authored in the Design inspector. See [variables](/docs/v2/concepts/variables) and [templates](/docs/v2/concepts/templates).
+
 ## When to use it
 
 Structured agent operations now cover linear and radial gradient fills, layered effects, constraints, vector shapes, grid layout, strokes, components and variant sets, variables, and bindings. FNX remains useful for source review in Git, source-level edits, and properties such as individual rich-text runs that the structured operation vocabulary does not edit. Keep referenced binary media in <code>assets/</code>; FNX refers to an asset by ID rather than embedding raw bytes.
