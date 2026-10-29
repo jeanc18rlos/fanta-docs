@@ -1,11 +1,11 @@
 ---
 title: Build Fanta 2.0
-description: Fanta 2.0 has no installer yet. Build it from source, and know which build differences apply.
+description: Fanta 2.0 has no public installer yet. Build it from source, and know which build differences apply.
 ---
 
-## No 2.0 installer yet
+## No public 2.0 installer yet
 
-Fanta 2.0 is in development. There is no signed 2.0 package, download, or update yet. To use the released app, [install the Fanta 1.0 Public Alpha](/docs/getting-started/install). To try 2.0, build it from source.
+Fanta 2.0 is in development. There is no accepted public 2.0 package, download, or update yet. To use the released app, [install the Fanta 1.0 Public Alpha](/docs/getting-started/install). To try 2.0, build it from source.
 
 ## Build from source
 
@@ -19,9 +19,9 @@ The Cargo package and its binary are both named <code>fanta</code>. Use <code>ca
 
 Maintainers can enable **build diagnostics** on a manual macOS release workflow run. This opt-in setting records bounded CPU, memory, disk, and swap progress during the Cargo build and retains Cargo timing reports when produced. It is disabled by default and requires GitHub Actions CI. Diagnostic output helps investigate a build; it does not establish signing, notarization, installation, or release readiness.
 
-## Windows source build
+## Windows source build and local packaging
 
-Windows is a development build, not a released Fanta installer. Use **Windows 10 version 1803 or later, or Windows 11, on x64**. Install Visual Studio 2022 Build Tools with **Desktop development with C++** (including the Windows SDK), Git for Windows, and Rust through [rustup](https://rustup.rs). The repository pins its Rust version in `rust-toolchain.toml`. The live MCP bridge needs the AF_UNIX socket support introduced in Windows 10 version 1803.
+Windows is a development target; there is no public Fanta 2.0 Windows download. Use **Windows 10 version 1803 or later, or Windows 11, on x64**. Install Visual Studio 2022 Build Tools with **Desktop development with C++** (including the Windows SDK), Git for Windows, and Rust through [rustup](https://rustup.rs). The repository pins its Rust version in `rust-toolchain.toml`. The live MCP bridge needs the AF_UNIX socket support introduced in Windows 10 version 1803.
 
 Enable Git long paths with `git config --global core.longpaths true`, enable Win32 long paths in Windows, and clone into a short location such as `C:\src\fanta-edit`. In PowerShell, run from the repository root:
 
@@ -29,17 +29,26 @@ Enable Git long paths with `git config --global core.longpaths true`, enable Win
 cargo run -p fanta
 ~~~
 
-The running app's local MCP bridge is `target\debug\fanta.exe --mcp-stdio`. The [committed Windows development guide](https://github.com/jeanc18rlos/fanta-edit/blob/578c12839286b62f2fafabc134a56929ab3ef60e/docs/fanta/windows-development.md) has the test commands, long-path setup, and build dependency details. Its [Windows CI workflow](https://github.com/jeanc18rlos/fanta-edit/blob/578c12839286b62f2fafabc134a56929ab3ef60e/.github/workflows/windows.yml) checks the app and CLI and tests the design engine, renderer, and canvas on `windows-2025`. The [October 21 run passed](https://github.com/jeanc18rlos/fanta-edit/actions/runs/39605592976); that is not installed-app acceptance.
+The running app's local MCP bridge is `target\debug\fanta.exe --mcp-stdio`. The [committed Windows development guide](https://github.com/jeanc18rlos/fanta-edit/blob/d4fe64713e8615607878d896049f88379e7cc39f/docs/fanta/windows-development.md) has the test commands, long-path setup, and build dependency details. [Windows CI](https://github.com/jeanc18rlos/fanta-edit/blob/d4fe64713e8615607878d896049f88379e7cc39f/.github/workflows/windows.yml) is configured to check the app, CLI, and update helper and test the helper, engine, renderer, and canvas on `windows-2025`. These source checks do not establish a released installer.
 
-Windows uses CPU canvas rendering. Video layers and fills can show a saved poster frame, but AVFoundation video playback and audio preview are unavailable; video placed on Windows has no newly generated poster. The macOS bundle, signing, notarization, and in-app updater do not provide Windows packaging. The inherited `script/bundle-windows.ps1` has not been validated for Fanta.
+The repository now includes `script\bundle-windows.ps1` to build an x64 installer with Inno Setup 6. To package a local source build, install Inno Setup and run:
+
+~~~powershell
+winget install -e --id JRSoftware.InnoSetup
+.\script\bundle-windows.ps1 -Architecture x86_64
+~~~
+
+It writes `target\Fanta-x86_64.exe`. The installer targets the current user's `%LOCALAPPDATA%\Programs\Fanta` and needs no administrator rights. It is **unsigned by default**; `FANTA_WINDOWS_SIGN=1` requests Azure Trusted Signing with separately configured credentials. The [release workflow](https://github.com/jeanc18rlos/fanta-edit/blob/d4fe64713e8615607878d896049f88379e7cc39f/.github/workflows/release-windows.yml) builds the installer and includes an install, update, and uninstall smoke test using stand-in app binaries. A matching `v*` release tag can add build artifacts to a **draft** GitHub release after those jobs pass. This source workflow does not provide a public 2.0 download.
+
+Windows uses CPU canvas rendering. Video layers and fills can show a saved poster frame, but AVFoundation video playback and audio preview are unavailable; video placed on Windows has no newly generated poster. Installed-app media and update behavior still need acceptance against a distributable Windows build.
 
 ## Platforms
 
-Fanta 2.0 targets **Apple Silicon macOS** first. Windows can be built from source for development with the limits above. Linux and Windows installers, with in-app updates, are under review; neither platform has a release.
+Fanta 2.0 targets **Apple Silicon macOS** first. Windows can be built and locally packaged from source with the limits above. A public Windows release and Linux installer remain unverified; neither platform has an accepted 2.0 download.
 
 ## Updates
 
-Fanta 2.0 adds update controls in Settings, About, and the app menu. They need a signed release feed and a release key, which do not exist yet, so a build from source cannot update itself. See [Settings](/docs/v2/editor/settings).
+Fanta 2.0 adds update controls in Settings, About, and the app menu. The Windows source includes a staged installer and update helper, but the checked-in release-signing public-key file still has no key. A source build therefore cannot check for updates. See [Settings](/docs/v2/editor/settings).
 
 ## Limits and support
 

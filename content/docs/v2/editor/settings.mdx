@@ -28,7 +28,7 @@ The Mac App Store feature build cannot launch local command-backed MCP servers, 
 
 ## Updates and released builds
 
-Fanta 2.0 adds an **Updates** group in Settings, **Check for Updates…** in the app menu, and check or restart controls in About. The controls can show checking, downloading, installation, failure, and restart states. A development build can instead show that updates are managed separately. The source has no compiled release verification key yet, so a build from it cannot check for updates. A release key, a published signed feed, and a verified replacement installation are required before these controls can be recommended as an upgrade route.
+Fanta 2.0 adds an **Updates** group in Settings, **Check for Updates…** in the app menu, and check or restart controls in About. The controls can show checking, downloading, installation, failure, and restart states. A development build can instead show that updates are managed separately. The checked-in release-signing public-key file has no key, so a build from this source cannot check for updates. The Windows source now has an installer and helper that stage new files while Fanta runs and replace them after it quits, but this is not a public upgrade route. A release key, a published signed feed, and acceptance of the exact installed build are still required.
 
 ## Account and privacy
 

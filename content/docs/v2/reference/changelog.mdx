@@ -5,6 +5,16 @@ description: What changed in Fanta 2.0's source since the 1.0 Public Alpha.
 
 This changelog lists what changed in Fanta 2.0's source after the 1.0 Public Alpha. Fanta 2.0 has no installer yet. Earlier history is in the [Fanta 1.0 changelog](/docs/reference/changelog).
 
+## October 29, 2026 source alignment
+
+These pages now track published [fanta-edit main at `d4fe647`](https://github.com/jeanc18rlos/fanta-edit/tree/d4fe64713e8615607878d896049f88379e7cc39f). The accepted signed Public Alpha remains **Fanta 1.0.0 Build45** from source `57d86330`; this 2.0 source update has no accepted installer or public browser playback result.
+
+**Plan & Build** now opens an empty Plan-profile thread in the Agent Panel. **Apply plan** switches that thread to Write to build the whole plan; each canvas edit batch is a separate undo step. The earlier task-by-task Build sidebar and its Accept, Retry, Skip, and automatic acceptance controls are gone. AI Review and Ultrareview also start from the Agent Panel's new-thread menu. **Add to Agent** puts a selected-layer snapshot mention into the draft, and the model button now offers favorites, grouped models, search, and an effort submenu. [In-app AI →](/docs/v2/agents/in-app-ai)
+
+The Comments panel now opens a thread detail page with its full conversation and a reply composer. The Code workspace lists editable `doc/variables.json` plus read-only `fanta.json` and `workspace.fnx`. [Comments →](/docs/v2/editor/comments) · [Code workspace →](/docs/v2/editor/surfaces)
+
+Source adds `fanta-compile` and the `fanta-bundle` crate. The compiler turns a saved project into a compiled `program.fanta` bundle that a matching runtime can load. The static website exporter wraps that bundle in a read-only viewer; a custom runtime page in the source auth-wizard sample drives interactions. Windows source also has an unsigned per-user installer and release workflow, but no accepted public Windows installer. [Runtime bundle →](/docs/v2/formats/runtime-bundle) · [Website export →](/docs/v2/formats/website-export) · [Platform status →](/docs/v2/roadmap)
+
 ## October 26, 2026 source alignment
 
 These pages now track published [fanta-edit main at `389e8c9`](https://github.com/jeanc18rlos/fanta-edit/tree/389e8c905d14168b808af5fd5ce058cf2c3d2ba3). The signed, installed Public Alpha remains **Fanta 1.0.0 Build45** from source `57d86330`; the changes below are committed 2.0 source, not an accepted 2.0 installer or deployed cloud service.
@@ -19,7 +29,7 @@ These pages now track published [fanta-edit main at `578c1283`](https://github.c
 
 The Design menu now also exports the selected animation as a Claude Motion Stage package, an MP4 video, a GIF, or PNG frames. Fanta renders them itself; MP4 needs `ffmpeg`. [Motion exports →](/docs/v2/formats/export#motion-exports) On macOS, canvas images now decode on background threads at the size they are drawn. An image can show a light grey wash, or look soft, for a moment. In a bounded release-build measurement on a page of 24 large photos, the slowest canvas render dropped from 1.9 s to 64 ms; that does not establish general responsiveness.
 
-Current source builds and runs its tests on Windows in CI. Linux and Windows installers, and cloud AI Review and generation, are in development; none is offered in a build. The shared engine code they need now lives in separate crates (`fanta-design-ops`, `fanta-headless`, and the in-development `fanta-engine`), without changing what the editor does. The external MCP server still registers 14 tools, and `batch_design` still exposes 44 operations. [Roadmap →](/docs/v2/roadmap)
+At that October 21 checkpoint, source built and ran tests on Windows in CI, while Linux and Windows installers and cloud AI Review and generation were in development. No public build offered those capabilities then. The shared engine code they need lived in separate crates (`fanta-design-ops`, `fanta-headless`, and the in-development `fanta-engine`), without changing what the editor did. The external MCP server registered 14 tools, and `batch_design` exposed 44 operations. [Roadmap →](/docs/v2/roadmap)
 
 ## October 20, 2026 source alignment
 

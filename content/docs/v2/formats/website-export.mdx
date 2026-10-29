@@ -3,9 +3,11 @@ title: Export a static website
 description: Package saved design pages with Fanta's read-only WebAssembly viewer.
 ---
 
-The `fanta-site` command exports a **saved Fanta project** as a static website. Each design page gets a URL with page navigation and a canvas viewer that can pan and zoom. The viewer loads a bundle through the `@fanta/runtime` WebAssembly package built from the matching Fanta engine revision. It is a command-line workflow, not an export control in the app.
+The `fanta-site` command exports a **saved Fanta project** as a static website. Each design page gets a URL with page navigation and a canvas viewer that can pan and zoom. The viewer loads a bundle through a matching Fanta-JS `packages/runtime` WebAssembly build. It is a command-line workflow, not an export control in the app.
 
 The website is read-only. Prototype interactions and motion playback are disabled; live audio and video use their authored posters rather than playing. Keep the editable [project directory](/docs/v2/formats/fant) for changes, then re-export it.
+
+The exporter compiles the project natively and ships the resulting `fanta/program.fanta` bundle with the viewer, not the project FNX, styles, or source parser. The separate [runtime-bundle command](/docs/v2/formats/runtime-bundle) produces a bundle for a custom page that uses the matching runtime. The custom player can drive prototype interactions and motion in the source sample; the generated website viewer remains read-only.
 
 ## Build and export
 

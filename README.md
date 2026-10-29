@@ -45,7 +45,7 @@ When 2.0 ships:
 
 ## Keep the docs accurate
 
-The 2.0 preview was checked against `fanta-edit` remote `main` commit `389e8c905d14168b808af5fd5ce058cf2c3d2ba3` on October 26, 2026. When `fanta-edit` changes, compare the new source with the `v2` pages before updating claims. In particular, verify the live MCP tool list, platform support, user-visible controls, generated media flows, format handlers, and alpha limitations. A merged source change is not proof of a public release, so it belongs in `v2` until a signed installer ships it. Build and typecheck before publishing.
+The 2.0 preview was checked against `fanta-edit` remote `main` commit `d4fe64713e8615607878d896049f88379e7cc39f` on October 29, 2026. When `fanta-edit` changes, compare the new source with the `v2` pages before updating claims. In particular, verify the live MCP tool list, platform support, user-visible controls, generated media flows, format handlers, and alpha limitations. A merged source change is not proof of a public release, so it belongs in `v2` until a signed installer ships it. Build and typecheck before publishing.
 
 The Claude Code plugin that the `plugin/` pages document lives in [Fanta-JS](https://github.com/jeanc18rlos/Fanta-JS), under `plugin/` and `.claude-plugin/`. Keep those pages aligned with it. Draft platform/API files in a working checkout should be verified against the live backend before publication.
 

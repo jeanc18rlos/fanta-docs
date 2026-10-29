@@ -1,0 +1,29 @@
+---
+title: Compile a runtime bundle
+description: Turn a saved Fanta project into a self-contained program for the source-only runtime.
+---
+
+Fanta 2.0 source includes `fanta-compile`, a command that compiles a saved project into one `program.fanta` runtime bundle. The bundle is a ZIP containing the compiled design, referenced assets, embedded fonts, and a manifest with checksums. It is a playback artifact; keep the project folder and its FNX files for editing. A `.fanta` runtime bundle is different from a [`.fant` design snapshot](/docs/v2/formats/fant).
+
+This is a **source workflow**, not a feature accepted in the signed Fanta 1.0 Public Alpha or a packaged 2.0 installer. The browser runtime must be built from the matching source; public browser and installer acceptance remain separate.
+
+## Compile a saved project
+
+From a Fanta source checkout, run:
+
+```bash
+cargo run --locked -p fanta-site --bin fanta-compile -- \
+  "/path/to/My Design" "/path/to/dist/program.fanta" --offline
+```
+
+The first path is a saved project directory containing `fanta.json`. The second is the output file; missing parent directories are created. Recompile after the project changes. The command embeds fonts using the same options as [website export](/docs/v2/formats/website-export): repeat `--font-dir "/path/to/licensed-fonts"` for fonts you may publish, use `--substitute "Brand Font=Source Sans 3"` to pick a replacement, and use `--offline` to avoid downloads. The report lists embedded fonts and substitutions.
+
+Before writing the bundle, the compiler loads it in the native runtime and creates a player for every page. The bundle records its document schema version and pins its resources by SHA-256; the runtime rejects a newer schema or a damaged resource instead of guessing. The runtime loads compiled bundles and does not parse project FNX or styles itself.
+
+## Use the bundle
+
+A separately built matching `fanta-runtime` player can load the bundle into a page you control. The [source auth-wizard sample](https://github.com/jeanc18rlos/fanta-edit/tree/d4fe64713e8615607878d896049f88379e7cc39f/docs/samples/auth-wizard) compiles a project and uses a custom page to drive component variants, transitions, overlays, motion, variables, and pointer or keyboard interactions. The runtime uses authored video posters instead of live video and does not play live audio.
+
+The [static website exporter](/docs/v2/formats/website-export) compiles the same bundle, then wraps it in a **read-only** viewer with page navigation, pan, and zoom. That generated viewer does not play prototype interactions or motion. Use a custom runtime page for the source sample's interactive playback.
+
+Implementation: [source compiler](https://github.com/jeanc18rlos/fanta-edit/blob/d4fe64713e8615607878d896049f88379e7cc39f/crates/fanta-format/src/runtime.rs), [bundle format](https://github.com/jeanc18rlos/fanta-edit/blob/d4fe64713e8615607878d896049f88379e7cc39f/crates/fanta-bundle/src/bundle.rs), and [`fanta-compile` CLI](https://github.com/jeanc18rlos/fanta-edit/blob/d4fe64713e8615607878d896049f88379e7cc39f/crates/fanta-site/src/compile_main.rs).

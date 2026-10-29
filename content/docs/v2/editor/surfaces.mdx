@@ -41,7 +41,7 @@ Fill mode is implemented in Fanta 2.0 source. The signed 1.0 Public Alpha screen
 
 ## Code
 
-The Code workspace opens the active page's `page.fnx` and `page.json`, or a component master's `master.fnx` and `def.json`. Select **FNX** or **JSON** to edit that source file. **Find** searches the selected source buffer. Save the design once before opening source. Save or discard canvas changes before editing source; while either source buffer has unsaved changes, canvas content editing is locked, but pan and selection remain available.
+The Code workspace opens the active page's `page.fnx` and `page.json`, or a component master's `master.fnx` and `def.json`. It also lists the project-wide `doc/variables.json`, `fanta.json`, and, for older projects that have one, `workspace.fnx`. Select **FNX**, **JSON**, or **variables.json** to edit that source file. The manifest and legacy workspace source are read-only in this pane. Opening Code from Variables selects `variables.json`. **Find** searches the selected source buffer. Save the design once before opening source. Save or discard canvas changes before editing source; while an editable source buffer has unsaved changes, canvas content editing is locked, but pan and selection remain available.
 
 <ProductScreenshot
   src="/screenshots/native-20261013/fnx-workspace.jpg"
@@ -53,7 +53,7 @@ The Code workspace opens the active page's `page.fnx` and `page.json`, or a comp
 
 While a source draft is unsaved, select one canvas layer to read its last accepted properties in the Design inspector, including position, size, and layout gap. These rows cannot be edited until the draft is saved or discarded. With no selection or a mixed selection, the inspector asks you to select one layer. A source draft also blocks **Go to main component** when that action would switch page or component scope; save or discard the draft first.
 
-Save source to validate the edited file against the project, write it, and reload the canvas. FNX saves also maintain its ID sidecar. Invalid JSON stays in the editor with an error and does not replace the saved file or the last good canvas. If both FNX and JSON have changes, Fanta saves and validates them in sequence. **Discard draft** discards unsaved edits in the selected source file only; switch between FNX and JSON to check each buffer. Resolve any on-disk file conflict before retrying. When an in-app agent is writing the selected FNX file, Code shows its name and can follow its live source location. Choose **Pause follow** to navigate independently, and **Follow** to resume.
+Save source to validate the edited file against the project, write it, and reload the canvas. FNX saves also maintain its ID sidecar. Invalid JSON stays in the editor with an error and does not replace the saved file or the last good canvas. If multiple editable source files have changes, Fanta saves and validates them in sequence. **Discard draft** discards unsaved edits in the selected source file only; check the other editable files for drafts. Resolve any on-disk file conflict before retrying. When an in-app agent is writing the selected FNX file, Code shows its name and can follow its live source location. Choose **Pause follow** to navigate independently, and **Follow** to resume.
 
 The canvas can also show an **Agents** control for active design agents. Select an agent to follow its current page or component and its Canvas, Variables, or Code workspace. Select the agent again to stop following. Source activity can open the relevant source tab. A clean canvas tab restores its project, page, or component location when the workspace reopens.
 
@@ -67,9 +67,9 @@ Dev mode is a read-only artwork inspection session with page-bound measurements 
 
 Motion mode shows the animation timeline and Motion inspector. Create or select a clip, add an animation to one selected layer, and preview or edit keyframes at the playhead. See [Motion](/docs/v2/editor/motion) for properties, timing, and current limits.
 
-## Build
+## Plan & Build
 
-Build mode opens **Plan & build** beside the canvas. With a signed-in account on a build connected to Fanta's v2 service, describe a design task, review each proposed canvas change, then **Accept**, **Retry** with feedback, **Skip**, or **Stop**. You can choose automatic acceptance. Retry and Skip undo the latest preview when it is still safe to undo; Stop leaves changes already applied on the canvas. [Agent workflows →](/docs/v2/agents)
+Open **Plan & Build** from the Agent Panel's new-thread menu or the Design menu. It starts an empty Plan-profile thread for the open design. Write a brief; the agent can read the design and propose a plan. After a successful plan response, **Apply plan** switches the thread to Write so the agent can build on the canvas. Each canvas batch the agent applies is its own undo step. This source workflow has a bounded test for opening the Plan thread; a complete build has not been verified against a model from the app. [Agent workflows →](/docs/v2/agents)
 
 ## Prototype and comments
 
